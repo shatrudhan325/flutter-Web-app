@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Flutter & Dart — Complete Learning Notes | Premium Edition</title>
+  <meta name="description" content="Comprehensive Flutter and Dart learning notes covering basics to advanced topics including state management, navigation, animations, and clean architecture." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      /* Premium Dark Mode Colors */
+      --bg: #0B0C10;
+      --bg2: rgba(30, 32, 40, 0.6);
+      --bg3: rgba(42, 45, 54, 0.8);
+      --bg-code: #0A0A0E;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(167, 139, 250, 0.3);
+      --text: #F1F2F6;
+      --muted: #A0A5B1;
+      
+      /* Vibrant Accents */
+      --blue: #60A5FA;
+      --blue-bg: rgba(96, 165, 250, 0.1);
+      --purple: #A78BFA;
+      --purple-bg: rgba(167, 139, 250, 0.1);
+      --teal: #34D399;
+      --teal-bg: rgba(52, 211, 153, 0.1);
+      --amber: #FBBF24;
+      --amber-bg: rgba(251, 191, 36, 0.1);
+      --coral: #FB7185;
+      --coral-bg: rgba(251, 113, 133, 0.1);
+      --green: #86EFAC;
+      --green-bg: rgba(134, 239, 172, 0.1);
+
+      /* Typography */
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 400;
+      line-height: 1.75;
+      letter-spacing: -0.01em;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* GLASSMORPHISM & EFFECTS */
+    .glass {
+      background: var(--bg2);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+    }
+    
+    .glow-hover {
+      transition: all 0.3s ease;
+    }
+    .glow-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px -10px var(--border-glow);
+      border-color: var(--purple);
+    }
+
+    /* PROGRESS BAR */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      width: 0%;
+      background: linear-gradient(90deg, #60A5FA, #A78BFA, #34D399);
+      z-index: 1000;
+      transition: width 0.1s ease-out;
+      box-shadow: 0 0 10px rgba(167, 139, 250, 0.5);
+    }
+
+    /* ANIMATIONS */
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+    @keyframes blobRotate {
+      0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+      33% { transform: translate(-50%, -50%) rotate(120deg) scale(1.1); }
+      66% { transform: translate(-50%, -50%) rotate(240deg) scale(0.9); }
+      100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      padding: 140px 40px 100px;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(11, 12, 16, 0.8) 0%, var(--bg) 100%);
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: 0;
+      opacity: 0.5;
+      mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+    }
+
+    .hero-blob {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(167, 139, 250, 0.25) 0%, rgba(96, 165, 250, 0.15) 30%, transparent 70%);
+      border-radius: 50%;
+      z-index: 0;
+      animation: blobRotate 20s infinite linear;
+      pointer-events: none;
+      filter: blur(40px);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      animation: fadeUp 0.8s ease-out forwards;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(167, 139, 250, 0.15);
+      color: var(--purple);
+      border: 1px solid rgba(167, 139, 250, 0.4);
+      border-radius: 30px;
+      padding: 6px 20px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      margin-bottom: 30px;
+      letter-spacing: 0.05em;
+      box-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
+      backdrop-filter: blur(10px);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: 72px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #FFFFFF 20%, #A78BFA 50%, #60A5FA 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 24px;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      filter: drop-shadow(0 4px 20px rgba(167, 139, 250, 0.2));
+    }
+
+    .hero p {
+      color: var(--text);
+      opacity: 0.8;
+      font-size: 20px;
+      max-width: 660px;
+      margin: 0 auto 40px;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    .hero-tags {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero-tag {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: var(--font-body);
+      color: var(--text);
+      opacity: 0.9;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-tag:hover {
+      background: rgba(167, 139, 250, 0.15);
+      border-color: var(--purple);
+      color: #FFF;
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 10px 20px -10px rgba(167, 139, 250, 0.5);
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11, 12, 16, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      overflow-x: auto;
+      padding: 0 40px;
+      scrollbar-width: none;
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+    }
+
+    nav::-webkit-scrollbar { display: none; }
+
+    nav a {
+      display: block;
+      padding: 16px 18px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s;
+    }
+
+    nav a:hover, nav a.active {
+      color: var(--text);
+      border-bottom-color: var(--purple);
+      text-shadow: 0 0 10px rgba(167, 139, 250, 0.5);
+    }
+
+    /* MAIN */
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+
+    /* TOC */
+    .toc {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 60px;
+      box-shadow: 0 20px 40px -20px rgba(0,0,0,0.5);
+    }
+
+    .toc-title {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .toc-item {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .toc-item:hover {
+      border-color: var(--purple);
+      background: var(--purple-bg);
+      transform: scale(1.02);
+    }
+
+    .toc-num {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--purple);
+      font-weight: 600;
+      min-width: 22px;
+    }
+
+    .toc-label {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    /* SECTION */
+    .section {
+      margin-bottom: 80px;
+      scroll-margin-top: 80px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+
+    .section-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    .section-meta { flex: 1; }
+
+    .section-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 30px;
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    .section-subtitle {
+      color: var(--muted);
+      font-size: 16px;
+      margin-top: 6px;
+    }
+
+    /* SUBSECTION */
+    .subsection { margin-bottom: 56px; }
+
+    .subsection h3 {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      letter-spacing: -0.01em;
+    }
+
+    /* CARD */
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    /* PRE CODE BLOCKS */
+    .code-wrap {
+      position: relative;
+      margin: 24px 0;
+      border-radius: 12px;
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    .mac-header {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg2);
+      border-radius: 12px 12px 0 0;
+    }
+
+    .mac-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .mac-dots div {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .mac-dot-r { background: #FF5F56; }
+    .mac-dot-y { background: #FFBD2E; }
+    .mac-dot-g { background: #27C93F; }
+
+    .code-label-mac {
+      margin-left: 16px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    pre {
+      padding: 20px;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.6;
+      tab-size: 2;
+    }
+
+    /* SYNTAX HIGHLIGHTING */
+    .k { color: #FF7B72; } /* keywords */
+    .t { color: #79C0FF; } /* types */
+    .s { color: #A5D6FF; } /* strings */
+    .m { color: #D2A8FF; } /* methods */
+    .c { color: #8B949E; font-style: italic; } /* comments */
+    .n { color: #C9D1D9; } /* names */
+    .num { color: #79C0FF; } /* numbers */
+    .ann { color: #FFA657; } /* annotations */
+
+    /* INFO BOXES */
+    .info-box {
+      padding: 20px 24px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border-left: 4px solid;
+      background: var(--bg2);
+    }
+    .info-tip { border-color: var(--teal); }
+    .info-warn { border-color: var(--amber); }
+    .info-key { border-color: var(--purple); }
+    .info-box strong {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 16px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    /* TABLE */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 24px 0;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+      background: var(--bg2);
+    }
+    th {
+      background: var(--bg3);
+      color: var(--muted);
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 14px 18px;
+      text-align: left;
+    }
+    td {
+      padding: 14px 18px;
+      border-top: 1px solid var(--border);
+    }
+    tr:hover td { background: rgba(255,255,255,0.03); }
+    code {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      background: rgba(255,255,255,0.1);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    /* MISC */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .flow-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 20px 0; }
+    .flow-box { padding: 10px 20px; border-radius: 10px; font-size: 14px; font-family: var(--font-mono); border: 1px solid; font-weight:500;}
+    p { margin-bottom: 16px; font-size: 16px; color: rgba(241, 242, 246, 0.9); }
+    strong { font-weight: 600; color: #FFF; }
+    ul, ol { padding-left: 24px; margin-bottom: 16px; color: rgba(241, 242, 246, 0.9); }
+    li { margin-bottom: 8px; }
+    
+    /* INTERACTIVE ELEMENTS */
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      font-weight: 500;
+      cursor: pointer;
+      z-index: 2;
+      transition: all 0.2s;
+    }
+    .copy-btn:hover {
+      background: var(--purple);
+      color: #000;
+      border-color: var(--purple);
+    }
+    #back-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: rgba(167, 139, 250, 0.2);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--purple);
+      color: var(--purple);
+      border-radius: 30px;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      cursor: pointer;
+      display: none;
+      z-index: 200;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(167, 139, 250, 0.3);
+    }
+    #back-top:hover {
+      background: var(--purple);
+      color: #000;
+      transform: translateY(-3px);
+    }
+
+    /* RESPONSIVE */
+    @media(max-width:768px) {
+      .hero { padding: 80px 20px 40px; }
+      .hero h1 { font-size: 42px; }
+      nav { padding: 0 16px; }
+      main { padding: 30px 16px; }
+      .toc-grid { grid-template-columns: 1fr 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+    @media(max-width:480px) {
+      .toc-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 32px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="progress-bar"></div>
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-blob"></div>
+    <div class="hero-content">
+      <div class="hero-badge">// v3.0 Premium · Dart 3.x · Flutter 3.x</div>
+      <h1>Flutter &amp; Dart<br/>Complete Notes</h1>
+      <p>From Variables to Architecture &mdash; master Flutter development with real code, deep theory, and high-quality visual diagrams.</p>
+      <div class="hero-tags">
+        <span class="hero-tag">🎯 Dart</span>
+        <span class="hero-tag">🟣 Flutter Basics</span>
+        <span class="hero-tag">🎨 UI & Layout</span>
+        <span class="hero-tag">🧩 Widgets</span>
+        <span class="hero-tag">🧭 Navigation</span>
+        <span class="hero-tag">⚡ State Mgmt</span>
+        <span class="hero-tag">🌐 APIs</span>
+        <span class="hero-tag">💾 Storage</span>
+        <span class="hero-tag">🚀 Advanced</span>
+        <span class="hero-tag">🏗 Architecture</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <a href="#s1">🎯 Dart</a>
+    <a href="#s2">🟣 Flutter</a>
+    <a href="#s3">🎨 UI & Layout</a>
+    <a href="#s4">🧩 Widgets</a>
+    <a href="#s5">🧭 Navigation</a>
+    <a href="#s6">⚡ State</a>
+    <a href="#s7">🌐 Networking</a>
+    <a href="#s8">💾 Storage</a>
+    <a href="#s9">🚀 Advanced</a>
+    <a href="#s10">🏗 Architecture</a>
+  </nav>
+
+  <main>
+    <!-- TOC -->
+    <div class="toc glass glow-hover">
+      <div class="toc-title">Table of Contents</div>
+      <div class="toc-grid">
+        <a class="toc-item" href="#s1"><span class="toc-num">01</span><span class="toc-label">Dart Fundamentals</span></a>
+        <a class="toc-item" href="#s2"><span class="toc-num">02</span><span class="toc-label">Flutter Fundamentals</span></a>
+        <a class="toc-item" href="#s3"><span class="toc-num">03</span><span class="toc-label">UI & Layout</span></a>
+        <a class="toc-item" href="#s4"><span class="toc-num">04</span><span class="toc-label">Widgets Deep Dive</span></a>
+        <a class="toc-item" href="#s5"><span class="toc-num">05</span><span class="toc-label">Navigation</span></a>
+        <a class="toc-item" href="#s6"><span class="toc-num">06</span><span class="toc-label">State Management</span></a>
+        <a class="toc-item" href="#s7"><span class="toc-num">07</span><span class="toc-label">Networking & APIs</span></a>
+        <a class="toc-item" href="#s8"><span class="toc-num">08</span><span class="toc-label">Local Storage</span></a>
+        <a class="toc-item" href="#s9"><span class="toc-num">09</span><span class="toc-label">Advanced Flutter</span></a>
+        <a class="toc-item" href="#s10"><span class="toc-num">10</span><span class="toc-label">Clean Architecture</span></a>
+      </div>
+    </div>
+
