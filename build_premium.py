@@ -10,8 +10,8 @@ def build():
     with open('flutter_notes.html', 'w') as f:
         f.write(head_content)
     
-    # 2. Run all builders 1 to 11
-    for i in range(1, 12):
+    # 2. Run all builders 1 to 14
+    for i in range(1, 15):
         print(f'Running build_s{i}.py...')
         subprocess.run(['python3', f'build_s{i}.py'], check=True)
         

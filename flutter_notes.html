@@ -3675,6 +3675,344 @@
   </div>
 </section>
 
+<!-- ═══════════════════════════════════════════ SECTION 11 ═══ -->
+<section class="section" id="s11">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--teal-bg);">📦</div>
+    <div class="section-meta">
+      <span class="section-badge" style="background:var(--teal-bg);color:var(--teal);">Advanced Dart</span>
+      <div class="section-title" style="color:var(--teal);">Collections &amp; Iterables</div>
+      <div class="section-subtitle">Deep dive into Lists, Sets, Maps, and higher-order functions</div>
+    </div>
+  </div>
+
+  <!-- 11.1 Iterables & Higher-Order Functions -->
+  <div class="subsection" id="s11-1">
+    <h3 style="color:var(--teal);">11.1 Iterables &amp; Higher-Order Functions</h3>
+    <p>In Dart, an <strong>Iterable</strong> is a collection of elements that can be accessed sequentially. Both <code>List</code> and <code>Set</code> implement <code>Iterable</code>. Maps don't directly implement it, but their <code>keys</code> and <code>values</code> properties are Iterables.</p>
+    <p>Dart provides powerful higher-order functions that transform, filter, and aggregate iterables natively, replacing traditional `for` loops with concise, declarative operations.</p>
+    
+    <div class="table-wrap"><table>
+      <tr><th>Method</th><th>Description</th><th>Equivalent to</th></tr>
+      <tr><td><code style="background:var(--blue-bg);color:var(--blue);">map((e) => ...)</code></td><td>Transforms each element into a new element. Returns an Iterable.</td><td>JavaScript <code>map</code>, Python <code>map()</code></td></tr>
+      <tr><td><code style="background:var(--teal-bg);color:var(--teal);">where((e) => condition)</code></td><td>Filters elements based on a true/false condition.</td><td>JavaScript <code>filter</code>, Python <code>filter()</code></td></tr>
+      <tr><td><code style="background:var(--amber-bg);color:var(--amber);">reduce((a, b) => ...)</code></td><td>Combines all elements into a single value iteratively. Throws if empty.</td><td>JavaScript <code>reduce</code></td></tr>
+      <tr><td><code style="background:var(--purple-bg);color:var(--purple);">fold(init, (a, b) => ...)</code></td><td>Like `reduce`, but with an initial value. Handles empty iterables safely.</td><td>Swift <code>reduce</code></td></tr>
+      <tr><td><code style="background:var(--coral-bg);color:var(--coral);">any / every((e) => bool)</code></td><td>Checks if some (`any`) or all (`every`) elements match a condition.</td><td>JavaScript <code>some / every</code></td></tr>
+    </table></div>
+
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="k">final</span> <span class="t">List</span>&lt;<span class="t">int</span>&gt; <span class="n">numbers</span> = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>];
+
+<span class="c">// map - Multiply every number by 2</span>
+<span class="k">final</span> <span class="n">doubled</span> = <span class="n">numbers</span>.<span class="m">map</span>((<span class="n">n</span>) =&gt; <span class="n">n</span> * <span class="num">2</span>).<span class="m">toList</span>(); <span class="c">// [2, 4, 6, 8, 10, 12]</span>
+
+<span class="c">// where - Filter only even numbers</span>
+<span class="k">final</span> <span class="n">evens</span> = <span class="n">numbers</span>.<span class="m">where</span>((<span class="n">n</span>) =&gt; <span class="n">n</span> % <span class="num">2</span> == <span class="num">0</span>).<span class="m">toList</span>(); <span class="c">// [2, 4, 6]</span>
+
+<span class="c">// reduce - Sum all numbers (no initial value)</span>
+<span class="k">final</span> <span class="n">sum</span> = <span class="n">numbers</span>.<span class="m">reduce</span>((<span class="n">total</span>, <span class="n">element</span>) =&gt; <span class="n">total</span> + <span class="n">element</span>); <span class="c">// 21</span>
+
+<span class="c">// fold - Sum with an initial value of 100</span>
+<span class="k">final</span> <span class="n">totalSum</span> = <span class="n">numbers</span>.<span class="m">fold</span>(<span class="num">100</span>, (<span class="n">prev</span>, <span class="n">element</span>) =&gt; <span class="n">prev</span> + <span class="n">element</span>); <span class="c">// 121</span>
+
+<span class="c">// Chaining iterable methods</span>
+<span class="k">final</span> <span class="n">complex</span> = <span class="n">numbers</span>
+    .<span class="m">where</span>((<span class="n">n</span>) =&gt; <span class="n">n</span> &gt; <span class="num">2</span>)             <span class="c">// [3, 4, 5, 6]</span>
+    .<span class="m">map</span>((<span class="n">n</span>) =&gt; <span class="s">'Item $n'</span>)           <span class="c">// ['Item 3', 'Item 4', 'Item 5', 'Item 6']</span>
+    .<span class="m">toList</span>();</pre>
+    </div>
+  </div>
+
+  <!-- 11.2 Collection Control Flow -->
+  <div class="subsection" id="s11-2">
+    <h3 style="color:var(--teal);">11.2 Deep Dive: Collection `if`, `for`, and Spreads</h3>
+    <p>Dart makes building collections incredibly fluid using control flow operators inside the collection literals themselves. They are heavily utilized in Flutter to dynamically generate lists of widgets without boilerplate mapping functions.</p>
+
+    <div class="info-box info-tip"><strong>💡 Spread Operator (...)</strong><p>The spread operator unwraps an iterable and inserts its elements into the surrounding collection. The null-aware spread (<code>...?</code>) only spreads the iterable if it is not null.</p></div>
+
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="c">// Spread Operator</span>
+<span class="k">final</span> <span class="t">List</span>&lt;<span class="t">String</span>&gt; <span class="n">basics</span> = [<span class="s">'Dart'</span>, <span class="s">'Flutter'</span>];
+<span class="t">List</span>&lt;<span class="t">String</span>&gt;? <span class="n">extensions</span> = <span class="k">null</span>;
+<span class="k">final</span> <span class="n">allSkills</span> = [
+  <span class="s">'HTML'</span>,
+  ...<span class="n">basics</span>,               <span class="c">// Spreads: 'Dart', 'Flutter'</span>
+  ...?<span class="n">extensions</span>,             <span class="c">// Null-aware spread, does nothing if null</span>
+];
+
+<span class="c">// Collection If &amp; For (Flutter Widget Scenario)</span>
+<span class="k">final</span> <span class="t">bool</span> <span class="n">isAdmin</span> = <span class="k">true</span>;
+<span class="k">final</span> <span class="t">List</span>&lt;<span class="t">User</span>&gt; <span class="n">users</span> = [<span class="t">User</span>(<span class="s">'Alice'</span>), <span class="t">User</span>(<span class="s">'Bob'</span>)];
+
+<span class="k">final</span> <span class="n">widgetTree</span> = [
+  <span class="t">HeaderWidget</span>(),
+  
+  <span class="c">// 1. Collection If</span>
+  <span class="k">if</span> (<span class="n">isAdmin</span>)
+    <span class="t">AdminPanelWidget</span>()
+  <span class="k">else</span>
+    <span class="t">UserPanelWidget</span>(),
+    
+  <span class="c">// 2. Collection For</span>
+  <span class="k">for</span> (<span class="k">var</span> <span class="n">user</span> <span class="k">in</span> <span class="n">users</span>)
+    <span class="t">UserTileWidget</span>(<span class="n">user</span>),
+    
+  <span class="t">FooterWidget</span>(),
+];</pre>
+    </div>
+  </div>
+
+  <!-- 11.3 Map Deep Dive -->
+  <div class="subsection" id="s11-3">
+    <h3 style="color:var(--teal);">11.3 Map Iteration &amp; Modification</h3>
+    <p>Maps store Key-Value pairs. While you can iterate over `.keys` or `.values`, the `.entries` property is the most robust way to iterate over Maps, providing access to both key and value simultaneously via <code>MapEntry</code>.</p>
+    
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="k">final</span> <span class="t">Map</span>&lt;<span class="t">String</span>, <span class="t">int</span>&gt; <span class="n">inventory</span> = {
+  <span class="s">'Apples'</span>: <span class="num">50</span>,
+  <span class="s">'Oranges'</span>: <span class="num">20</span>,
+  <span class="s">'Bananas'</span>: <span class="num">5</span>,
+};
+
+<span class="c">// Iterating through entries</span>
+<span class="k">for</span> (<span class="k">var</span> <span class="n">entry</span> <span class="k">in</span> <span class="n">inventory</span>.<span class="m">entries</span>) {
+  <span class="m">print</span>(<span class="s">'${entry.key} count: ${entry.value}'</span>);
+}
+
+<span class="c">// Safely put an item if it doesn't exist</span>
+<span class="n">inventory</span>.<span class="m">putIfAbsent</span>(<span class="s">'Grapes'</span>, () =&gt; <span class="num">100</span>);
+
+<span class="c">// Updating a value</span>
+<span class="n">inventory</span>.<span class="m">update</span>(<span class="s">'Bananas'</span>, (<span class="n">value</span>) =&gt; <span class="n">value</span> + <span class="num">10</span>);
+
+<span class="c">// Map from Iterable</span>
+<span class="k">final</span> <span class="t">List</span>&lt;<span class="t">String</span>&gt; <span class="n">keys</span> = [<span class="s">'x'</span>, <span class="s">'y'</span>, <span class="s">'z'</span>];
+<span class="k">final</span> <span class="n">coords</span> = <span class="t">Map</span>.<span class="m">fromIterable</span>(
+  <span class="n">keys</span>,
+  <span class="n">key</span>: (<span class="n">k</span>) =&gt; <span class="n">k</span>,
+  <span class="n">value</span>: (<span class="n">k</span>) =&gt; <span class="num">0</span>,
+); <span class="c">// {'x': 0, 'y': 0, 'z': 0}</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ SECTION 12 ═══ -->
+<section class="section" id="s12">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--blue-bg);">🧬</div>
+    <div class="section-meta">
+      <span class="section-badge" style="background:var(--blue-bg);color:var(--blue);">Advanced Dart</span>
+      <div class="section-title" style="color:var(--blue);">OOP Details &amp; File Handling</div>
+      <div class="section-subtitle">Factory constructors, abstract interfaces, mixins, and I/O</div>
+    </div>
+  </div>
+
+  <!-- 12.1 Factory Constructors -->
+  <div class="subsection" id="s12-1">
+    <h3 style="color:var(--blue);">12.1 Factory Constructors &amp; Singletons</h3>
+    <p>A <strong>factory constructor</strong> does not strictly create a new instance of its class entirely from scratch like a generative constructor does. Instead, it can return an existing instance (like from a cache), return an instance of a subclass, or perform complex validation before returning an object.</p>
+
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="k">class</span> <span class="t">Database</span> {
+  <span class="c">// Internal private constructor</span>
+  <span class="t">Database</span>.<span class="m">_internal</span>() {
+    <span class="m">print</span>(<span class="s">'Database connection initialized'</span>);
+  }
+
+  <span class="c">// Static instance cache</span>
+  <span class="k">static</span> <span class="k">final</span> <span class="t">Database</span> <span class="n">_instance</span> = <span class="t">Database</span>.<span class="m">_internal</span>();
+
+  <span class="c">// Factory constructor returns the identical instance every time</span>
+  <span class="k">factory</span> <span class="t">Database</span>() {
+    <span class="k">return</span> <span class="n">_instance</span>;
+  }
+}
+
+<span class="k">void</span> <span class="m">main</span>() {
+  <span class="k">final</span> <span class="n">db1</span> = <span class="t">Database</span>();
+  <span class="k">final</span> <span class="n">db2</span> = <span class="t">Database</span>();
+  <span class="m">print</span>(<span class="m">identical</span>(<span class="n">db1</span>, <span class="n">db2</span>)); <span class="c">// true (both point to same memory)</span>
+}</pre>
+    </div>
+  </div>
+
+  <!-- 12.2 Mixins in Depth -->
+  <div class="subsection" id="s12-2">
+    <h3 style="color:var(--blue);">12.2 Mixins and 'on' Clause</h3>
+    <p>Mixins allow for code reusability outside of traditional class inheritance. Using the <code>on</code> keyword, you can restrict a mixin so it can only be applied to classes that extend a specific base class. This allows the mixin to call methods from that base class.</p>
+
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="k">abstract class</span> <span class="t">Animal</span> {
+  <span class="k">void</span> <span class="m">breathe</span>() =&gt; <span class="m">print</span>(<span class="s">'Breathing...'</span>);
+}
+
+<span class="c">// Mixin restricted to Animals only</span>
+<span class="k">mixin</span> <span class="t">Swimmer</span> <span class="k">on</span> <span class="t">Animal</span> {
+  <span class="k">void</span> <span class="m">swim</span>() {
+    <span class="m">breathe</span>(); <span class="c">// Safe because 'Swimmer' is guaranteed to be an 'Animal'</span>
+    <span class="m">print</span>(<span class="s">'Swimming!'</span>);
+  }
+}
+
+<span class="k">class</span> <span class="t">Dolphin</span> <span class="k">extends</span> <span class="t">Animal</span> <span class="k">with</span> <span class="t">Swimmer</span> { }
+
+<span class="c">// class Stone with Swimmer { } // &lt;-- ERROR: Stone does not extend Animal</span></pre>
+    </div>
+  </div>
+
+  <!-- 12.3 File Handling -->
+  <div class="subsection" id="s12-3">
+    <h3 style="color:var(--blue);">12.3 File Handling (dart:io)</h3>
+    <p>Dart's <code>dart:io</code> library handles File reading and writing. Keep in mind that <code>dart:io</code> cannot be used in Flutter Web, as web browsers sandbox file systems. For web, you must use <code>dart:html</code> or cross-platform packages like <code>file_picker</code>.</p>
+
+    <div class="grid-2">
+      <div class="card glass glow-hover" style="border-top: 3px solid var(--blue);">
+        <div class="card-title">Reading Files</div>
+        <p>You can read files sync or async. Async is preferred so the main thread (UI) is not blocked.</p>
+<pre style="background:transparent;border:none;margin-top:10px;"><code style="color:var(--muted);"><span class="k">final</span> <span class="n">file</span> = <span class="t">File</span>(<span class="s">'data.txt'</span>);
+<span class="t">String</span> <span class="n">content</span> = <span class="k">await</span> <span class="n">file</span>.<span class="m">readAsString</span>();</code></pre>
+      </div>
+      <div class="card glass glow-hover" style="border-top: 3px solid var(--amber);">
+        <div class="card-title">Writing Files</div>
+        <p>You can overwrite or append to existing files using <code>FileMode</code>.</p>
+<pre style="background:transparent;border:none;margin-top:10px;"><code style="color:var(--muted);"><span class="k">final</span> <span class="n">file</span> = <span class="t">File</span>(<span class="s">'log.txt'</span>);
+<span class="k">await</span> <span class="n">file</span>.<span class="m">writeAsString</span>(<span class="s">'Log!'</span>, 
+  <span class="n">mode</span>: <span class="t">FileMode</span>.<span class="n">append</span>);</code></pre>
+      </div>
+    </div>
+    
+    <div class="info-box info-warn"><strong>⚠️ Important Flutter Paths</strong><p>In Flutter mobile apps, you cannot hardcode file paths like <code>C:/files/</code> or <code>/home/user/</code>. You must use the <code>path_provider</code> package to dynamically get the correct directory path (like <code>getApplicationDocumentsDirectory()</code>).</p></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ SECTION 13 ═══ -->
+<section class="section" id="s13">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--amber-bg);">⚡</div>
+    <div class="section-meta">
+      <span class="section-badge" style="background:var(--amber-bg);color:var(--amber);">Advanced Dart</span>
+      <div class="section-title" style="color:var(--amber);">Async Deep Dive &amp; Best Practices</div>
+      <div class="section-subtitle">Streams, Isolates, and helpful utility methods</div>
+    </div>
+  </div>
+
+  <!-- 13.1 Isolates -->
+  <div class="subsection" id="s13-1">
+    <h3 style="color:var(--amber);">13.1 Concurrency vs Parallelism (Isolates)</h3>
+    <p>Dart is <strong>single-threaded</strong> by default. Using <code>async/await</code> provides <strong>concurrency</strong> (not blocking the thread while waiting for network/disk I/O). However, if you do heavy computational work (e.g., parsing a 50MB JSON file or applying an image filter), you will freeze the UI thread and drop frames.</p>
+    <p>For true <strong>parallelism</strong>, Dart provides <strong>Isolates</strong>. Isolates are independent execution threads with their own isolated memory heap. They communicate purely by passing messages via ports.</p>
+
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="k">import</span> <span class="s">'dart:isolate'</span>;
+
+<span class="c">// Heavy computational function (Must be a top-level or static function)</span>
+<span class="t">int</span> <span class="m">complexMath</span>(<span class="t">int</span> <span class="n">iterationLimit</span>) {
+  <span class="t">int</span> <span class="n">sum</span> = <span class="num">0</span>;
+  <span class="k">for</span> (<span class="t">int</span> <span class="n">i</span> = <span class="num">0</span>; <span class="n">i</span> &lt; <span class="n">iterationLimit</span>; <span class="n">i</span>++) {
+    <span class="n">sum</span> += <span class="n">i</span>;
+  }
+  <span class="k">return</span> <span class="n">sum</span>;
+}
+
+<span class="c">// Flutter simplifies isolates with Isolate.run() (Dart 2.15+)</span>
+<span class="k">Future</span>&lt;<span class="k">void</span>&gt; <span class="m">processData</span>() <span class="k">async</span> {
+  <span class="m">print</span>(<span class="s">'Starting heavy work on separate thread...'</span>);
+  
+  <span class="c">// Spawns an isolate, runs the function, returns result, and kills isolate</span>
+  <span class="k">final</span> <span class="n">result</span> = <span class="k">await</span> <span class="t">Isolate</span>.<span class="m">run</span>(() =&gt; <span class="m">complexMath</span>(<span class="num">1000000000</span>));
+  
+  <span class="m">print</span>(<span class="s">'Result computed in background: $result'</span>);
+}</pre>
+    </div>
+  </div>
+
+  <!-- 13.2 Streams Deep Dive -->
+  <div class="subsection" id="s13-2">
+    <h3 style="color:var(--amber);">13.2 Streams &amp; Generators</h3>
+    <p>Where <code>Future</code> represents a single value arriving later, a <code>Stream</code> represents <strong>multiple values</strong> arriving over time. You create complex streams easily using <code>sync*</code> (synchronous generators) and <code>async*</code> (asynchronous generators), utilizing the <code>yield</code> keyword.</p>
+
+    <div class="info-box info-key"><strong>🔑 Single vs Broadcast Streams</strong><p>A standard Stream can only be listened to <strong>once</strong> (e.g., reading a file stream). If multiple parts of your app need to act on the same events (like a button click or a global bus), you must transform it using <code>.asBroadcastStream()</code>.</p></div>
+
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="c">// Synchronous generator (Iterable)</span>
+<span class="t">Iterable</span>&lt;<span class="t">int</span>&gt; <span class="m">countDownSync</span>(<span class="t">int</span> <span class="n">n</span>) <span class="k">sync</span>* {
+  <span class="k">while</span> (<span class="n">n</span> &gt; <span class="num">0</span>) {
+    <span class="k">yield</span> <span class="n">n</span>--;
+  }
+}
+
+<span class="c">// Asynchronous generator (Stream)</span>
+<span class="t">Stream</span>&lt;<span class="t">int</span>&gt; <span class="m">countDownAsync</span>(<span class="t">int</span> <span class="n">n</span>) <span class="k">async</span>* {
+  <span class="k">while</span> (<span class="n">n</span> &gt; <span class="num">0</span>) {
+    <span class="k">await</span> <span class="t">Future</span>.<span class="m">delayed</span>(<span class="k">const</span> <span class="t">Duration</span>(<span class="n">seconds</span>: <span class="num">1</span>));
+    <span class="k">yield</span> <span class="n">n</span>--;
+  }
+}
+
+<span class="c">// Listening to a stream natively using await for</span>
+<span class="k">Future</span>&lt;<span class="k">void</span>&gt; <span class="m">monitorStream</span>() <span class="k">async</span> {
+  <span class="k">final</span> <span class="n">stream</span> = <span class="m">countDownAsync</span>(<span class="num">3</span>);
+  <span class="c">// This loop waits asynchronously for each emitted item</span>
+  <span class="k">await for</span> (<span class="k">final</span> <span class="n">value</span> <span class="k">in</span> <span class="n">stream</span>) {
+    <span class="m">print</span>(<span class="n">value</span>);
+  }
+  <span class="m">print</span>(<span class="s">'Stream complete'</span>);
+}</pre>
+    </div>
+  </div>
+
+  <!-- 13.3 Dart Helpers & Interview Cheatsheet -->
+  <div class="subsection" id="s13-3">
+    <h3 style="color:var(--amber);">13.3 Everyday Dart Helpers</h3>
+    <p>A few common logic requirements from standard Dart usage.</p>
+    
+    <div class="table-wrap"><table>
+      <tr><th>Action</th><th>Code Example</th></tr>
+      <tr><td>Convert String to Int</td><td><code>int.parse('42')</code> or <code>int.tryParse('invalid') // returns null</code></td></tr>
+      <tr><td>Random Number (0-9)</td><td><code>import 'dart:math'; final rnd = Random().nextInt(10);</code></td></tr>
+      <tr><td>Reverse a List</td><td><code>myList.reversed.toList();</code></td></tr>
+      <tr><td>DateTime Formatting</td><td><code>DateTime.now().toIso8601String()</code> (For beautiful UI time formats, use the <code>intl</code> package!)</td></tr>
+      <tr><td>Cascade Null Check</td><td><code>myObject?..method1()..?field = value;</code> (Executes safely only if <code>myObject</code> is not null)</td></tr>
+    </table></div>
+  </div>
+</section>
+
   </main>
 
   <footer>
