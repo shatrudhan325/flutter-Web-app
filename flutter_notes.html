@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Flutter & Dart — Complete Learning Notes | Premium Edition</title>
   <meta name="description" content="Comprehensive Flutter and Dart learning notes covering basics to advanced topics including state management, navigation, animations, and clean architecture." />
-  <link rel="icon" type="image/svg+xml" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg" />
+  <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -645,6 +645,16 @@
         <a class="toc-item" href="#s8"><span class="toc-num">08</span><span class="toc-label">Local Storage</span></a>
         <a class="toc-item" href="#s9"><span class="toc-num">09</span><span class="toc-label">Advanced Flutter</span></a>
         <a class="toc-item" href="#s10"><span class="toc-num">10</span><span class="toc-label">Clean Architecture</span></a>
+        <a class="toc-item" href="#s11"><span class="toc-num">11</span><span class="toc-label">Collections Deep Dive</span></a>
+        <a class="toc-item" href="#s12"><span class="toc-num">12</span><span class="toc-label">OOP Details &amp; File I/O</span></a>
+        <a class="toc-item" href="#s13"><span class="toc-num">13</span><span class="toc-label">Async Deep Dive</span></a>
+        <a class="toc-item" href="#s14"><span class="toc-num">14</span><span class="toc-label">Conditions &amp; Operators</span></a>
+        <a class="toc-item" href="#s15"><span class="toc-num">15</span><span class="toc-label">Strings, DateTime &amp; Enums</span></a>
+        <a class="toc-item" href="#s16"><span class="toc-num">16</span><span class="toc-label">Animations &amp; Adaptive UI</span></a>
+        <a class="toc-item" href="#s17"><span class="toc-num">17</span><span class="toc-label">Generics &amp; Error Handling</span></a>
+        <a class="toc-item" href="#s18"><span class="toc-num">18</span><span class="toc-label">Testing &amp; Deployment</span></a>
+        <a class="toc-item" href="#s19"><span class="toc-num">19</span><span class="toc-label">Dart 3: Records &amp; Patterns</span></a>
+        <a class="toc-item" href="#s20"><span class="toc-num">20</span><span class="toc-label">Cheatsheet &amp; Quick Ref</span></a>
       </div>
     </div>
 
@@ -4011,6 +4021,1069 @@
       <tr><td>DateTime Formatting</td><td><code>DateTime.now().toIso8601String()</code> (For beautiful UI time formats, use the <code>intl</code> package!)</td></tr>
       <tr><td>Cascade Null Check</td><td><code>myObject?..method1()..?field = value;</code> (Executes safely only if <code>myObject</code> is not null)</td></tr>
     </table></div>
+  </div>
+</section>
+
+
+<!-- ═══════════ SECTION 14: Conditions, Loops & Operators ═══════════ -->
+<section class="section" id="s14">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--coral-bg);">🔀</div>
+    <div class="section-meta">
+      <span class="section-badge" style="background:var(--coral-bg);color:var(--coral);">Dart Core</span>
+      <div class="section-title" style="color:var(--coral);">Conditions, Loops &amp; Operators</div>
+      <div class="section-subtitle">Control flow mastery — if/else, switch expressions, loops, break, assert, and all operators</div>
+    </div>
+  </div>
+
+  <div class="subsection" id="s14-1">
+    <h3 style="color:var(--coral);">14.1 Conditions &amp; Switch Expressions</h3>
+    <p>Dart supports the standard <strong>if / else if / else</strong> ladder, the traditional <strong>switch</strong> statement, and Dart 3's powerful <strong>switch expressions</strong> that return a value. Use <code>assert()</code> during development to catch programmer errors early — it's stripped entirely in release builds.</p>
+    <div class="table-wrap"><table>
+      <tr><th>Statement</th><th>Use Case</th><th>Dart 3 Upgrade</th></tr>
+      <tr><td><code style="background:var(--coral-bg);color:var(--coral);">if / else</code></td><td>Any boolean condition</td><td>Same syntax, now with pattern guards</td></tr>
+      <tr><td><code style="background:var(--blue-bg);color:var(--blue);">switch</code></td><td>Multiple values of same variable</td><td>Switch expressions return values</td></tr>
+      <tr><td><code style="background:var(--amber-bg);color:var(--amber);">? :</code></td><td>Inline single condition</td><td>Same syntax</td></tr>
+      <tr><td><code style="background:var(--purple-bg);color:var(--purple);">assert()</code></td><td>Dev-time invariant checking</td><td>Removed in release builds</td></tr>
+    </table></div>
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="c">// Classic if / else if / else</span>
+<span class="t">int</span> <span class="n">score</span> = <span class="num">82</span>;
+<span class="k">if</span> (<span class="n">score</span> &gt;= <span class="num">90</span>) {
+  <span class="m">print</span>(<span class="s">'Grade: A'</span>);
+} <span class="k">else if</span> (<span class="n">score</span> &gt;= <span class="num">75</span>) {
+  <span class="m">print</span>(<span class="s">'Grade: B'</span>);
+} <span class="k">else</span> {
+  <span class="m">print</span>(<span class="s">'Grade: C'</span>);
+}
+
+<span class="c">// Ternary operator</span>
+<span class="t">String</span> <span class="n">result</span> = <span class="n">score</span> &gt;= <span class="num">50</span> ? <span class="s">'Pass'</span> : <span class="s">'Fail'</span>;
+
+<span class="c">// Dart 2 — switch statement</span>
+<span class="t">String</span> <span class="n">day</span> = <span class="s">'Monday'</span>;
+<span class="k">switch</span> (<span class="n">day</span>) {
+  <span class="k">case</span> <span class="s">'Saturday'</span>:
+  <span class="k">case</span> <span class="s">'Sunday'</span>:
+    <span class="m">print</span>(<span class="s">'Weekend!'</span>); <span class="k">break</span>;
+  <span class="k">default</span>:
+    <span class="m">print</span>(<span class="s">'Weekday'</span>);
+}
+
+<span class="c">// Dart 3 — switch expression (returns a value inline)</span>
+<span class="t">String</span> <span class="n">dayType</span> = <span class="k">switch</span> (<span class="n">day</span>) {
+  <span class="s">'Saturday'</span> || <span class="s">'Sunday'</span> =&gt; <span class="s">'Weekend'</span>,
+  _ =&gt; <span class="s">'Weekday'</span>,
+};
+
+<span class="c">// assert — throws AssertionError in debug mode only</span>
+<span class="t">int</span> <span class="n">age</span> = <span class="num">25</span>;
+<span class="m">assert</span>(<span class="n">age</span> &gt;= <span class="num">0</span>, <span class="s">'Age cannot be negative!'</span>);</pre>
+    </div>
+    <div class="info-box info-tip"><strong>💡 Dart 3 Pattern Matching</strong><p>Switch expressions in Dart 3 support destructuring — match on object shapes: <code>switch (shape) { Circle(radius: var r) =&gt; pi * r * r, Rectangle(width: var w, height: var h) =&gt; w * h }</code>. Eliminates verbose if/instanceof chains entirely.</p></div>
+  </div>
+
+  <div class="subsection" id="s14-2">
+    <h3 style="color:var(--coral);">14.2 All Loop Types</h3>
+    <p>Dart has four loop types: <strong>for</strong> (classic index-based), <strong>for-in</strong> (iterates any Iterable), <strong>while</strong> (checks condition first), and <strong>do-while</strong> (executes body first — always runs at least once). <code>break</code> exits loops. <code>continue</code> skips to the next iteration.</p>
+    <div class="flow-row">
+      <div class="flow-box" style="background:var(--blue-bg);border-color:var(--blue);color:var(--blue);">for (init; cond; step)</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box" style="background:var(--teal-bg);border-color:var(--teal);color:var(--teal);">for (item in list)</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box" style="background:var(--purple-bg);border-color:var(--purple);color:var(--purple);">while (condition)</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box" style="background:var(--amber-bg);border-color:var(--amber);color:var(--amber);">do { } while (cond)</div>
+    </div>
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="c">// Classic for loop</span>
+<span class="k">for</span> (<span class="t">int</span> <span class="n">i</span> = <span class="num">0</span>; <span class="n">i</span> &lt; <span class="num">5</span>; <span class="n">i</span>++) {
+  <span class="m">print</span>(<span class="s">'Index: $i'</span>);
+}
+
+<span class="c">// For-in (iterates any Iterable)</span>
+<span class="t">List</span>&lt;<span class="t">String</span>&gt; <span class="n">colors</span> = [<span class="s">'red'</span>, <span class="s">'green'</span>, <span class="s">'blue'</span>];
+<span class="k">for</span> (<span class="k">var</span> <span class="n">color</span> <span class="k">in</span> <span class="n">colors</span>) { <span class="m">print</span>(<span class="n">color</span>); }
+
+<span class="c">// forEach (functional — no break/continue/await support)</span>
+<span class="n">colors</span>.<span class="m">forEach</span>((<span class="n">c</span>) =&gt; <span class="m">print</span>(<span class="n">c</span>.<span class="m">toUpperCase</span>()));
+
+<span class="c">// While loop</span>
+<span class="t">int</span> <span class="n">count</span> = <span class="num">0</span>;
+<span class="k">while</span> (<span class="n">count</span> &lt; <span class="num">3</span>) { <span class="m">print</span>(<span class="s">'count: $count'</span>); <span class="n">count</span>++; }
+
+<span class="c">// Do-while — runs body at least once</span>
+<span class="k">do</span> { <span class="m">print</span>(<span class="s">'Runs once even if false'</span>); } <span class="k">while</span> (<span class="k">false</span>);
+
+<span class="c">// break — exit loop early</span>
+<span class="k">for</span> (<span class="t">int</span> <span class="n">i</span> = <span class="num">0</span>; <span class="n">i</span> &lt; <span class="num">10</span>; <span class="n">i</span>++) {
+  <span class="k">if</span> (<span class="n">i</span> == <span class="num">5</span>) <span class="k">break</span>;  <span class="c">// stops at 5</span>
+  <span class="m">print</span>(<span class="n">i</span>);
+}
+
+<span class="c">// continue — skip current iteration</span>
+<span class="k">for</span> (<span class="t">int</span> <span class="n">i</span> = <span class="num">0</span>; <span class="n">i</span> &lt; <span class="num">6</span>; <span class="n">i</span>++) {
+  <span class="k">if</span> (<span class="n">i</span> % <span class="num">2</span> == <span class="num">0</span>) <span class="k">continue</span>;  <span class="c">// skip even numbers</span>
+  <span class="m">print</span>(<span class="n">i</span>);  <span class="c">// prints 1, 3, 5</span>
+}</pre>
+    </div>
+    <div class="info-box info-warn"><strong>⚠️ forEach vs for-in in Flutter</strong><p>Always prefer <code>for-in</code> over <code>.forEach()</code> in Flutter async code. <code>forEach</code> callbacks cannot use <code>await</code>, <code>break</code>, or <code>continue</code>. Use <code>for-in</code> with <code>await</code> when processing lists of futures sequentially.</p></div>
+  </div>
+
+  <div class="subsection" id="s14-3">
+    <h3 style="color:var(--coral);">14.3 Dart Operators Cheat Sheet</h3>
+    <p>Dart has all standard operators plus unique ones: the <strong>cascade (..)</strong>, <strong>null-aware (??)</strong>, <strong>null-aware cascade (?..) </strong>, <strong>type test (is, as)</strong>, and <strong>spread (...)</strong> operators. These are used constantly in real Flutter applications.</p>
+    <div class="table-wrap"><table>
+      <tr><th>Category</th><th>Symbols</th><th>Example</th><th>Notes</th></tr>
+      <tr><td>Arithmetic</td><td><code>+  -  *  /  ~/  %</code></td><td><code>10 ~/ 3</code> → <code>3</code></td><td><code>~/</code> = integer division</td></tr>
+      <tr><td>Comparison</td><td><code>==  !=  &lt;  &gt;  &lt;=  &gt;=</code></td><td><code>5 != 3</code> → <code>true</code></td><td>Returns bool</td></tr>
+      <tr><td>Logical</td><td><code>&amp;&amp;  ||  !</code></td><td><code>a &amp;&amp; b</code></td><td>Short-circuit eval</td></tr>
+      <tr><td>Null-aware</td><td><code>??  ??=  ?.</code></td><td><code>name ?? 'Guest'</code></td><td>Handle nulls safely</td></tr>
+      <tr><td>Type test</td><td><code>is  is!  as</code></td><td><code>x is String</code></td><td>Runtime type check + promotion</td></tr>
+      <tr><td>Cascade</td><td><code>..  ?..</code></td><td><code>list..add(1)..add(2)</code></td><td>Chain calls, same object</td></tr>
+      <tr><td>Spread</td><td><code>...  ...?</code></td><td><code>[...list1, ...list2]</code></td><td>Merge collections</td></tr>
+    </table></div>
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="c">// Integer division vs regular division</span>
+<span class="m">print</span>(<span class="num">10</span> / <span class="num">3</span>);   <span class="c">// 3.333... (double)</span>
+<span class="m">print</span>(<span class="num">10</span> ~/ <span class="num">3</span>);  <span class="c">// 3 (int, truncates)</span>
+<span class="m">print</span>(<span class="num">10</span> % <span class="num">3</span>);   <span class="c">// 1 (modulus)</span>
+
+<span class="c">// Type operators — 'is' also promotes the type!</span>
+<span class="k">dynamic</span> <span class="n">val</span> = <span class="s">'Hello'</span>;
+<span class="k">if</span> (<span class="n">val</span> <span class="k">is</span> <span class="t">String</span>) {
+  <span class="m">print</span>(<span class="n">val</span>.<span class="m">toUpperCase</span>());  <span class="c">// val promoted to String</span>
+}
+<span class="t">String</span> <span class="n">casted</span> = <span class="n">val</span> <span class="k">as</span> <span class="t">String</span>; <span class="c">// throws if wrong type</span>
+
+<span class="c">// Null-aware operators</span>
+<span class="t">String</span>? <span class="n">username</span>;
+<span class="n">username</span> ??= <span class="s">'Guest'</span>;           <span class="c">// Assign only if null</span>
+<span class="t">String</span> <span class="n">display</span> = <span class="n">username</span> ?? <span class="s">'Anonymous'</span>;
+<span class="t">int</span>? <span class="n">len</span> = <span class="n">username</span>?.<span class="n">length</span>;   <span class="c">// null if username is null</span>
+
+<span class="c">// Cascade (..) — chain calls on same object</span>
+<span class="k">final</span> <span class="n">paint</span> = <span class="t">Paint</span>()
+  ..<span class="n">color</span> = <span class="t">Colors</span>.<span class="n">blue</span>
+  ..<span class="n">strokeWidth</span> = <span class="num">2.0</span>
+  ..<span class="n">style</span> = <span class="t">PaintingStyle</span>.<span class="n">fill</span>;
+
+<span class="c">// Null-aware cascade (?..)</span>
+<span class="t">Paint</span>? <span class="n">maybePaint</span>;
+<span class="n">maybePaint</span>?..<span class="n">color</span> = <span class="t">Colors</span>.<span class="n">red</span>; <span class="c">// safe — skips if null</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SECTION 15: Strings, DateTime & Enums ═══════════ -->
+<section class="section" id="s15">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--amber-bg);">📅</div>
+    <div class="section-meta">
+      <span class="section-badge" style="background:var(--amber-bg);color:var(--amber);">Dart Core</span>
+      <div class="section-title" style="color:var(--amber);">Strings, DateTime &amp; Enums</div>
+      <div class="section-subtitle">String manipulation, date/time arithmetic, and enhanced Dart 3 enums with methods</div>
+    </div>
+  </div>
+
+  <div class="subsection" id="s15-1">
+    <h3 style="color:var(--amber);">15.1 String Methods &amp; Manipulation</h3>
+    <p>Dart's <code>String</code> is an immutable sequence of UTF-16 code units. String interpolation with <code>$variable</code> and <code>${expression}</code> is the idiomatic Dart way. Never use <code>+</code> concatenation in loops — it creates a new object on every iteration. Use <code>StringBuffer</code> instead.</p>
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="t">String</span> <span class="n">text</span> = <span class="s">'  Hello, Flutter World!  '</span>;
+
+<span class="c">// Case &amp; whitespace</span>
+<span class="m">print</span>(<span class="n">text</span>.<span class="m">trim</span>());           <span class="c">// 'Hello, Flutter World!'</span>
+<span class="m">print</span>(<span class="n">text</span>.<span class="m">toUpperCase</span>());    <span class="c">// '  HELLO, FLUTTER WORLD!  '</span>
+<span class="m">print</span>(<span class="n">text</span>.<span class="m">toLowerCase</span>());
+
+<span class="c">// Searching</span>
+<span class="m">print</span>(<span class="n">text</span>.<span class="m">contains</span>(<span class="s">'Flutter'</span>));     <span class="c">// true</span>
+<span class="m">print</span>(<span class="n">text</span>.<span class="m">startsWith</span>(<span class="s">'  Hello'</span>));   <span class="c">// true</span>
+<span class="m">print</span>(<span class="n">text</span>.<span class="m">indexOf</span>(<span class="s">'Flutter'</span>));      <span class="c">// 9</span>
+
+<span class="c">// Slicing &amp; replacing</span>
+<span class="m">print</span>(<span class="n">text</span>.<span class="m">substring</span>(<span class="num">2</span>, <span class="num">7</span>));          <span class="c">// 'Hello'</span>
+<span class="m">print</span>(<span class="n">text</span>.<span class="m">replaceAll</span>(<span class="s">'Flutter'</span>, <span class="s">'Dart'</span>));
+<span class="m">print</span>(<span class="n">text</span>.<span class="m">split</span>(<span class="s">','</span>));               <span class="c">// List of parts</span>
+
+<span class="c">// Interpolation — preferred</span>
+<span class="t">String</span> <span class="n">name</span> = <span class="s">'Shatrudhan'</span>;
+<span class="t">int</span> <span class="n">version</span> = <span class="num">3</span>;
+<span class="m">print</span>(<span class="s">'Hello $name! Flutter $version'</span>);
+<span class="m">print</span>(<span class="s">'${name.length} characters'</span>);
+
+<span class="c">// StringBuffer — efficient loop building</span>
+<span class="k">final</span> <span class="n">sb</span> = <span class="t">StringBuffer</span>();
+<span class="k">for</span> (<span class="t">int</span> <span class="n">i</span> = <span class="num">1</span>; <span class="n">i</span> &lt;= <span class="num">5</span>; <span class="n">i</span>++) { <span class="n">sb</span>.<span class="m">write</span>(<span class="s">'Item $i, '</span>); }
+<span class="m">print</span>(<span class="n">sb</span>.<span class="m">toString</span>()); <span class="c">// 'Item 1, Item 2, ...'</span></pre>
+    </div>
+    <div class="info-box info-key"><strong>🔑 String Immutability</strong><p>Every <code>String</code> method returns a <strong>new</strong> String — the original is unchanged. Never do <code>str = str + item</code> in loops (creates N objects). Use <code>StringBuffer</code> or <code>list.join(separator)</code>.</p></div>
+  </div>
+
+  <div class="subsection" id="s15-2">
+    <h3 style="color:var(--amber);">15.2 DateTime &amp; Duration Arithmetic</h3>
+    <p><code>DateTime</code> handles date/time. Use <code>DateTime.now()</code> for local time, <code>DateTime.utc()</code> for UTC, <code>DateTime.parse()</code> for ISO 8601 strings. <code>Duration</code> represents a span of time and enables date arithmetic. Use the <code>intl</code> package for locale-aware formatting.</p>
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="c">// Creating DateTime</span>
+<span class="k">final</span> <span class="n">now</span> = <span class="t">DateTime</span>.<span class="m">now</span>();
+<span class="k">final</span> <span class="n">specific</span> = <span class="t">DateTime</span>(<span class="num">2024</span>, <span class="num">4</span>, <span class="num">6</span>, <span class="num">10</span>, <span class="num">30</span>);
+<span class="k">final</span> <span class="n">parsed</span> = <span class="t">DateTime</span>.<span class="m">parse</span>(<span class="s">'2024-04-06T10:30:00Z'</span>);
+
+<span class="c">// Reading parts</span>
+<span class="m">print</span>(<span class="n">now</span>.<span class="n">year</span>);    <span class="m">print</span>(<span class="n">now</span>.<span class="n">month</span>);   <span class="m">print</span>(<span class="n">now</span>.<span class="n">day</span>);
+<span class="m">print</span>(<span class="n">now</span>.<span class="n">hour</span>);   <span class="m">print</span>(<span class="n">now</span>.<span class="n">weekday</span>);  <span class="c">// 1=Mon..7=Sun</span>
+<span class="m">print</span>(<span class="n">now</span>.<span class="n">millisecondsSinceEpoch</span>);  <span class="c">// Unix ms</span>
+
+<span class="c">// Arithmetic with Duration</span>
+<span class="k">final</span> <span class="n">tomorrow</span>   = <span class="n">now</span>.<span class="m">add</span>(<span class="t">Duration</span>(<span class="n">days</span>: <span class="num">1</span>));
+<span class="k">final</span> <span class="n">lastWeek</span>   = <span class="n">now</span>.<span class="m">subtract</span>(<span class="t">Duration</span>(<span class="n">days</span>: <span class="num">7</span>));
+<span class="k">final</span> <span class="n">inFiveHrs</span>  = <span class="n">now</span>.<span class="m">add</span>(<span class="t">Duration</span>(<span class="n">hours</span>: <span class="num">5</span>));
+
+<span class="c">// Comparing</span>
+<span class="m">print</span>(<span class="n">tomorrow</span>.<span class="m">isAfter</span>(<span class="n">now</span>));    <span class="c">// true</span>
+<span class="m">print</span>(<span class="n">lastWeek</span>.<span class="m">isBefore</span>(<span class="n">now</span>));   <span class="c">// true</span>
+
+<span class="c">// Difference</span>
+<span class="k">final</span> <span class="n">diff</span> = <span class="n">tomorrow</span>.<span class="m">difference</span>(<span class="n">now</span>);
+<span class="m">print</span>(<span class="n">diff</span>.<span class="n">inHours</span>);    <span class="c">// 24</span>
+<span class="m">print</span>(<span class="n">diff</span>.<span class="n">inMinutes</span>);  <span class="c">// 1440</span>
+
+<span class="c">// ISO format (no package needed)</span>
+<span class="m">print</span>(<span class="n">now</span>.<span class="m">toIso8601String</span>()); <span class="c">// '2024-04-06T10:30:00.000'</span>
+
+<span class="c">// With intl package: DateFormat('dd MMM yyyy').format(now) → '06 Apr 2024'</span></pre>
+    </div>
+  </div>
+
+  <div class="subsection" id="s15-3">
+    <h3 style="color:var(--amber);">15.3 Enhanced Enums (Dart 2.17+)</h3>
+    <p>Dart's enhanced enums can have <strong>fields, constructors, getters, and methods</strong>. This is a massive upgrade over traditional enums. You can attach data and behavior directly to enum values — eliminating parallel maps and switch helpers entirely.</p>
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="c">// Simple enum for widget state</span>
+<span class="k">enum</span> <span class="t">AppStatus</span> { <span class="n">idle</span>, <span class="n">loading</span>, <span class="n">success</span>, <span class="n">failure</span> }
+
+<span class="c">// Enhanced enum — fields + methods (Dart 2.17+)</span>
+<span class="k">enum</span> <span class="t">Planet</span> {
+  mercury(<span class="n">mass</span>: <span class="num">3.303e+23</span>, <span class="n">radius</span>: <span class="num">2.4397e6</span>),
+  venus(<span class="n">mass</span>: <span class="num">4.869e+24</span>, <span class="n">radius</span>: <span class="num">6.0518e6</span>),
+  earth(<span class="n">mass</span>: <span class="num">5.976e+24</span>, <span class="n">radius</span>: <span class="num">6.37814e6</span>);
+
+  <span class="k">const</span> <span class="t">Planet</span>({<span class="k">required</span> <span class="k">this</span>.<span class="n">mass</span>, <span class="k">required</span> <span class="k">this</span>.<span class="n">radius</span>});
+
+  <span class="k">final</span> <span class="t">double</span> <span class="n">mass</span>;
+  <span class="k">final</span> <span class="t">double</span> <span class="n">radius</span>;
+
+  <span class="t">double</span> <span class="k">get</span> <span class="n">surfaceGravity</span> {
+    <span class="k">const</span> <span class="n">G</span> = <span class="num">6.67430e-11</span>;
+    <span class="k">return</span> <span class="n">G</span> * <span class="n">mass</span> / (<span class="n">radius</span> * <span class="n">radius</span>);
+  }
+  <span class="t">double</span> <span class="m">surfaceWeight</span>(<span class="t">double</span> <span class="n">m</span>) =&gt; <span class="n">m</span> * <span class="n">surfaceGravity</span>;
+}
+
+<span class="k">void</span> <span class="m">main</span>() {
+  <span class="m">print</span>(<span class="t">Planet</span>.<span class="n">earth</span>.<span class="m">surfaceWeight</span>(<span class="num">75.0</span>)); <span class="c">// ~735 N</span>
+
+  <span class="c">// Switch expression — exhaustive, no default needed</span>
+  <span class="t">AppStatus</span> <span class="n">status</span> = <span class="t">AppStatus</span>.<span class="n">loading</span>;
+  <span class="t">String</span> <span class="n">label</span> = <span class="k">switch</span> (<span class="n">status</span>) {
+    <span class="t">AppStatus</span>.<span class="n">idle</span>    =&gt; <span class="s">'Idle'</span>,
+    <span class="t">AppStatus</span>.<span class="n">loading</span> =&gt; <span class="s">'Loading...'</span>,
+    <span class="t">AppStatus</span>.<span class="n">success</span> =&gt; <span class="s">'Done!'</span>,
+    <span class="t">AppStatus</span>.<span class="n">failure</span> =&gt; <span class="s">'Error!'</span>,
+  };
+
+  <span class="c">// Built-in enum utilities</span>
+  <span class="m">print</span>(<span class="t">AppStatus</span>.<span class="n">loading</span>.<span class="n">name</span>);           <span class="c">// 'loading'</span>
+  <span class="m">print</span>(<span class="t">AppStatus</span>.<span class="n">values</span>);                  <span class="c">// all values</span>
+  <span class="m">print</span>(<span class="t">AppStatus</span>.<span class="n">values</span>.<span class="m">byName</span>(<span class="s">'failure'</span>)); <span class="c">// AppStatus.failure</span>
+}</pre>
+    </div>
+    <div class="info-box info-tip"><strong>💡 Enums for State Modeling</strong><p>Replace multiple boolean flags (<code>isLoading</code>, <code>hasError</code>) with a single <code>AppStatus</code> enum. This makes state exhaustive and impossible to represent invalid combinations. Riverpod's <code>AsyncValue</code> is built on exactly this pattern.</p></div>
+  </div>
+</section>
+
+<!-- ═══════════ SECTION 16: Animations & Adaptive Design ═══════════ -->
+<section class="section" id="s16">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--purple-bg);">🎨</div>
+    <div class="section-meta">
+      <span class="section-badge" style="background:var(--purple-bg);color:var(--purple);">Flutter UI</span>
+      <div class="section-title" style="color:var(--purple);">Animations &amp; Adaptive Design</div>
+      <div class="section-subtitle">Implicit vs explicit animations, Hero transitions, and responsive/adaptive layouts</div>
+    </div>
+  </div>
+
+  <div class="subsection" id="s16-1">
+    <h3 style="color:var(--purple);">16.1 Flutter Animation System</h3>
+    <p>Flutter has two tiers: <strong>Implicit</strong> (AnimatedContainer, AnimatedOpacity — manage their own controller, just set the target value) and <strong>Explicit</strong> (AnimationController + AnimatedBuilder — you drive the timeline). Use implicit first; reach for explicit only when you need repeating, sequenced, or manually-triggered animations.</p>
+    <div class="table-wrap"><table>
+      <tr><th>Type</th><th>Widgets</th><th>When to Use</th></tr>
+      <tr><td><strong>Implicit</strong></td><td><code>AnimatedContainer</code>, <code>AnimatedOpacity</code>, <code>AnimatedPadding</code>, <code>AnimatedAlign</code></td><td>Simple setState-triggered property changes</td></tr>
+      <tr><td><strong>Tween Builder</strong></td><td><code>TweenAnimationBuilder</code></td><td>Custom tween on any widget without a controller</td></tr>
+      <tr><td><strong>Explicit</strong></td><td><code>AnimationController</code> + <code>AnimatedBuilder</code></td><td>Repeating, sequenced, or code-driven animations</td></tr>
+      <tr><td><strong>Hero</strong></td><td><code>Hero(tag:...)</code></td><td>Shared element transition between routes</td></tr>
+      <tr><td><strong>Page Route</strong></td><td><code>PageRouteBuilder</code></td><td>Custom screen-to-screen transition</td></tr>
+    </table></div>
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart — Implicit vs Explicit Animation</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="c">// ── IMPLICIT: AnimatedContainer ─────────────────────────────</span>
+<span class="k">class</span> <span class="t">_PulsingBoxState</span> <span class="k">extends</span> <span class="t">State</span>&lt;<span class="t">PulsingBox</span>&gt; {
+  <span class="t">bool</span> <span class="n">_big</span> = <span class="k">false</span>;
+
+  <span class="ann">@override</span>
+  <span class="t">Widget</span> <span class="m">build</span>(<span class="t">BuildContext</span> <span class="n">context</span>) {
+    <span class="k">return</span> <span class="t">GestureDetector</span>(
+      <span class="n">onTap</span>: () =&gt; <span class="m">setState</span>(() =&gt; <span class="n">_big</span> = !<span class="n">_big</span>),
+      <span class="n">child</span>: <span class="t">AnimatedContainer</span>(      <span class="c">// Auto-animates on change</span>
+        <span class="n">duration</span>: <span class="k">const</span> <span class="t">Duration</span>(<span class="n">milliseconds</span>: <span class="num">300</span>),
+        <span class="n">curve</span>: <span class="t">Curves</span>.<span class="n">easeInOut</span>,
+        <span class="n">width</span>: <span class="n">_big</span> ? <span class="num">200</span> : <span class="num">100</span>,
+        <span class="n">height</span>: <span class="n">_big</span> ? <span class="num">200</span> : <span class="num">100</span>,
+        <span class="n">color</span>: <span class="n">_big</span> ? <span class="t">Colors</span>.<span class="n">purple</span> : <span class="t">Colors</span>.<span class="n">blue</span>,
+      ),
+    );
+  }
+}
+
+<span class="c">// ── EXPLICIT: AnimationController + AnimatedBuilder ──────────</span>
+<span class="k">class</span> <span class="t">_SpinningState</span> <span class="k">extends</span> <span class="t">State</span>&lt;<span class="t">SpinningIcon</span>&gt;
+    <span class="k">with</span> <span class="t">SingleTickerProviderStateMixin</span> {
+  <span class="k">late</span> <span class="t">AnimationController</span> <span class="n">_ctrl</span>;
+
+  <span class="ann">@override</span>
+  <span class="k">void</span> <span class="m">initState</span>() {
+    <span class="k">super</span>.<span class="m">initState</span>();
+    <span class="n">_ctrl</span> = <span class="t">AnimationController</span>(
+      <span class="n">vsync</span>: <span class="k">this</span>,
+      <span class="n">duration</span>: <span class="k">const</span> <span class="t">Duration</span>(<span class="n">seconds</span>: <span class="num">2</span>),
+    )..<span class="m">repeat</span>();  <span class="c">// Spin forever</span>
+  }
+
+  <span class="ann">@override</span>
+  <span class="k">void</span> <span class="m">dispose</span>() { <span class="n">_ctrl</span>.<span class="m">dispose</span>(); <span class="k">super</span>.<span class="m">dispose</span>(); } <span class="c">// MUST dispose</span>
+
+  <span class="ann">@override</span>
+  <span class="t">Widget</span> <span class="m">build</span>(<span class="t">BuildContext</span> <span class="n">context</span>) {
+    <span class="k">return</span> <span class="t">AnimatedBuilder</span>(
+      <span class="n">animation</span>: <span class="n">_ctrl</span>,
+      <span class="n">builder</span>: (<span class="n">context</span>, <span class="n">child</span>) =&gt; <span class="t">Transform</span>.<span class="m">rotate</span>(
+        <span class="n">angle</span>: <span class="n">_ctrl</span>.<span class="n">value</span> * <span class="num">6.28</span>,  <span class="c">// 2*pi radians</span>
+        <span class="n">child</span>: <span class="n">child</span>,
+      ),
+      <span class="n">child</span>: <span class="k">const</span> <span class="t">Icon</span>(<span class="t">Icons</span>.<span class="n">settings</span>, <span class="n">size</span>: <span class="num">48</span>),
+    );
+  }
+}
+
+<span class="c">// ── HERO: Shared element transition ─────────────────────────</span>
+<span class="c">// Screen 1:</span>
+<span class="t">Hero</span>(<span class="n">tag</span>: <span class="s">'avatar-123'</span>, <span class="n">child</span>: <span class="t">CircleAvatar</span>(...))
+<span class="c">// Screen 2 (same tag — Flutter animates between them):</span>
+<span class="t">Hero</span>(<span class="n">tag</span>: <span class="s">'avatar-123'</span>, <span class="n">child</span>: <span class="t">Image</span>.<span class="m">network</span>(..., <span class="n">width</span>: <span class="num">300</span>))</pre>
+    </div>
+  </div>
+
+  <div class="subsection" id="s16-2">
+    <h3 style="color:var(--purple);">16.2 Responsive &amp; Adaptive Design</h3>
+    <p><strong>Responsive</strong>: layout adapts to screen <em>size</em>. <strong>Adaptive</strong>: UI adapts to the <em>platform</em> (iOS vs Android, using Cupertino vs Material). Use <code>MediaQuery.sizeOf(context)</code> and <code>LayoutBuilder</code> for responsive; <code>Platform.isIOS</code> or <code>defaultTargetPlatform</code> for adaptive.</p>
+    <div class="grid-2">
+      <div class="card glass glow-hover" style="border-top:3px solid var(--blue);">
+        <div class="card-title" style="color:var(--blue);">MediaQuery.sizeOf()</div>
+        <p>Preferred in Flutter 3.7+ — only rebuilds when size changes, not every MediaQuery property.</p>
+<pre style="background:transparent;border:none;margin-top:8px;"><code style="color:var(--muted);"><span class="k">final</span> <span class="n">w</span> = <span class="t">MediaQuery</span>
+  .<span class="m">sizeOf</span>(<span class="n">context</span>).<span class="n">width</span>;
+<span class="k">return</span> <span class="n">w</span> &gt; <span class="num">800</span>
+  ? <span class="t">WideLayout</span>()
+  : <span class="t">NarrowLayout</span>();</code></pre>
+      </div>
+      <div class="card glass glow-hover" style="border-top:3px solid var(--purple);">
+        <div class="card-title" style="color:var(--purple);">LayoutBuilder</div>
+        <p>Provides parent constraints — ideal when a widget needs to know its own available space.</p>
+<pre style="background:transparent;border:none;margin-top:8px;"><code style="color:var(--muted);"><span class="t">LayoutBuilder</span>(
+  <span class="n">builder</span>: (<span class="n">ctx</span>, <span class="n">c</span>) {
+    <span class="k">return</span> <span class="n">c</span>.<span class="n">maxWidth</span> &gt; <span class="num">600</span>
+      ? <span class="t">WideWidget</span>()
+      : <span class="t">NarrowWidget</span>();
+  },
+)</code></pre>
+      </div>
+    </div>
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart — Adaptive Platform Widgets + SafeArea</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="c">// Adaptive: Render Cupertino on iOS, Material on Android</span>
+<span class="k">import</span> <span class="s">'dart:io'</span>;
+
+<span class="t">Widget</span> <span class="m">buildButton</span>(<span class="t">String</span> <span class="n">label</span>, <span class="t">VoidCallback</span> <span class="n">onPressed</span>) {
+  <span class="k">return</span> <span class="t">Platform</span>.<span class="n">isIOS</span>
+    ? <span class="t">CupertinoButton</span>(<span class="n">onPressed</span>: <span class="n">onPressed</span>, <span class="n">child</span>: <span class="t">Text</span>(<span class="n">label</span>))
+    : <span class="t">ElevatedButton</span>(<span class="n">onPressed</span>: <span class="n">onPressed</span>, <span class="n">child</span>: <span class="t">Text</span>(<span class="n">label</span>));
+}
+
+<span class="c">// SafeArea — pads content away from notches &amp; system bars</span>
+<span class="t">Scaffold</span>(
+  <span class="n">body</span>: <span class="t">SafeArea</span>(
+    <span class="n">child</span>: <span class="t">MyContent</span>(),
+  ),
+);
+
+<span class="c">// Responsive navigation pattern</span>
+<span class="t">Widget</span> <span class="m">build</span>(<span class="t">BuildContext</span> <span class="n">context</span>) {
+  <span class="k">final</span> <span class="n">width</span> = <span class="t">MediaQuery</span>.<span class="m">sizeOf</span>(<span class="n">context</span>).<span class="n">width</span>;
+  <span class="k">if</span> (<span class="n">width</span> &gt; <span class="num">1200</span>) <span class="k">return</span> <span class="t">DesktopLayout</span>();  <span class="c">// Sidebar nav</span>
+  <span class="k">if</span> (<span class="n">width</span> &gt; <span class="num">600</span>)  <span class="k">return</span> <span class="t">TabletLayout</span>();   <span class="c">// Rail nav</span>
+  <span class="k">return</span> <span class="t">MobileLayout</span>();                       <span class="c">// Bottom nav</span>
+}</pre>
+    </div>
+    <div class="info-box info-key"><strong>🔑 Three-Breakpoint Strategy from Flutter Docs</strong><p>Flutter's official adaptive design guide recommends three breakpoints: <strong>compact</strong> (&lt;600dp — phones), <strong>medium</strong> (600–1200dp — tablets/foldables), and <strong>expanded</strong> (&gt;1200dp — desktops). Switch navigation types: BottomNavigationBar → NavigationRail → NavigationDrawer.</p></div>
+  </div>
+</section>
+
+
+<!-- ═══════════ SECTION 17: Generics & Error Handling ═══════════ -->
+<section class="section" id="s17">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--blue-bg);">🧬</div>
+    <div class="section-meta">
+      <span class="section-badge" style="background:var(--blue-bg);color:var(--blue);">Dart Core</span>
+      <div class="section-title" style="color:var(--blue);">Generics &amp; Error Handling</div>
+      <div class="section-subtitle">Type-safe reusable code with generics, and robust try/catch/finally patterns</div>
+    </div>
+  </div>
+
+  <div class="subsection" id="s17-1">
+    <h3 style="color:var(--blue);">17.1 Generics Deep Dive</h3>
+    <p>Generics allow you to write <strong>type-safe, reusable code</strong> without duplicating logic for different types. Dart generics are <strong>reified</strong> — unlike Java, type information is preserved at runtime. You can constrain generics with <code>extends</code> (bounded type parameters) to restrict which types are allowed.</p>
+    <div class="table-wrap"><table>
+      <tr><th>Concept</th><th>Syntax</th><th>Meaning</th></tr>
+      <tr><td>Generic class</td><td><code>class Box&lt;T&gt;</code></td><td><code>T</code> is a placeholder for any type</td></tr>
+      <tr><td>Generic method</td><td><code>T first&lt;T&gt;(List&lt;T&gt; list)</code></td><td>Type inferred from argument</td></tr>
+      <tr><td>Bounded type</td><td><code>class Repo&lt;T extends Entity&gt;</code></td><td><code>T</code> must be a subtype of <code>Entity</code></td></tr>
+      <tr><td>Reified types</td><td><code>list is List&lt;String&gt;</code></td><td>Runtime check works — unlike Java erasure</td></tr>
+    </table></div>
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="c">// Generic class — type-safe wrapper</span>
+<span class="k">class</span> <span class="t">Box</span>&lt;<span class="t">T</span>&gt; {
+  <span class="k">final</span> <span class="t">T</span> <span class="n">value</span>;
+  <span class="k">const</span> <span class="t">Box</span>(<span class="k">this</span>.<span class="n">value</span>);
+
+  <span class="t">Box</span>&lt;<span class="t">R</span>&gt; <span class="m">map</span>&lt;<span class="t">R</span>&gt;(<span class="t">R</span> <span class="t">Function</span>(<span class="t">T</span>) <span class="n">transform</span>) {
+    <span class="k">return</span> <span class="t">Box</span>(<span class="m">transform</span>(<span class="n">value</span>));
+  }
+}
+
+<span class="c">// Usage — Dart infers the type parameter</span>
+<span class="k">final</span> <span class="n">intBox</span>  = <span class="t">Box</span>(<span class="num">42</span>);                               <span class="c">// Box&lt;int&gt;</span>
+<span class="k">final</span> <span class="n">strBox</span>  = <span class="n">intBox</span>.<span class="m">map</span>((<span class="n">n</span>) =&gt; <span class="s">'Value: $n'</span>);        <span class="c">// Box&lt;String&gt;</span>
+<span class="k">final</span> <span class="n">nameBox</span> = <span class="t">Box</span>&lt;<span class="t">String</span>&gt;(<span class="s">'Flutter'</span>);                <span class="c">// Explicit type</span>
+
+<span class="c">// Bounded type parameter — T must extend Comparable</span>
+<span class="t">T</span> <span class="m">maxOf</span>&lt;<span class="t">T</span> <span class="k">extends</span> <span class="t">Comparable</span>&lt;<span class="t">T</span>&gt;&gt;(<span class="t">T</span> <span class="n">a</span>, <span class="t">T</span> <span class="n">b</span>) {
+  <span class="k">return</span> <span class="n">a</span>.<span class="m">compareTo</span>(<span class="n">b</span>) &gt;= <span class="num">0</span> ? <span class="n">a</span> : <span class="n">b</span>;
+}
+<span class="m">print</span>(<span class="m">maxOf</span>(<span class="num">3</span>, <span class="num">7</span>));          <span class="c">// 7</span>
+<span class="m">print</span>(<span class="m">maxOf</span>(<span class="s">'apple'</span>, <span class="s">'mango'</span>)); <span class="c">// 'mango' (lexicographic)</span>
+
+<span class="c">// Generic repository pattern (Clean Architecture)</span>
+<span class="k">abstract class</span> <span class="t">Entity</span> { <span class="k">final</span> <span class="t">int</span> <span class="n">id</span>; <span class="k">const</span> <span class="t">Entity</span>(<span class="k">this</span>.<span class="n">id</span>); }
+
+<span class="k">abstract class</span> <span class="t">Repository</span>&lt;<span class="t">T</span> <span class="k">extends</span> <span class="t">Entity</span>&gt; {
+  <span class="k">Future</span>&lt;<span class="t">T</span>?&gt; <span class="m">findById</span>(<span class="t">int</span> <span class="n">id</span>);
+  <span class="k">Future</span>&lt;<span class="t">List</span>&lt;<span class="t">T</span>&gt;&gt; <span class="m">findAll</span>();
+  <span class="k">Future</span>&lt;<span class="k">void</span>&gt; <span class="m">save</span>(<span class="t">T</span> <span class="n">entity</span>);
+}
+
+<span class="c">// Dart reified generics — runtime check works!</span>
+<span class="k">final</span> <span class="t">List</span>&lt;<span class="t">String</span>&gt; <span class="n">names</span> = [<span class="s">'Alice'</span>, <span class="s">'Bob'</span>];
+<span class="m">print</span>(<span class="n">names</span> <span class="k">is</span> <span class="t">List</span>&lt;<span class="t">String</span>&gt;); <span class="c">// true  (would be false in Java!)</span>
+<span class="m">print</span>(<span class="n">names</span> <span class="k">is</span> <span class="t">List</span>&lt;<span class="t">int</span>&gt;);    <span class="c">// false</span></pre>
+    </div>
+    <div class="info-box info-tip"><strong>💡 Generic Result Type</strong><p>Model success/failure with a generic sealed class instead of throwing exceptions: <code>sealed class Result&lt;T&gt; {} class Ok&lt;T&gt; extends Result&lt;T&gt; { final T value; } class Err&lt;T&gt; extends Result&lt;T&gt; { final String message; }</code>. Callers handle it with exhaustive switch — no try/catch needed in the UI layer.</p></div>
+  </div>
+
+  <div class="subsection" id="s17-2">
+    <h3 style="color:var(--blue);">17.2 Error &amp; Exception Handling</h3>
+    <p>Dart distinguishes between <strong>Errors</strong> (programming bugs — should not be caught: <code>StackOverflowError</code>, <code>OutOfMemoryError</code>) and <strong>Exceptions</strong> (recoverable runtime issues: <code>FormatException</code>, <code>SocketException</code>). Use <code>try / on / catch / finally</code>. Always catch specific types — never use bare <code>catch (e)</code> in production.</p>
+    <div class="table-wrap"><table>
+      <tr><th>Keyword</th><th>Purpose</th><th>Example</th></tr>
+      <tr><td><code style="background:var(--coral-bg);color:var(--coral);">try</code></td><td>Wraps risky code</td><td>Network call, JSON parse, file read</td></tr>
+      <tr><td><code style="background:var(--blue-bg);color:var(--blue);">on TypeName</code></td><td>Catch specific exception type</td><td><code>on FormatException catch (e)</code></td></tr>
+      <tr><td><code style="background:var(--amber-bg);color:var(--amber);">catch (e, s)</code></td><td>Catch any exception + stack trace</td><td><code>s</code> is the StackTrace</td></tr>
+      <tr><td><code style="background:var(--teal-bg);color:var(--teal);">finally</code></td><td>Always runs — for cleanup</td><td>Close file, hide loading spinner</td></tr>
+      <tr><td><code style="background:var(--purple-bg);color:var(--purple);">throw</code></td><td>Throw any object as exception</td><td><code>throw Exception('msg')</code></td></tr>
+      <tr><td><code style="background:var(--green-bg);color:var(--green);">rethrow</code></td><td>Re-throw caught exception upwards</td><td>After logging, pass to caller</td></tr>
+    </table></div>
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="c">// Custom exception class</span>
+<span class="k">class</span> <span class="t">ApiException</span> <span class="k">implements</span> <span class="t">Exception</span> {
+  <span class="k">final</span> <span class="t">int</span> <span class="n">statusCode</span>;
+  <span class="k">final</span> <span class="t">String</span> <span class="n">message</span>;
+  <span class="k">const</span> <span class="t">ApiException</span>(<span class="k">this</span>.<span class="n">statusCode</span>, <span class="k">this</span>.<span class="n">message</span>);
+
+  <span class="ann">@override</span>
+  <span class="t">String</span> <span class="m">toString</span>() =&gt; <span class="s">'ApiException($statusCode): $message'</span>;
+}
+
+<span class="c">// Comprehensive try / on / catch / finally</span>
+<span class="k">Future</span>&lt;<span class="t">User</span>&gt; <span class="m">fetchUser</span>(<span class="t">int</span> <span class="n">id</span>) <span class="k">async</span> {
+  <span class="k">try</span> {
+    <span class="k">final</span> <span class="n">response</span> = <span class="k">await</span> <span class="n">http</span>.<span class="m">get</span>(<span class="t">Uri</span>.<span class="m">parse</span>(<span class="s">'/users/$id'</span>));
+
+    <span class="k">if</span> (<span class="n">response</span>.<span class="n">statusCode</span> != <span class="num">200</span>) {
+      <span class="k">throw</span> <span class="t">ApiException</span>(<span class="n">response</span>.<span class="n">statusCode</span>, <span class="s">'User not found'</span>);
+    }
+
+    <span class="k">return</span> <span class="t">User</span>.<span class="m">fromJson</span>(<span class="m">jsonDecode</span>(<span class="n">response</span>.<span class="n">body</span>));
+
+  } <span class="k">on</span> <span class="t">ApiException</span> <span class="k">catch</span> (<span class="n">e</span>) {
+    <span class="m">print</span>(<span class="s">'API Error: ${e.message}'</span>);
+    <span class="k">rethrow</span>;  <span class="c">// Pass up to UI layer to display</span>
+
+  } <span class="k">on</span> <span class="t">FormatException</span> <span class="k">catch</span> (<span class="n">e</span>) {
+    <span class="k">throw</span> <span class="t">Exception</span>(<span class="s">'Bad JSON response: ${e.message}'</span>);
+
+  } <span class="k">on</span> <span class="t">SocketException</span> <span class="k">catch</span> (<span class="n">e</span>) {
+    <span class="k">throw</span> <span class="t">Exception</span>(<span class="s">'No internet connection'</span>);
+
+  } <span class="k">catch</span> (<span class="n">e</span>, <span class="n">stack</span>) {
+    <span class="c">// Unexpected error — log with stack trace</span>
+    <span class="m">print</span>(<span class="s">'Unexpected: $e
+$stack'</span>);
+    <span class="k">rethrow</span>;
+
+  } <span class="k">finally</span> {
+    <span class="m">print</span>(<span class="s">'Request finished'</span>); <span class="c">// Always runs</span>
+  }
+}
+
+<span class="c">// Throwing non-Exception objects (valid in Dart!)</span>
+<span class="k">throw</span> <span class="s">'Something went wrong'</span>;       <span class="c">// A String</span>
+<span class="k">throw</span> <span class="num">42</span>;                            <span class="c">// An int — valid but bad practice</span>
+<span class="k">throw</span> <span class="t">UnimplementedError</span>(<span class="s">'TODO'</span>); <span class="c">// An Error (bug, not exception)</span></pre>
+    </div>
+    <div class="info-box info-warn"><strong>⚠️ Error vs Exception</strong><p><code>Error</code> subclasses (<code>AssertionError</code>, <code>StackOverflowError</code>) represent <em>programmer bugs</em> — do NOT catch them. <code>Exception</code> subclasses represent <em>recoverable situations</em> — catch and handle gracefully. Creating custom classes that <code>implement Exception</code> (not <code>extend</code>) is the Dart convention.</p></div>
+  </div>
+
+  <div class="subsection" id="s17-3">
+    <h3 style="color:var(--blue);">17.3 Result Pattern (Railway-Oriented Programming)</h3>
+    <p>Instead of propagating exceptions across async calls, model outcomes as a <strong>sealed class</strong>. The caller handles success and error explicitly — this is type-safe, composable, and eliminates <em>invisible</em> exception flows. Riverpod uses <code>AsyncValue&lt;T&gt;</code> — a built-in Result type with <code>loading | data | error</code> states.</p>
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart — Sealed Result Type</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="c">// Dart 3 sealed class — exhaustive, compile-time safe</span>
+<span class="k">sealed class</span> <span class="t">Result</span>&lt;<span class="t">T</span>&gt; {}
+
+<span class="k">final class</span> <span class="t">Ok</span>&lt;<span class="t">T</span>&gt; <span class="k">extends</span> <span class="t">Result</span>&lt;<span class="t">T</span>&gt; {
+  <span class="k">final</span> <span class="t">T</span> <span class="n">value</span>;
+  <span class="k">const</span> <span class="t">Ok</span>(<span class="k">this</span>.<span class="n">value</span>);
+}
+
+<span class="k">final class</span> <span class="t">Err</span>&lt;<span class="t">T</span>&gt; <span class="k">extends</span> <span class="t">Result</span>&lt;<span class="t">T</span>&gt; {
+  <span class="k">final</span> <span class="t">String</span> <span class="n">message</span>;
+  <span class="k">const</span> <span class="t">Err</span>(<span class="k">this</span>.<span class="n">message</span>);
+}
+
+<span class="c">// Repository method — never throws, returns Result</span>
+<span class="k">Future</span>&lt;<span class="t">Result</span>&lt;<span class="t">User</span>&gt;&gt; <span class="m">getUser</span>(<span class="t">int</span> <span class="n">id</span>) <span class="k">async</span> {
+  <span class="k">try</span> {
+    <span class="k">final</span> <span class="n">user</span> = <span class="k">await</span> <span class="n">api</span>.<span class="m">fetchUser</span>(<span class="n">id</span>);
+    <span class="k">return</span> <span class="t">Ok</span>(<span class="n">user</span>);
+  } <span class="k">catch</span> (<span class="n">e</span>) {
+    <span class="k">return</span> <span class="t">Err</span>(<span class="s">'Failed to load user: $e'</span>);
+  }
+}
+
+<span class="c">// Caller — pattern match with switch (exhaustive)</span>
+<span class="k">final</span> <span class="n">result</span> = <span class="k">await</span> <span class="m">getUser</span>(<span class="num">1</span>);
+<span class="k">switch</span> (<span class="n">result</span>) {
+  <span class="k">case</span> <span class="t">Ok</span>(<span class="n">value</span>: <span class="k">var</span> <span class="n">user</span>):
+    <span class="m">print</span>(<span class="s">'Hello ${user.name}'</span>);
+  <span class="k">case</span> <span class="t">Err</span>(<span class="n">message</span>: <span class="k">var</span> <span class="n">msg</span>):
+    <span class="m">showSnackBar</span>(<span class="n">msg</span>);
+}</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SECTION 18: Testing & Deployment ═══════════ -->
+<section class="section" id="s18">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--teal-bg);">🚀</div>
+    <div class="section-meta">
+      <span class="section-badge" style="background:var(--teal-bg);color:var(--teal);">Flutter Pro</span>
+      <div class="section-title" style="color:var(--teal);">Testing &amp; Deployment</div>
+      <div class="section-subtitle">Unit, widget, integration tests — and shipping to Play Store, App Store, &amp; Web</div>
+    </div>
+  </div>
+
+  <div class="subsection" id="s18-1">
+    <h3 style="color:var(--teal);">18.1 Flutter Testing Pyramid</h3>
+    <p>Flutter has three levels of testing. <strong>Unit tests</strong> are fast pure-Dart tests with no UI. <strong>Widget tests</strong> render a single widget in a fake environment using <code>WidgetTester</code>. <strong>Integration tests</strong> run the full app on a real device/emulator and simulate real user journeys end-to-end.</p>
+    <div class="table-wrap"><table>
+      <tr><th>Level</th><th>Speed</th><th>Scope</th><th>Package</th><th>Best For</th></tr>
+      <tr><td><code style="background:var(--blue-bg);color:var(--blue);">Unit</code></td><td>⚡ Fastest</td><td>Single class/function</td><td><code>test</code>, <code>mocktail</code></td><td>Business logic, repositories, use cases</td></tr>
+      <tr><td><code style="background:var(--amber-bg);color:var(--amber);">Widget</code></td><td>🐇 Fast</td><td>Single widget tree</td><td><code>flutter_test</code></td><td>UI rendering, taps, text input</td></tr>
+      <tr><td><code style="background:var(--coral-bg);color:var(--coral);">Integration</code></td><td>🐢 Slow</td><td>Full app on device</td><td><code>integration_test</code></td><td>Critical user flows (login, checkout)</td></tr>
+      <tr><td><code style="background:var(--purple-bg);color:var(--purple);">Golden</code></td><td>🐇 Fast</td><td>Widget screenshot comparison</td><td><code>golden_toolkit</code></td><td>Prevent visual regressions</td></tr>
+    </table></div>
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart — Unit + Widget Tests</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="c">// ── UNIT TEST (test/login_usecase_test.dart) ──────────────────</span>
+<span class="k">import</span> <span class="s">'package:test/test.dart'</span>;
+<span class="k">import</span> <span class="s">'package:mocktail/mocktail.dart'</span>;
+
+<span class="k">class</span> <span class="t">MockAuthRepo</span> <span class="k">extends</span> <span class="t">Mock</span> <span class="k">implements</span> <span class="t">AuthRepository</span> {}
+
+<span class="k">void</span> <span class="m">main</span>() {
+  <span class="k">late</span> <span class="t">LoginUseCase</span> <span class="n">usecase</span>;
+  <span class="k">late</span> <span class="t">MockAuthRepo</span> <span class="n">mockRepo</span>;
+
+  <span class="m">setUp</span>(() {
+    <span class="n">mockRepo</span> = <span class="t">MockAuthRepo</span>();
+    <span class="n">usecase</span>  = <span class="t">LoginUseCase</span>(<span class="n">mockRepo</span>);
+  });
+
+  <span class="m">group</span>(<span class="s">'LoginUseCase'</span>, () {
+    <span class="m">test</span>(<span class="s">'returns User on success'</span>, () <span class="k">async</span> {
+      <span class="t">when</span>(() =&gt; <span class="n">mockRepo</span>.<span class="m">login</span>(<span class="m">any</span>(), <span class="m">any</span>()))
+          .<span class="m">thenAnswer</span>((_) <span class="k">async</span> =&gt; <span class="t">User</span>(<span class="s">'Alice'</span>));
+
+      <span class="k">final</span> <span class="n">result</span> = <span class="k">await</span> <span class="n">usecase</span>.<span class="m">execute</span>(<span class="s">'a@b.com'</span>, <span class="s">'pass'</span>);
+
+      <span class="m">expect</span>(<span class="n">result</span>.<span class="n">name</span>, <span class="s">'Alice'</span>);
+      <span class="t">verify</span>(() =&gt; <span class="n">mockRepo</span>.<span class="m">login</span>(<span class="s">'a@b.com'</span>, <span class="s">'pass'</span>)).<span class="m">called</span>(<span class="num">1</span>);
+    });
+
+    <span class="m">test</span>(<span class="s">'throws for invalid email'</span>, () {
+      <span class="m">expect</span>(
+        () =&gt; <span class="n">usecase</span>.<span class="m">execute</span>(<span class="s">'not-an-email'</span>, <span class="s">'pass'</span>),
+        <span class="m">throwsA</span>(<span class="m">isA</span>&lt;<span class="t">Exception</span>&gt;()),
+      );
+    });
+  });
+}
+
+<span class="c">// ── WIDGET TEST (test/login_screen_test.dart) ─────────────────</span>
+<span class="k">import</span> <span class="s">'package:flutter_test/flutter_test.dart'</span>;
+
+<span class="k">void</span> <span class="m">main</span>() {
+  <span class="m">testWidgets</span>(<span class="s">'Login button is disabled when fields are empty'</span>,
+      (<span class="t">WidgetTester</span> <span class="n">tester</span>) <span class="k">async</span> {
+
+    <span class="c">// Build the widget in a fake environment</span>
+    <span class="k">await</span> <span class="n">tester</span>.<span class="m">pumpWidget</span>(<span class="k">const</span> <span class="t">MaterialApp</span>(<span class="n">home</span>: <span class="t">LoginScreen</span>()));
+
+    <span class="c">// Find widgets</span>
+    <span class="k">final</span> <span class="n">loginBtn</span> = <span class="m">find</span>.<span class="m">text</span>(<span class="s">'Login'</span>);
+    <span class="m">expect</span>(<span class="n">loginBtn</span>, <span class="m">findsOneWidget</span>);
+
+    <span class="c">// Simulate user typing</span>
+    <span class="k">await</span> <span class="n">tester</span>.<span class="m">enterText</span>(<span class="m">find</span>.<span class="m">byKey</span>(<span class="t">Key</span>(<span class="s">'email_field'</span>)), <span class="s">'test@test.com'</span>);
+    <span class="k">await</span> <span class="n">tester</span>.<span class="m">pump</span>(); <span class="c">// Rebuild widget tree</span>
+
+    <span class="c">// Tap the button</span>
+    <span class="k">await</span> <span class="n">tester</span>.<span class="m">tap</span>(<span class="n">loginBtn</span>);
+    <span class="k">await</span> <span class="n">tester</span>.<span class="m">pump</span>();
+
+    <span class="c">// Verify expected outcome</span>
+    <span class="m">expect</span>(<span class="m">find</span>.<span class="m">text</span>(<span class="s">'Email is required'</span>), <span class="m">findsNothing</span>);
+  });
+}</pre>
+    </div>
+    <div class="info-box info-key"><strong>🔑 Run Tests</strong><p><code>flutter test</code> — runs all unit + widget tests. <code>flutter test --coverage</code> — generates coverage report. <code>flutter drive --driver=test_driver/driver.dart --target=integration_test/app_test.dart</code> — integration tests on device.</p></div>
+  </div>
+
+  <div class="subsection" id="s18-2">
+    <h3 style="color:var(--teal);">18.2 Build Flavors &amp; Release Builds</h3>
+    <p>A <strong>Flavor</strong> (Android) / <strong>Scheme</strong> (iOS) creates separate app variants from the same codebase — different App IDs, icons, names, and API endpoints for <strong>dev / staging / production</strong>. Users can install both "MyApp Dev" and "MyApp" side-by-side. Use <code>--dart-define-from-file</code> to inject compile-time config without native setup.</p>
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Terminal — Build Commands</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="c"># Run dev environment (reads envs/dev.json for compile-time vars)</span>
+flutter run --dart-define-from-file=envs/dev.json
+
+<span class="c"># Build production release APK</span>
+flutter build apk --release --dart-define-from-file=envs/prod.json
+
+<span class="c"># Build App Bundle (required for Play Store)</span>
+flutter build appbundle --release
+
+<span class="c"># Build iOS IPA (requires macOS + Xcode)</span>
+flutter build ipa --release
+
+<span class="c"># Build for Web</span>
+flutter build web --release --web-renderer canvaskit
+
+<span class="c"># Obfuscate + split debug info (protect IP)</span>
+flutter build apk --release --obfuscate --split-debug-info=./debug_info/
+
+<span class="c"># Read compile-time variable in Dart code</span>
+<span class="k">const</span> <span class="t">String</span> <span class="n">apiUrl</span> = <span class="t">String</span>.<span class="m">fromEnvironment</span>(
+  <span class="s">'API_URL'</span>,
+  <span class="n">defaultValue</span>: <span class="s">'https://api.dev.myapp.com'</span>,
+);</pre>
+    </div>
+  </div>
+
+  <div class="subsection" id="s18-3">
+    <h3 style="color:var(--teal);">18.3 Publishing to Stores</h3>
+    <p>Publishing a Flutter app involves platform-specific steps. Both stores require <strong>signing</strong> — Android uses a keystore file, iOS uses certificates. Key checklist below:</p>
+    <div class="table-wrap"><table>
+      <tr><th>Step</th><th>Android (Play Store)</th><th>iOS (App Store)</th></tr>
+      <tr><td><strong>Signing</strong></td><td>Create a <code>.jks</code> keystore: <code>keytool -genkey -v -keystore release.jks -keyalg RSA -keysize 2048 -validity 10000 -alias release</code></td><td>Create Distribution Certificate + Provisioning Profile in Xcode / developer.apple.com</td></tr>
+      <tr><td><strong>Config</strong></td><td>Link keystore in <code>android/key.properties</code> + <code>build.gradle</code></td><td>Set Bundle ID + provisioning in Xcode &gt; Signing &amp; Capabilities</td></tr>
+      <tr><td><strong>Build</strong></td><td><code>flutter build appbundle --release</code></td><td><code>flutter build ipa --release</code></td></tr>
+      <tr><td><strong>Upload</strong></td><td>Upload <code>.aab</code> to Google Play Console &gt; Internal Testing</td><td>Upload <code>.ipa</code> via Xcode Organizer or Transporter</td></tr>
+      <tr><td><strong>Metadata</strong></td><td>Screenshots (phone + tablet), description, content rating</td><td>Screenshots (6.7" + 12.9" iPad), App Privacy, age rating</td></tr>
+    </table></div>
+    <div class="info-box info-tip"><strong>💡 CI/CD with GitHub Actions</strong><p>Automate your entire build + deploy pipeline with GitHub Actions and <strong>Fastlane</strong>. On every push to <code>main</code>: run tests → build release → upload to Play Console / TestFlight automatically. The <code>flutter-action</code> GitHub Action sets up Flutter in CI in one step.</p></div>
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">YAML — GitHub Actions Flutter CI</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="c"># .github/workflows/ci.yml</span>
+name: Flutter CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run tests with coverage
+        run: flutter test --coverage
+
+      - name: Analyze code
+        run: flutter analyze
+
+      - name: Build APK (Debug)
+        run: flutter build apk --debug
+
+      <span class="c"># Add upload-to-play-store step here using Fastlane</span></pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════ SECTION 19: Dart 3 Records & Patterns ═══════════ -->
+<section class="section" id="s19">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--purple-bg);">✨</div>
+    <div class="section-meta">
+      <span class="section-badge" style="background:var(--purple-bg);color:var(--purple);">Dart 3 New</span>
+      <div class="section-title" style="color:var(--purple);">Records, Patterns &amp; Sealed Classes</div>
+      <div class="section-subtitle">Dart 3's biggest features — anonymous product types, destructuring, and exhaustive matching</div>
+    </div>
+  </div>
+
+  <div class="subsection" id="s19-1">
+    <h3 style="color:var(--purple);">19.1 Records — Anonymous Tuples</h3>
+    <p><strong>Records</strong> (Dart 3.0+) are lightweight, anonymous, immutable objects that bundle multiple values without defining a class. They are the idiomatic way to return multiple values from a function. Records have <strong>structural equality</strong> — two records are equal if all their fields are equal.</p>
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart 3</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="c">// Record type — positional fields</span>
+<span class="k">var</span> <span class="n">point</span> = (<span class="num">1.0</span>, <span class="num">2.0</span>);        <span class="c">// Record(double, double)</span>
+<span class="m">print</span>(<span class="n">point</span>.$<span class="num">1</span>);                <span class="c">// 1.0 (access by position)</span>
+<span class="m">print</span>(<span class="n">point</span>.$<span class="num">2</span>);                <span class="c">// 2.0</span>
+
+<span class="c">// Record with named fields</span>
+<span class="k">var</span> <span class="n">user</span> = (<span class="n">name</span>: <span class="s">'Alice'</span>, <span class="n">age</span>: <span class="num">30</span>);
+<span class="m">print</span>(<span class="n">user</span>.<span class="n">name</span>);               <span class="c">// 'Alice'</span>
+<span class="m">print</span>(<span class="n">user</span>.<span class="n">age</span>);                <span class="c">// 30</span>
+
+<span class="c">// Mix of positional + named</span>
+<span class="k">var</span> <span class="n">mixed</span> = (<span class="s">'Flutter'</span>, <span class="n">version</span>: <span class="num">3</span>, <span class="k">true</span>);
+<span class="m">print</span>(<span class="n">mixed</span>.$<span class="num">1</span>);               <span class="c">// 'Flutter'</span>
+<span class="m">print</span>(<span class="n">mixed</span>.<span class="n">version</span>);          <span class="c">// 3</span>
+
+<span class="c">// Return multiple values — no need for a class!</span>
+(<span class="t">String</span>, <span class="t">int</span>) <span class="m">getUserInfo</span>() =&gt; (<span class="s">'Bob'</span>, <span class="num">25</span>);
+
+<span class="k">final</span> (<span class="n">name</span>, <span class="n">age</span>) = <span class="m">getUserInfo</span>();  <span class="c">// Destructuring</span>
+<span class="m">print</span>(<span class="s">'$name is $age years old'</span>);   <span class="c">// 'Bob is 25 years old'</span>
+
+<span class="c">// Structural equality — unlike class instances</span>
+<span class="m">print</span>((<span class="num">1</span>, <span class="num">2</span>) == (<span class="num">1</span>, <span class="num">2</span>));          <span class="c">// true</span>
+<span class="m">print</span>((<span class="n">a</span>: <span class="num">1</span>) == (<span class="n">a</span>: <span class="num">1</span>));          <span class="c">// true</span>
+
+<span class="c">// Record type annotation</span>
+(<span class="t">String</span> <span class="n">name</span>, {<span class="t">int</span> <span class="n">age</span>}) <span class="m">createUser</span>(<span class="t">String</span> <span class="n">n</span>, <span class="t">int</span> <span class="n">a</span>) {
+  <span class="k">return</span> (<span class="n">n</span>, <span class="n">age</span>: <span class="n">a</span>);
+}
+
+<span class="c">// Useful in Flutter: returning position + size together</span>
+(<span class="t">double</span> <span class="n">x</span>, <span class="t">double</span> <span class="n">y</span>, <span class="t">double</span> <span class="n">width</span>, <span class="t">double</span> <span class="n">height</span>) <span class="m">getBounds</span>() {
+  <span class="k">return</span> (<span class="num">10.0</span>, <span class="num">20.0</span>, <span class="num">200.0</span>, <span class="num">100.0</span>);
+}</pre>
+    </div>
+    <div class="info-box info-tip"><strong>💡 When to Use Records vs Classes</strong><p>Use <strong>Records</strong> for temporary data grouping within a function (like returning multiple values or zipping two lists). Use <strong>Classes</strong> when you need methods, inheritance, documentation, or when the type is used across many files. Records are NOT a replacement for data classes.</p></div>
+  </div>
+
+  <div class="subsection" id="s19-2">
+    <h3 style="color:var(--purple);">19.2 Pattern Matching &amp; Destructuring</h3>
+    <p><strong>Patterns</strong> (Dart 3.0+) appear in variable declarations, switch statements/expressions, and for loops. They can <strong>destructure</strong> records, lists, maps, and objects to extract fields directly into variables in one step.</p>
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart 3 — Patterns</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="c">// Destructure a record in a variable declaration</span>
+<span class="k">final</span> (<span class="n">lat</span>, <span class="n">lng</span>) = (<span class="num">37.7749</span>, <span class="num">-122.4194</span>);
+
+<span class="c">// List pattern</span>
+<span class="k">final</span> [<span class="n">first</span>, <span class="n">second</span>, ...<span class="n">rest</span>] = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>];
+<span class="m">print</span>(<span class="n">first</span>);   <span class="c">// 1</span>
+<span class="m">print</span>(<span class="n">second</span>);  <span class="c">// 2</span>
+<span class="m">print</span>(<span class="n">rest</span>);    <span class="c">// [3, 4, 5]</span>
+
+<span class="c">// Map pattern</span>
+<span class="k">final</span> {<span class="s">'name'</span>: <span class="k">var</span> <span class="n">name</span>, <span class="s">'age'</span>: <span class="k">var</span> <span class="n">age</span>} = {<span class="s">'name'</span>: <span class="s">'Alice'</span>, <span class="s">'age'</span>: <span class="num">30</span>};
+
+<span class="c">// Object pattern — destructure class fields</span>
+<span class="k">class</span> <span class="t">Point</span> { <span class="k">final</span> <span class="t">int</span> <span class="n">x</span>, <span class="n">y</span>; <span class="k">const</span> <span class="t">Point</span>(<span class="k">this</span>.<span class="n">x</span>, <span class="k">this</span>.<span class="n">y</span>); }
+
+<span class="k">final</span> <span class="n">p</span> = <span class="t">Point</span>(<span class="num">3</span>, <span class="num">4</span>);
+<span class="k">final</span> <span class="t">Point</span>(<span class="n">x</span>: <span class="k">var</span> <span class="n">px</span>, <span class="n">y</span>: <span class="k">var</span> <span class="n">py</span>) = <span class="n">p</span>;  <span class="c">// Extracts x=3, y=4</span>
+
+<span class="c">// Switch with patterns (Dart 3)</span>
+<span class="t">String</span> <span class="m">describe</span>(<span class="t">Object</span> <span class="n">shape</span>) =&gt; <span class="k">switch</span> (<span class="n">shape</span>) {
+  <span class="t">Point</span>(<span class="n">x</span>: <span class="num">0</span>, <span class="n">y</span>: <span class="num">0</span>)         =&gt; <span class="s">'Origin'</span>,
+  <span class="t">Point</span>(<span class="n">x</span>: <span class="k">var</span> <span class="n">x</span>, <span class="n">y</span>: <span class="num">0</span>)     =&gt; <span class="s">'On x-axis at $x'</span>,
+  <span class="t">Point</span>(<span class="n">x</span>: <span class="num">0</span>, <span class="n">y</span>: <span class="k">var</span> <span class="n">y</span>)     =&gt; <span class="s">'On y-axis at $y'</span>,
+  <span class="t">Point</span>(<span class="n">x</span>: <span class="k">var</span> <span class="n">x</span>, <span class="n">y</span>: <span class="k">var</span> <span class="n">y</span>) =&gt; <span class="s">'Point ($x, $y)'</span>,
+  _                          =&gt; <span class="s">'Unknown shape'</span>,
+};
+
+<span class="c">// Guard clause — add 'when' condition to a case</span>
+<span class="k">switch</span> (<span class="n">point</span>) {
+  <span class="k">case</span> <span class="t">Point</span>(<span class="n">x</span>: <span class="k">var</span> <span class="n">x</span>, <span class="n">y</span>: <span class="k">var</span> <span class="n">y</span>) <span class="k">when</span> <span class="n">x</span> == <span class="n">y</span>:
+    <span class="m">print</span>(<span class="s">'Diagonal point at $x'</span>);
+}
+
+<span class="c">// Pattern in for-in — destructure entries</span>
+<span class="k">final</span> <span class="n">scores</span> = {<span class="s">'Alice'</span>: <span class="num">95</span>, <span class="s">'Bob'</span>: <span class="num">87</span>};
+<span class="k">for</span> (<span class="k">final</span> <span class="t">MapEntry</span>(<span class="n">key</span>: <span class="n">name</span>, <span class="n">value</span>: <span class="n">score</span>) <span class="k">in</span> <span class="n">scores</span>.<span class="n">entries</span>) {
+  <span class="m">print</span>(<span class="s">'$name scored $score'</span>);
+}</pre>
+    </div>
+  </div>
+
+  <div class="subsection" id="s19-3">
+    <h3 style="color:var(--purple);">19.3 Sealed Classes &amp; Exhaustive Matching</h3>
+    <p>A <strong>sealed class</strong> (Dart 3.0+) restricts which classes can extend it — only classes in the <em>same file</em> can. Combined with switch expressions, the compiler can verify that all subtypes are handled (<strong>exhaustiveness checking</strong>). This is the foundation for robust state modeling.</p>
+    <div class="code-wrap">
+      <div class="mac-header">
+        <div class="mac-dots"><div class="mac-dot-r"></div><div class="mac-dot-y"></div><div class="mac-dot-g"></div></div>
+        <span class="code-label-mac">Dart 3 — Sealed Classes</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+<pre><span class="c">// Sealed class — all subtypes must be in this file</span>
+<span class="k">sealed class</span> <span class="t">Shape</span> {}
+
+<span class="k">class</span> <span class="t">Circle</span>    <span class="k">extends</span> <span class="t">Shape</span> { <span class="k">final</span> <span class="t">double</span> <span class="n">radius</span>; <span class="t">Circle</span>(<span class="k">this</span>.<span class="n">radius</span>); }
+<span class="k">class</span> <span class="t">Rectangle</span> <span class="k">extends</span> <span class="t">Shape</span> { <span class="k">final</span> <span class="t">double</span> <span class="n">w</span>, <span class="n">h</span>; <span class="t">Rectangle</span>(<span class="k">this</span>.<span class="n">w</span>, <span class="k">this</span>.<span class="n">h</span>); }
+<span class="k">class</span> <span class="t">Triangle</span>  <span class="k">extends</span> <span class="t">Shape</span> { <span class="k">final</span> <span class="t">double</span> <span class="n">base</span>, <span class="n">height</span>; <span class="t">Triangle</span>(<span class="k">this</span>.<span class="n">base</span>, <span class="k">this</span>.<span class="n">height</span>); }
+
+<span class="c">// exhaustive switch — compiler ENSURES all shapes are handled</span>
+<span class="t">double</span> <span class="m">area</span>(<span class="t">Shape</span> <span class="n">shape</span>) =&gt; <span class="k">switch</span> (<span class="n">shape</span>) {
+  <span class="t">Circle</span>(<span class="n">radius</span>: <span class="k">var</span> <span class="n">r</span>)      =&gt; <span class="num">3.14</span> * <span class="n">r</span> * <span class="n">r</span>,
+  <span class="t">Rectangle</span>(<span class="n">w</span>: <span class="k">var</span> <span class="n">w</span>, <span class="n">h</span>: <span class="k">var</span> <span class="n">h</span>) =&gt; <span class="n">w</span> * <span class="n">h</span>,
+  <span class="t">Triangle</span>(<span class="n">base</span>: <span class="k">var</span> <span class="n">b</span>, <span class="n">height</span>: <span class="k">var</span> <span class="n">h</span>) =&gt; <span class="num">0.5</span> * <span class="n">b</span> * <span class="n">h</span>,
+  <span class="c">// No _ needed — compiler knows these are all possible subtypes!</span>
+};
+
+<span class="c">// Flutter State with sealed classes (replaces bool flags)</span>
+<span class="k">sealed class</span> <span class="t">AuthState</span> {}
+<span class="k">class</span> <span class="t">AuthInitial</span>       <span class="k">extends</span> <span class="t">AuthState</span> {}
+<span class="k">class</span> <span class="t">AuthLoading</span>       <span class="k">extends</span> <span class="t">AuthState</span> {}
+<span class="k">class</span> <span class="t">AuthAuthenticated</span> <span class="k">extends</span> <span class="t">AuthState</span> { <span class="k">final</span> <span class="t">User</span> <span class="n">user</span>; <span class="t">AuthAuthenticated</span>(<span class="k">this</span>.<span class="n">user</span>); }
+<span class="k">class</span> <span class="t">AuthError</span>         <span class="k">extends</span> <span class="t">AuthState</span> { <span class="k">final</span> <span class="t">String</span> <span class="n">message</span>; <span class="t">AuthError</span>(<span class="k">this</span>.<span class="n">message</span>); }
+
+<span class="c">// Widget build — exhaustive, no runtime errors</span>
+<span class="t">Widget</span> <span class="m">build</span>(<span class="t">BuildContext</span> <span class="n">ctx</span>) =&gt; <span class="k">switch</span> (<span class="n">state</span>) {
+  <span class="t">AuthInitial</span>()       =&gt; <span class="k">const</span> <span class="t">LoginScreen</span>(),
+  <span class="t">AuthLoading</span>()       =&gt; <span class="k">const</span> <span class="t">CircularProgressIndicator</span>(),
+  <span class="t">AuthAuthenticated</span>(<span class="n">user</span>: <span class="k">var</span> <span class="n">u</span>) =&gt; <span class="t">HomeScreen</span>(<span class="n">user</span>: <span class="n">u</span>),
+  <span class="t">AuthError</span>(<span class="n">message</span>: <span class="k">var</span> <span class="n">m</span>) =&gt; <span class="t">ErrorWidget</span>(<span class="n">m</span>),
+};</pre>
+    </div>
+    <div class="info-box info-key"><strong>🔑 Sealed vs Abstract vs Enum</strong><p>Use <strong>enums</strong> when variants have no data. Use <strong>sealed classes</strong> when variants carry different fields. Use <strong>abstract classes</strong> when you need extensibility across files. Sealed classes + switch expressions give you functional-programming-style algebraic data types in Dart.</p></div>
+  </div>
+</section>
+
+<!-- ═══════════ SECTION 20: Quick Reference Cheatsheet ═══════════ -->
+<section class="section" id="s20">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--green-bg);">📋</div>
+    <div class="section-meta">
+      <span class="section-badge" style="background:var(--green-bg);color:var(--green);">Reference</span>
+      <div class="section-title" style="color:var(--green);">Quick Reference Cheatsheet</div>
+      <div class="section-subtitle">Essential commands, packages, and patterns — everything at a glance</div>
+    </div>
+  </div>
+
+  <div class="subsection" id="s20-1">
+    <h3 style="color:var(--green);">20.1 Essential Flutter CLI Commands</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Command</th><th>Purpose</th></tr>
+      <tr><td><code>flutter create my_app</code></td><td>Create new project</td></tr>
+      <tr><td><code>flutter run</code></td><td>Run on connected device/emulator</td></tr>
+      <tr><td><code>flutter run -d chrome</code></td><td>Run on Chrome (Web)</td></tr>
+      <tr><td><code>flutter pub add package_name</code></td><td>Add a dependency</td></tr>
+      <tr><td><code>flutter pub get</code></td><td>Install dependencies</td></tr>
+      <tr><td><code>flutter pub upgrade</code></td><td>Upgrade all packages</td></tr>
+      <tr><td><code>flutter analyze</code></td><td>Static analysis (lint)</td></tr>
+      <tr><td><code>flutter test</code></td><td>Run all tests</td></tr>
+      <tr><td><code>flutter build apk --release</code></td><td>Build Android APK</td></tr>
+      <tr><td><code>flutter build appbundle</code></td><td>Build App Bundle (Play Store)</td></tr>
+      <tr><td><code>flutter build ipa</code></td><td>Build iOS IPA (App Store)</td></tr>
+      <tr><td><code>flutter build web</code></td><td>Build Web app</td></tr>
+      <tr><td><code>flutter clean</code></td><td>Delete build folder (fix weird errors)</td></tr>
+      <tr><td><code>flutter doctor</code></td><td>Check environment setup</td></tr>
+      <tr><td><code>flutter upgrade</code></td><td>Upgrade Flutter SDK</td></tr>
+      <tr><td><code>dart format .</code></td><td>Auto-format all Dart files</td></tr>
+      <tr><td><code>dart fix --apply</code></td><td>Auto-fix all lint warnings</td></tr>
+    </table></div>
+  </div>
+
+  <div class="subsection" id="s20-2">
+    <h3 style="color:var(--green);">20.2 Must-Have Packages</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Package</th><th>Category</th><th>What it does</th></tr>
+      <tr><td><code style="background:var(--blue-bg);color:var(--blue);">flutter_riverpod</code></td><td>State</td><td>Best-in-class reactive state management</td></tr>
+      <tr><td><code style="background:var(--blue-bg);color:var(--blue);">flutter_bloc</code></td><td>State</td><td>BLoC/Cubit pattern with stream-based events</td></tr>
+      <tr><td><code style="background:var(--teal-bg);color:var(--teal);">go_router</code></td><td>Navigation</td><td>URL-based declarative routing with deep links</td></tr>
+      <tr><td><code style="background:var(--teal-bg);color:var(--teal);">dio</code></td><td>Networking</td><td>Powerful HTTP client with interceptors</td></tr>
+      <tr><td><code style="background:var(--teal-bg);color:var(--teal);">http</code></td><td>Networking</td><td>Simple HTTP client (official)</td></tr>
+      <tr><td><code style="background:var(--amber-bg);color:var(--amber);">json_serializable</code></td><td>Serialization</td><td>Auto-generate <code>fromJson/toJson</code> code</td></tr>
+      <tr><td><code style="background:var(--amber-bg);color:var(--amber);">freezed</code></td><td>Serialization</td><td>Immutable data classes, unions, copyWith</td></tr>
+      <tr><td><code style="background:var(--coral-bg);color:var(--coral);">sqflite</code></td><td>Storage</td><td>SQLite for Flutter (mobile)</td></tr>
+      <tr><td><code style="background:var(--coral-bg);color:var(--coral);">hive_flutter</code></td><td>Storage</td><td>Fast NoSQL key-value database</td></tr>
+      <tr><td><code style="background:var(--coral-bg);color:var(--coral);">shared_preferences</code></td><td>Storage</td><td>Simple key-value persistence</td></tr>
+      <tr><td><code style="background:var(--purple-bg);color:var(--purple);">cached_network_image</code></td><td>Media</td><td>Network images with disk caching</td></tr>
+      <tr><td><code style="background:var(--purple-bg);color:var(--purple);">flutter_svg</code></td><td>Media</td><td>Render SVG files as Flutter widgets</td></tr>
+      <tr><td><code style="background:var(--green-bg);color:var(--green);">get_it</code></td><td>DI</td><td>Service locator for dependency injection</td></tr>
+      <tr><td><code style="background:var(--green-bg);color:var(--green);">injectable</code></td><td>DI</td><td>Code-gen for get_it (annotation-based)</td></tr>
+      <tr><td><code style="background:var(--green-bg);color:var(--green);">intl</code></td><td>i18n</td><td>Date/number formatting &amp; localization</td></tr>
+      <tr><td><code style="background:var(--blue-bg);color:var(--blue);">mocktail</code></td><td>Testing</td><td>Mocking library for unit tests</td></tr>
+      <tr><td><code style="background:var(--blue-bg);color:var(--blue);">integration_test</code></td><td>Testing</td><td>End-to-end integration testing</td></tr>
+    </table></div>
+  </div>
+
+  <div class="subsection" id="s20-3">
+    <h3 style="color:var(--green);">20.3 Dart Language Quick Reference</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Concept</th><th>Syntax</th><th>Notes</th></tr>
+      <tr><td>Null-aware access</td><td><code>obj?.method()</code></td><td>Returns null if obj is null</td></tr>
+      <tr><td>Null fallback</td><td><code>value ?? defaultValue</code></td><td>Use right side if left is null</td></tr>
+      <tr><td>Null assign</td><td><code>x ??= 'default'</code></td><td>Assign only if x is null</td></tr>
+      <tr><td>Cascade</td><td><code>obj..a()..b()</code></td><td>Chain calls, return same object</td></tr>
+      <tr><td>Spread</td><td><code>[...list1, ...list2]</code></td><td>Merge any iterables</td></tr>
+      <tr><td>Named params</td><td><code>fn({required String a, int b = 0})</code></td><td>Curly braces = named</td></tr>
+      <tr><td>Late init</td><td><code>late String name;</code></td><td>Not-null, initialized later</td></tr>
+      <tr><td>Type promotion</td><td><code>if (x is String) x.toUpperCase()</code></td><td>Compiler narrows type in block</td></tr>
+      <tr><td>Arrow function</td><td><code>int double(int n) =&gt; n * 2;</code></td><td>Single-expression bodies</td></tr>
+      <tr><td>typedef</td><td><code>typedef Predicate = bool Function(int);</code></td><td>Name a function type</td></tr>
+      <tr><td>Extension</td><td><code>extension StringX on String { ... }</code></td><td>Add methods to existing classes</td></tr>
+      <tr><td>Record</td><td><code>var r = (1, name: 'A');</code></td><td>Anonymous immutable data group</td></tr>
+      <tr><td>Sealed class</td><td><code>sealed class State {}</code></td><td>Exhaustive switch matching</td></tr>
+      <tr><td>Pattern match</td><td><code>switch (obj) { TypeName(:var field) =&gt; ... }</code></td><td>Dart 3 destructuring</td></tr>
+      <tr><td>Isolate.run()</td><td><code>await Isolate.run(() =&gt; heavyWork());</code></td><td>Background thread (no freeze)</td></tr>
+    </table></div>
+  </div>
+
+  <div class="subsection" id="s20-4">
+    <h3 style="color:var(--green);">20.4 Widget Decision Tree</h3>
+    <p>Use this flow every time you're picking a widget or deciding how to manage state:</p>
+    <div class="flow-row" style="flex-wrap:wrap;gap:12px;">
+      <div class="flow-box" style="background:var(--blue-bg);border-color:var(--blue);color:var(--blue);">Need layout?<br/>→ Row/Column/Stack/Grid</div>
+      <div class="flow-box" style="background:var(--teal-bg);border-color:var(--teal);color:var(--teal);">Need input?<br/>→ TextField/GestureDetector/InkWell</div>
+      <div class="flow-box" style="background:var(--amber-bg);border-color:var(--amber);color:var(--amber);">Need animation?<br/>→ Implicit first, then explicit</div>
+      <div class="flow-box" style="background:var(--purple-bg);border-color:var(--purple);color:var(--purple);">Need state?<br/>→ setState → Riverpod → Bloc</div>
+      <div class="flow-box" style="background:var(--coral-bg);border-color:var(--coral);color:var(--coral);">Need data?<br/>→ FutureBuilder/StreamBuilder</div>
+      <div class="flow-box" style="background:var(--green-bg);border-color:var(--green);color:var(--green);">Need scrolling?<br/>→ ListView.builder</div>
+    </div>
+    <div class="info-box info-key" style="margin-top:20px;"><strong>🔑 The Golden Rule</strong><p>Always use <code>const</code> constructors wherever possible. If a parent rebuilds and the child is <code>const</code>, Flutter skips that entire subtree in the diff algorithm — <strong>zero CPU cost</strong>. Enable <code>prefer_const_constructors</code> lint rule so the IDE warns you whenever you forget.</p></div>
   </div>
 </section>
 
