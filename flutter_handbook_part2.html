@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flutter Interview Handbook — Part 2 – Shatrudhan</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141626;
+    --surface2: #1a1e33;
+    --border: rgba(120,130,255,0.15);
+    --accent: #7c6dfa;
+    --accent2: #38d9a9;
+    --accent3: #f7a94b;
+    --accent4: #f06595;
+    --text: #e8eaf6;
+    --muted: #8892b0;
+    --code-bg: #0a0c18;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Sora', sans-serif; font-size: 15px; line-height: 1.75; }
+  .hero { background: linear-gradient(135deg, #0d0f1a 0%, #151030 50%, #0d1a1f 100%); border-bottom: 1px solid var(--border); padding: 60px 40px 50px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 800px 400px at 70% 50%, rgba(124,109,250,0.08), transparent), radial-gradient(ellipse 600px 300px at 20% 80%, rgba(56,217,169,0.06), transparent); }
+  .hero-inner { max-width: 900px; margin: 0 auto; position: relative; }
+  .dart-logo { width: 52px; height: 52px; margin-bottom: 20px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 700; color: #fff; }
+  .hero h1 { font-size: clamp(28px, 5vw, 44px); font-weight: 700; letter-spacing: -1px; line-height: 1.15; margin-bottom: 12px; }
+  .hero h1 span { color: var(--accent); }
+  .hero p { color: var(--muted); font-size: 15px; max-width: 560px; }
+  .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+  .badge { font-size: 11px; font-family: 'Space Mono', monospace; padding: 4px 12px; border-radius: 99px; font-weight: 700; letter-spacing: 0.5px; border: 1px solid; }
+  .badge-purple { border-color: rgba(124,109,250,0.5); color: #a99cfc; background: rgba(124,109,250,0.1); }
+  .badge-teal   { border-color: rgba(56,217,169,0.5);  color: #6ef0d4; background: rgba(56,217,169,0.08); }
+  .badge-amber  { border-color: rgba(247,169,75,0.5);  color: #fcc377; background: rgba(247,169,75,0.08); }
+  .toc { position: sticky; top: 0; z-index: 99; background: rgba(13,15,26,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 40px; overflow-x: auto; }
+  .toc-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 0; }
+  .toc a { text-decoration: none; font-size: 12px; font-family: 'Space Mono', monospace; color: var(--muted); padding: 14px 11px; display: block; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.2s; }
+  .toc a:hover { color: var(--accent); border-color: var(--accent); }
+  .main { max-width: 900px; margin: 0 auto; padding: 48px 40px; }
+  .section { margin-bottom: 72px; }
+  .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .section-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .si-purple { background: rgba(124,109,250,0.15); } .si-teal { background: rgba(56,217,169,0.12); } .si-amber { background: rgba(247,169,75,0.12); }
+  .si-pink { background: rgba(240,101,149,0.12); } .si-blue { background: rgba(96,165,250,0.12); } .si-green { background: rgba(74,222,128,0.12); } .si-red { background: rgba(248,113,113,0.12); }
+  .section-title { font-size: 22px; font-weight: 600; }
+  .section-num { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 1px; }
+  .theory { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px; margin-bottom: 16px; }
+  .theory-title { font-size: 13px; font-weight: 600; color: var(--accent2); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 10px; }
+  .theory p { color: #c5cae9; font-size: 14px; line-height: 1.8; }
+  .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0; }
+  .concept-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+  .concept-card .keyword { font-family: 'Space Mono', monospace; font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .concept-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .kw-purple { color: #a99cfc; } .kw-teal { color: #6ef0d4; } .kw-amber { color: #fcc377; } .kw-pink { color: #f9a8d4; } .kw-blue { color: #93c5fd; } .kw-green { color: #86efac; } .kw-red { color: #fca5a5; }
+  .code-wrap { margin: 16px 0; }
+  .code-label { background: var(--surface2); border: 1px solid var(--border); border-bottom: none; border-radius: 10px 10px 0 0; padding: 8px 16px; display: flex; align-items: center; gap: 8px; }
+  .code-dot { width: 10px; height: 10px; border-radius: 50%; } .cd-red { background: #f87171; } .cd-yellow { background: #fbbf24; } .cd-green { background: #4ade80; }
+  .code-filename { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); margin-left: 4px; }
+  pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 0 0 10px 10px; padding: 20px 22px; overflow-x: auto; font-family: 'Space Mono', monospace; font-size: 13px; line-height: 1.85; }
+  .c-keyword { color: #c792ea; } .c-type { color: #82aaff; } .c-string { color: #c3e88d; } .c-comment { color: #546e7a; font-style: italic; } .c-num { color: #f78c6c; } .c-fn { color: #82aaff; } .c-var { color: #eeffff; } .c-accent { color: #ffcb6b; }
+  .diagram { margin: 20px 0; }
+  .interview-q { background: rgba(124,109,250,0.07); border-left: 3px solid var(--accent); border-radius: 0 12px 12px 0; padding: 16px 20px; margin: 14px 0; }
+  .interview-q .iq-label { font-size: 10px; font-family: 'Space Mono', monospace; color: var(--accent); letter-spacing: 1px; font-weight: 700; text-transform: uppercase; margin-bottom: 6px; }
+  .interview-q .iq-q { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .interview-q .iq-a { font-size: 13px; color: #b0bec5; line-height: 1.7; }
+  .tip { background: rgba(56,217,169,0.06); border: 1px solid rgba(56,217,169,0.25); border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 13px; color: #9eecd8; display: flex; gap: 10px; align-items: flex-start; }
+  .tip-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  th { background: var(--surface2); padding: 12px 16px; text-align: left; font-weight: 600; border-bottom: 1px solid var(--border); font-family: 'Space Mono', monospace; font-size: 12px; color: var(--accent); }
+  td { padding: 11px 16px; border-bottom: 1px solid var(--border); color: #c5cae9; } tr:last-child td { border-bottom: none; } tr:hover td { background: rgba(255,255,255,0.02); }
+  .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+  .flow-node { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; font-family: 'Space Mono', monospace; font-size: 12px; color: var(--text); }
+  .flow-arrow { color: var(--muted); font-size: 18px; }
+  .fn-purple { border-color: rgba(124,109,250,0.4); color: #a99cfc; } .fn-teal { border-color: rgba(56,217,169,0.4); color: #6ef0d4; } .fn-amber { border-color: rgba(247,169,75,0.4); color: #fcc377; } .fn-pink { border-color: rgba(240,101,149,0.4); color: #f9a8d4; }
+  .rapid-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 16px 0; }
+  footer { text-align: center; padding: 40px; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; font-family: 'Space Mono', monospace; }
+  @media (max-width: 600px) { .hero { padding: 40px 20px; } .main { padding: 32px 20px; } .toc { padding: 0 20px; } .concept-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <a href="/flutter_notes.html" style="display:inline-block;margin-bottom:18px;font-family:'Space Mono',monospace;font-size:12px;color:#a99cfc;text-decoration:none;">&larr; Back to Flutter &amp; Dart Notes</a>
+    <div class="dart-logo">F</div>
+    <h1>Flutter <span>Interview</span><br>Handbook — Part 2</h1>
+    <p>Chapters 16–30: API Integration, Auth, Local Storage (SharedPreferences/Hive/Sqflite), Firebase, Notifications, Performance, Animations, Clean Architecture, Testing and a final rapid-fire interview round.</p>
+    <div class="badge-row">
+      <span class="badge badge-purple">Ch 16–30 of 30</span>
+      <span class="badge badge-teal">Flutter 3.x</span>
+      <span class="badge badge-amber">Interview Ready</span>
+    </div>
+  </div>
+</div>
+
+<div class="toc">
+  <div class="toc-inner">
+    <a href="#s16">16 API</a>
+    <a href="#s17">17 JWT</a>
+    <a href="#s18">18 SharedPrefs</a>
+    <a href="#s19">19 Hive</a>
+    <a href="#s20">20 Sqflite</a>
+    <a href="#s21">21 Firebase</a>
+    <a href="#s22">22 Notifications</a>
+    <a href="#s23">23 Deep Links</a>
+    <a href="#s24">24 Responsive</a>
+    <a href="#s25">25 Perf</a>
+    <a href="#s26">26 Animations</a>
+    <a href="#s27">27 CustomPainter</a>
+    <a href="#s28">28 Clean Arch</a>
+    <a href="#s29">29 Testing</a>
+    <a href="#s30">30 Interview Qs</a>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ======================== SECTION 16 ======================== -->
+<section class="section" id="s16">
+  <div class="section-header">
+    <div class="section-icon si-purple">🔗</div>
+    <div><div class="section-num">16 / 30</div><div class="section-title">API Integration</div></div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>A clean API layer separates three concerns: the <strong>data model</strong> (parsing JSON into Dart objects), the <strong>service/repository</strong> (making the actual HTTP call), and the <strong>UI</strong> (consuming the result via a state management layer). This separation makes it easy to swap the backend, mock the network for tests, and handle errors consistently.</p>
+  </div>
+
+  <div class="diagram">
+    <svg viewBox="0 0 820 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:14px;background:#141626;border:1px solid rgba(120,130,255,0.15);">
+      <text x="20" y="24" font-family="Space Mono,monospace" font-size="11" fill="#546e7a">API INTEGRATION LAYERS</text>
+      <rect x="30" y="40" width="170" height="70" rx="8" fill="rgba(124,109,250,0.1)" stroke="rgba(124,109,250,0.4)" stroke-width="1.5"/>
+      <text x="50" y="68" font-family="Space Mono,monospace" font-size="12" fill="#a99cfc">UI Widget</text>
+      <text x="50" y="86" font-family="Sora,sans-serif" font-size="11" fill="#8892b0">consumes via Riverpod</text>
+      <line x1="200" y1="75" x2="280" y2="75" stroke="#546e7a" stroke-width="1.5" marker-end="url(#m1)"/>
+      <rect x="280" y="40" width="180" height="70" rx="8" fill="rgba(56,217,169,0.1)" stroke="rgba(56,217,169,0.4)" stroke-width="1.5"/>
+      <text x="300" y="68" font-family="Space Mono,monospace" font-size="12" fill="#6ef0d4">Repository</text>
+      <text x="300" y="86" font-family="Sora,sans-serif" font-size="11" fill="#8892b0">business logic, caching</text>
+      <line x1="460" y1="75" x2="540" y2="75" stroke="#546e7a" stroke-width="1.5" marker-end="url(#m2)"/>
+      <rect x="540" y="40" width="160" height="70" rx="8" fill="rgba(247,169,75,0.1)" stroke="rgba(247,169,75,0.4)" stroke-width="1.5"/>
+      <text x="560" y="68" font-family="Space Mono,monospace" font-size="12" fill="#fcc377">ApiService</text>
+      <text x="560" y="86" font-family="Sora,sans-serif" font-size="11" fill="#8892b0">Dio HTTP calls</text>
+      <defs><marker id="m1" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#546e7a"/></marker>
+      <marker id="m2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#546e7a"/></marker></defs>
+    </svg>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">api_integration.dart</span></div>
+    <pre><span class="c-comment">// ── MODEL ──────────────────────────────</span>
+<span class="c-keyword">class</span> <span class="c-type">User</span> {
+  <span class="c-keyword">final</span> <span class="c-type">int</span> <span class="c-var">id</span>;
+  <span class="c-keyword">final</span> <span class="c-type">String</span> <span class="c-var">name</span>;
+  <span class="c-type">User</span>({<span class="c-keyword">required</span> <span class="c-keyword">this</span>.<span class="c-var">id</span>, <span class="c-keyword">required</span> <span class="c-keyword">this</span>.<span class="c-var">name</span>});
+
+  <span class="c-keyword">factory</span> <span class="c-type">User</span>.<span class="c-fn">fromJson</span>(<span class="c-type">Map</span>&lt;<span class="c-type">String</span>, <span class="c-keyword">dynamic</span>&gt; <span class="c-var">json</span>) =>
+      <span class="c-type">User</span>(id: <span class="c-var">json</span>[<span class="c-string">'id'</span>], name: <span class="c-var">json</span>[<span class="c-string">'name'</span>]);
+}
+
+<span class="c-comment">// ── SERVICE LAYER ──────────────────────</span>
+<span class="c-keyword">class</span> <span class="c-type">UserService</span> {
+  <span class="c-keyword">final</span> <span class="c-type">Dio</span> <span class="c-var">_dio</span>;
+  <span class="c-type">UserService</span>(<span class="c-keyword">this</span>.<span class="c-var">_dio</span>);
+
+  <span class="c-type">Future</span>&lt;<span class="c-type">User</span>&gt; <span class="c-fn">getUser</span>(<span class="c-type">int</span> <span class="c-var">id</span>) <span class="c-keyword">async</span> {
+    <span class="c-keyword">final</span> <span class="c-var">res</span> = <span class="c-keyword">await</span> <span class="c-var">_dio</span>.<span class="c-fn">get</span>(<span class="c-string">'/users/</span><span class="c-var">$id</span><span class="c-string">'</span>);
+    <span class="c-keyword">return</span> <span class="c-type">User</span>.<span class="c-fn">fromJson</span>(<span class="c-var">res</span>.<span class="c-var">data</span>);
+  }
+}
+
+<span class="c-comment">// ── REPOSITORY — adds caching/error mapping ──</span>
+<span class="c-keyword">class</span> <span class="c-type">UserRepository</span> {
+  <span class="c-keyword">final</span> <span class="c-type">UserService</span> <span class="c-var">_service</span>;
+  <span class="c-type">UserRepository</span>(<span class="c-keyword">this</span>.<span class="c-var">_service</span>);
+
+  <span class="c-type">Future</span>&lt;<span class="c-type">User</span>&gt; <span class="c-fn">fetchUser</span>(<span class="c-type">int</span> <span class="c-var">id</span>) <span class="c-keyword">async</span> {
+    <span class="c-keyword">try</span> {
+      <span class="c-keyword">return</span> <span class="c-keyword">await</span> <span class="c-var">_service</span>.<span class="c-fn">getUser</span>(<span class="c-var">id</span>);
+    } <span class="c-keyword">on</span> <span class="c-type">DioException</span> <span class="c-keyword">catch</span> (<span class="c-var">e</span>) {
+      <span class="c-keyword">throw</span> <span class="c-type">Exception</span>(<span class="c-string">'Failed to load user: </span><span class="c-var">${e.message}</span><span class="c-string">'</span>);
+    }
+  }
+}</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: Why separate Service and Repository layers instead of calling Dio directly from the UI?</div>
+    <div class="iq-a">It keeps networking details out of widgets, makes the data layer mockable for unit tests (swap a fake repository in), and centralizes error transformation and caching logic in one place instead of repeating it across every screen that needs data.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 17 ======================== -->
+<section class="section" id="s17">
+  <div class="section-header">
+    <div class="section-icon si-teal">🔐</div>
+    <div><div class="section-num">17 / 30</div><div class="section-title">JWT Authentication</div></div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>JWT (JSON Web Token) auth typically issues a short-lived <strong>access token</strong> and a longer-lived <strong>refresh token</strong>. The access token is sent with every request (usually in the <code>Authorization</code> header); when it expires (401 response), the app silently uses the refresh token to get a new access token, without forcing the user to log in again. Tokens should be stored in secure storage, never plain SharedPreferences, since they're sensitive credentials.</p>
+  </div>
+
+  <div class="diagram">
+    <svg viewBox="0 0 820 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:14px;background:#141626;border:1px solid rgba(120,130,255,0.15);">
+      <text x="20" y="24" font-family="Space Mono,monospace" font-size="11" fill="#546e7a">JWT REFRESH FLOW</text>
+      <rect x="20" y="45" width="160" height="50" rx="8" fill="rgba(124,109,250,0.1)" stroke="rgba(124,109,250,0.4)" stroke-width="1"/>
+      <text x="35" y="75" font-family="Space Mono,monospace" font-size="11" fill="#a99cfc">Request + access token</text>
+      <line x1="180" y1="70" x2="260" y2="70" stroke="#546e7a" stroke-width="1.5"/>
+      <rect x="260" y="45" width="140" height="50" rx="8" fill="rgba(248,113,113,0.1)" stroke="rgba(248,113,113,0.4)" stroke-width="1"/>
+      <text x="280" y="75" font-family="Space Mono,monospace" font-size="11" fill="#fca5a5">401 Expired</text>
+      <line x1="400" y1="70" x2="480" y2="70" stroke="#546e7a" stroke-width="1.5"/>
+      <rect x="480" y="45" width="160" height="50" rx="8" fill="rgba(247,169,75,0.1)" stroke="rgba(247,169,75,0.4)" stroke-width="1"/>
+      <text x="500" y="75" font-family="Space Mono,monospace" font-size="11" fill="#fcc377">POST /refresh</text>
+      <line x1="640" y1="70" x2="700" y2="70" stroke="#546e7a" stroke-width="1.5"/>
+      <rect x="60" y="120" width="660" height="40" rx="8" fill="rgba(56,217,169,0.08)" stroke="rgba(56,217,169,0.35)" stroke-width="1"/>
+      <text x="80" y="144" font-family="Space Mono,monospace" font-size="11" fill="#6ef0d4">New access token issued → original request retried automatically</text>
+    </svg>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">jwt_auth.dart</span></div>
+    <pre><span class="c-var">dio</span>.<span class="c-var">interceptors</span>.<span class="c-fn">add</span>(<span class="c-type">InterceptorsWrapper</span>(
+  onRequest: (<span class="c-var">options</span>, <span class="c-var">handler</span>) <span class="c-keyword">async</span> {
+    <span class="c-keyword">final</span> <span class="c-var">token</span> = <span class="c-keyword">await</span> <span class="c-var">secureStorage</span>.<span class="c-fn">read</span>(key: <span class="c-string">'access_token'</span>);
+    <span class="c-var">options</span>.<span class="c-var">headers</span>[<span class="c-string">'Authorization'</span>] = <span class="c-string">'Bearer </span><span class="c-var">$token</span><span class="c-string">'</span>;
+    <span class="c-var">handler</span>.<span class="c-fn">next</span>(<span class="c-var">options</span>);
+  },
+  onError: (<span class="c-var">error</span>, <span class="c-var">handler</span>) <span class="c-keyword">async</span> {
+    <span class="c-keyword">if</span> (<span class="c-var">error</span>.<span class="c-var">response</span>?.<span class="c-var">statusCode</span> == <span class="c-num">401</span>) {
+      <span class="c-keyword">final</span> <span class="c-var">refreshToken</span> = <span class="c-keyword">await</span> <span class="c-var">secureStorage</span>.<span class="c-fn">read</span>(key: <span class="c-string">'refresh_token'</span>);
+      <span class="c-keyword">final</span> <span class="c-var">res</span> = <span class="c-keyword">await</span> <span class="c-var">dio</span>.<span class="c-fn">post</span>(<span class="c-string">'/refresh'</span>, data: {<span class="c-string">'token'</span>: <span class="c-var">refreshToken</span>});
+      <span class="c-keyword">await</span> <span class="c-var">secureStorage</span>.<span class="c-fn">write</span>(key: <span class="c-string">'access_token'</span>, value: <span class="c-var">res</span>.<span class="c-var">data</span>[<span class="c-string">'access_token'</span>]);
+
+      <span class="c-comment">// retry the original request with the new token</span>
+      <span class="c-keyword">final</span> <span class="c-var">retryResponse</span> = <span class="c-keyword">await</span> <span class="c-var">dio</span>.<span class="c-fn">fetch</span>(<span class="c-var">error</span>.<span class="c-var">requestOptions</span>);
+      <span class="c-keyword">return</span> <span class="c-var">handler</span>.<span class="c-fn">resolve</span>(<span class="c-var">retryResponse</span>);
+    }
+    <span class="c-var">handler</span>.<span class="c-fn">next</span>(<span class="c-var">error</span>);
+  },
+));</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: Why use flutter_secure_storage instead of SharedPreferences for tokens?</div>
+    <div class="iq-a">SharedPreferences stores values in plain text (XML on Android, plist on iOS) — accessible if the device is rooted/jailbroken or backed up insecurely. <code>flutter_secure_storage</code> uses Android's Keystore and iOS's Keychain, which encrypt the data at the OS level — the appropriate place for sensitive credentials like JWTs.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 18 ======================== -->
+<section class="section" id="s18">
+  <div class="section-header">
+    <div class="section-icon si-amber">💾</div>
+    <div><div class="section-num">18 / 30</div><div class="section-title">SharedPreferences</div></div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p><code>SharedPreferences</code> is a simple, asynchronous key-value store for small, non-sensitive data — things like a "remember theme mode" flag, onboarding-seen flag, or last-selected tab. It's not meant for structured data, large datasets, or anything sensitive (use Hive/Sqflite or secure storage for those instead).</p>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">shared_prefs.dart</span></div>
+    <pre><span class="c-keyword">void</span> <span class="c-fn">saveOnboardingSeen</span>() <span class="c-keyword">async</span> {
+  <span class="c-keyword">final</span> <span class="c-var">prefs</span> = <span class="c-keyword">await</span> <span class="c-type">SharedPreferences</span>.<span class="c-fn">getInstance</span>();
+  <span class="c-keyword">await</span> <span class="c-var">prefs</span>.<span class="c-fn">setBool</span>(<span class="c-string">'onboarding_seen'</span>, <span class="c-keyword">true</span>);
+  <span class="c-keyword">await</span> <span class="c-var">prefs</span>.<span class="c-fn">setString</span>(<span class="c-string">'theme_mode'</span>, <span class="c-string">'dark'</span>);
+  <span class="c-keyword">await</span> <span class="c-var">prefs</span>.<span class="c-fn">setInt</span>(<span class="c-string">'last_tab_index'</span>, <span class="c-num">2</span>);
+}
+
+<span class="c-type">Future</span>&lt;<span class="c-type">bool</span>&gt; <span class="c-fn">hasSeenOnboarding</span>() <span class="c-keyword">async</span> {
+  <span class="c-keyword">final</span> <span class="c-var">prefs</span> = <span class="c-keyword">await</span> <span class="c-type">SharedPreferences</span>.<span class="c-fn">getInstance</span>();
+  <span class="c-keyword">return</span> <span class="c-var">prefs</span>.<span class="c-fn">getBool</span>(<span class="c-string">'onboarding_seen'</span>) ?? <span class="c-keyword">false</span>;
+}</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: Why would you avoid storing a list of complex objects in SharedPreferences?</div>
+    <div class="iq-a">SharedPreferences only natively supports primitives (bool, int, double, String, List&lt;String&gt;) — anything more complex needs manual JSON encode/decode on every read/write, which is slow and error-prone at scale. Hive or Sqflite are built for structured/larger data and handle serialization more efficiently.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 19 ======================== -->
+<section class="section" id="s19">
+  <div class="section-header">
+    <div class="section-icon si-pink">🗄️</div>
+    <div><div class="section-num">19 / 30</div><div class="section-title">Hive</div></div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Hive is a fast, pure-Dart NoSQL key-value database that works without native dependencies — making it faster to set up than Sqflite and well suited for storing Dart objects directly via generated <strong>TypeAdapters</strong>. Data is organized into <strong>boxes</strong> (similar to tables), and reads/writes are synchronous after the box is opened, which is a notable performance advantage over Sqflite's always-async API.</p>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">hive.dart</span></div>
+    <pre><span class="c-comment">// ── MODEL with generated adapter ───────</span>
+<span class="c-accent">@HiveType</span>(typeId: <span class="c-num">0</span>)
+<span class="c-keyword">class</span> <span class="c-type">Task</span> <span class="c-keyword">extends</span> <span class="c-type">HiveObject</span> {
+  <span class="c-accent">@HiveField</span>(<span class="c-num">0</span>)
+  <span class="c-keyword">final</span> <span class="c-type">String</span> <span class="c-var">title</span>;
+  <span class="c-accent">@HiveField</span>(<span class="c-num">1</span>)
+  <span class="c-keyword">final</span> <span class="c-type">bool</span> <span class="c-var">isDone</span>;
+
+  <span class="c-type">Task</span>({<span class="c-keyword">required</span> <span class="c-keyword">this</span>.<span class="c-var">title</span>, <span class="c-keyword">this</span>.<span class="c-var">isDone</span> = <span class="c-keyword">false</span>});
+}
+
+<span class="c-comment">// ── SETUP & USAGE ───────────────────────</span>
+<span class="c-keyword">void</span> <span class="c-fn">main</span>() <span class="c-keyword">async</span> {
+  <span class="c-keyword">await</span> <span class="c-type">Hive</span>.<span class="c-fn">initFlutter</span>();
+  <span class="c-type">Hive</span>.<span class="c-fn">registerAdapter</span>(<span class="c-type">TaskAdapter</span>());
+  <span class="c-keyword">final</span> <span class="c-var">box</span> = <span class="c-keyword">await</span> <span class="c-type">Hive</span>.<span class="c-fn">openBox</span>&lt;<span class="c-type">Task</span>&gt;(<span class="c-string">'tasks'</span>);
+
+  <span class="c-var">box</span>.<span class="c-fn">add</span>(<span class="c-type">Task</span>(title: <span class="c-string">'Finish Flutter notes'</span>));
+  <span class="c-keyword">final</span> <span class="c-var">tasks</span> = <span class="c-var">box</span>.<span class="c-var">values</span>.<span class="c-fn">toList</span>();   <span class="c-comment">// synchronous read!</span>
+}</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: When would you choose Hive over Sqflite?</div>
+    <div class="iq-a">Choose Hive for simpler key-value/object storage needs where you don't need complex relational queries or joins — it's faster to set up (no SQL, no native plugin compilation issues) and offers synchronous reads. Choose Sqflite when you have genuinely relational data with multiple linked tables and need SQL-level querying, filtering, and aggregation.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 20 ======================== -->
+<section class="section" id="s20">
+  <div class="section-header">
+    <div class="section-icon si-blue">🗃️</div>
+    <div><div class="section-num">20 / 30</div><div class="section-title">Sqflite</div></div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Sqflite gives you a full SQLite database on-device — ideal when your local data is genuinely relational (e.g. orders linked to customers linked to products) and you need real SQL queries, joins, and transactions. Migrations are handled via the <code>onUpgrade</code> callback, keyed off a database version number.</p>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">sqflite.dart</span></div>
+    <pre><span class="c-keyword">final</span> <span class="c-var">db</span> = <span class="c-keyword">await</span> <span class="c-fn">openDatabase</span>(
+  <span class="c-string">'app.db'</span>,
+  version: <span class="c-num">1</span>,
+  onCreate: (<span class="c-var">db</span>, <span class="c-var">version</span>) <span class="c-keyword">async</span> {
+    <span class="c-keyword">await</span> <span class="c-var">db</span>.<span class="c-fn">execute</span>(<span class="c-string">'''
+      CREATE TABLE users(
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        age INTEGER
+      )
+    '''</span>);
+  },
+);
+
+<span class="c-comment">// ── INSERT ───────────────────────────────</span>
+<span class="c-keyword">await</span> <span class="c-var">db</span>.<span class="c-fn">insert</span>(<span class="c-string">'users'</span>, {<span class="c-string">'name'</span>: <span class="c-string">'Shatrudhan'</span>, <span class="c-string">'age'</span>: <span class="c-num">23</span>});
+
+<span class="c-comment">// ── QUERY ────────────────────────────────</span>
+<span class="c-keyword">final</span> <span class="c-var">users</span> = <span class="c-keyword">await</span> <span class="c-var">db</span>.<span class="c-fn">query</span>(<span class="c-string">'users'</span>, where: <span class="c-string">'age &gt; ?'</span>, whereArgs: [<span class="c-num">18</span>]);
+
+<span class="c-comment">// ── UPDATE ───────────────────────────────</span>
+<span class="c-keyword">await</span> <span class="c-var">db</span>.<span class="c-fn">update</span>(<span class="c-string">'users'</span>, {<span class="c-string">'age'</span>: <span class="c-num">24</span>}, where: <span class="c-string">'id = ?'</span>, whereArgs: [<span class="c-num">1</span>]);</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: How do you handle a schema migration in Sqflite?</div>
+    <div class="iq-a">Bump the <code>version</code> parameter in <code>openDatabase</code> and implement the <code>onUpgrade</code> callback, which receives the old and new version numbers. Inside, run the appropriate <code>ALTER TABLE</code>/<code>CREATE TABLE</code> statements conditionally based on which version the user is upgrading from, so existing user data isn't lost.</div>
+  </div>
+
+  <table>
+    <tr><th>Feature</th><th>Hive</th><th>Sqflite</th></tr>
+    <tr><td>Type</td><td>NoSQL key-value</td><td>Relational SQL</td></tr>
+    <tr><td>Speed</td><td>Faster, sync reads</td><td>Always async</td></tr>
+    <tr><td>Best for</td><td>Settings, simple objects</td><td>Linked/relational data</td></tr>
+  </table>
+</section>
+
+<!-- ======================== SECTION 21 ======================== -->
+<section class="section" id="s21">
+  <div class="section-header">
+    <div class="section-icon si-green">🔥</div>
+    <div><div class="section-num">21 / 30</div><div class="section-title">Firebase</div></div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Firebase is Google's backend-as-a-service suite. The most commonly used pieces in Flutter apps are <strong>Firebase Auth</strong> (email/phone/social sign-in), <strong>Firestore</strong> (a NoSQL document database with real-time listeners), <strong>Cloud Storage</strong> (file uploads), and <strong>Cloud Messaging/FCM</strong> (push notifications, see Chapter 22). It removes the need to build a custom backend for many common app needs.</p>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">firebase.dart</span></div>
+    <pre><span class="c-comment">// ── AUTH ─────────────────────────────────</span>
+<span class="c-keyword">final</span> <span class="c-var">cred</span> = <span class="c-keyword">await</span> <span class="c-type">FirebaseAuth</span>.<span class="c-var">instance</span>.<span class="c-fn">signInWithEmailAndPassword</span>(
+  email: <span class="c-var">email</span>, password: <span class="c-var">password</span>,
+);
+
+<span class="c-comment">// ── FIRESTORE — write & real-time listen ──</span>
+<span class="c-keyword">await</span> <span class="c-type">FirebaseFirestore</span>.<span class="c-var">instance</span>
+    .<span class="c-fn">collection</span>(<span class="c-string">'users'</span>)
+    .<span class="c-fn">doc</span>(<span class="c-var">cred</span>.<span class="c-var">user</span>!.<span class="c-var">uid</span>)
+    .<span class="c-fn">set</span>({<span class="c-string">'name'</span>: <span class="c-string">'Shatrudhan'</span>, <span class="c-string">'plan'</span>: <span class="c-string">'pro'</span>});
+
+<span class="c-type">FirebaseFirestore</span>.<span class="c-var">instance</span>
+    .<span class="c-fn">collection</span>(<span class="c-string">'users'</span>)
+    .<span class="c-fn">doc</span>(<span class="c-var">uid</span>)
+    .<span class="c-fn">snapshots</span>()                        <span class="c-comment">// real-time stream of changes</span>
+    .<span class="c-fn">listen</span>((<span class="c-var">snapshot</span>) => <span class="c-fn">print</span>(<span class="c-var">snapshot</span>.<span class="c-var">data</span>()));</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: What's the tradeoff of using Firestore instead of a custom REST backend?</div>
+    <div class="iq-a">Firestore gives you real-time sync, offline persistence, and scaling out of the box with very little backend code — great for MVPs and many production apps. The tradeoff is less control over complex relational queries/joins (it's a NoSQL document store), vendor lock-in to Google's pricing model, and security rules replacing traditional server-side business logic, which has its own learning curve.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 22 ======================== -->
+<section class="section" id="s22">
+  <div class="section-header">
+    <div class="section-icon si-red">🔔</div>
+    <div><div class="section-num">22 / 30</div><div class="section-title">Notifications</div></div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>There are two kinds of mobile notifications: <strong>local notifications</strong> (scheduled/triggered from inside the app itself, e.g. a reminder) using <code>flutter_local_notifications</code>, and <strong>push notifications</strong> sent from a server via Firebase Cloud Messaging (FCM), which work even when the app is closed.</p>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">notifications.dart</span></div>
+    <pre><span class="c-comment">// ── LOCAL NOTIFICATION ──────────────────</span>
+<span class="c-keyword">final</span> <span class="c-var">notifications</span> = <span class="c-type">FlutterLocalNotificationsPlugin</span>();
+
+<span class="c-keyword">await</span> <span class="c-var">notifications</span>.<span class="c-fn">show</span>(
+  <span class="c-num">0</span>, <span class="c-string">'Reminder'</span>, <span class="c-string">'Standup at 10 AM'</span>,
+  <span class="c-type">NotificationDetails</span>(
+    android: <span class="c-type">AndroidNotificationDetails</span>(<span class="c-string">'channel_id'</span>, <span class="c-string">'General'</span>),
+  ),
+);
+
+<span class="c-comment">// ── FCM PUSH — listen for messages ───────</span>
+<span class="c-type">FirebaseMessaging</span>.<span class="c-var">onMessage</span>.<span class="c-fn">listen</span>((<span class="c-type">RemoteMessage</span> <span class="c-var">message</span>) {
+  <span class="c-fn">print</span>(<span class="c-string">'Foreground push: </span><span class="c-var">${message.notification?.title}</span><span class="c-string">'</span>);
+});
+
+<span class="c-comment">// ── Get device token to send TO this device ──</span>
+<span class="c-keyword">final</span> <span class="c-var">token</span> = <span class="c-keyword">await</span> <span class="c-type">FirebaseMessaging</span>.<span class="c-var">instance</span>.<span class="c-fn">getToken</span>();</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: Why do you need a separate handler for background/terminated FCM messages?</div>
+    <div class="iq-a"><code>FirebaseMessaging.onMessage</code> only fires while the app is in the foreground. For background or terminated states, you must register a top-level (or static) <code>onBackgroundMessage</code> handler, since Dart isolates handling background messages run in a separate, limited execution context without access to the running app's widget tree.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 23 ======================== -->
+<section class="section" id="s23">
+  <div class="section-header">
+    <div class="section-icon si-purple">🔗</div>
+    <div><div class="section-num">23 / 30</div><div class="section-title">Deep Linking</div></div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Deep links let an external link (a URL, push notification, or another app) open your Flutter app directly to a specific screen. <strong>Custom schemes</strong> (<code>myapp://product/42</code>) are simplest but not verifiable; <strong>App Links</strong> (Android) and <strong>Universal Links</strong> (iOS) use real HTTPS URLs verified against your domain, which is the production-grade approach. Routers like go_router parse the incoming URI and navigate accordingly.</p>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">deep_linking.dart</span></div>
+    <pre><span class="c-comment">// go_router automatically handles incoming deep links</span>
+<span class="c-comment">// matching a registered route pattern:</span>
+<span class="c-keyword">final</span> <span class="c-var">router</span> = <span class="c-type">GoRouter</span>(
+  routes: [
+    <span class="c-type">GoRoute</span>(
+      path: <span class="c-string">'/product/:id'</span>,
+      builder: (context, state) {
+        <span class="c-keyword">final</span> <span class="c-var">id</span> = state.pathParameters[<span class="c-string">'id'</span>]!;
+        <span class="c-keyword">return</span> <span class="c-type">ProductPage</span>(productId: <span class="c-var">id</span>);
+      },
+    ),
+  ],
+);
+
+<span class="c-comment">// https://trinetra.app/product/42 (App Link) or</span>
+<span class="c-comment">// myapp://product/42 (custom scheme) both resolve here</span>
+<span class="c-comment">// once configured in AndroidManifest.xml / Info.plist.</span></pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: Why are App Links / Universal Links preferred over custom URL schemes in production?</div>
+    <div class="iq-a">A custom scheme like <code>myapp://</code> can be claimed by any app, creating a hijacking risk and ambiguity when multiple apps register the same scheme. App Links/Universal Links are cryptographically verified against your real domain (via a hosted JSON file), so the OS only opens your app for those URLs — and if your app isn't installed, the link gracefully falls back to opening in a browser.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 24 ======================== -->
+<section class="section" id="s24">
+  <div class="section-header">
+    <div class="section-icon si-teal">📐</div>
+    <div><div class="section-num">24 / 30</div><div class="section-title">Responsive UI</div></div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Flutter doesn't have native "breakpoints" — you build responsiveness yourself using <code>MediaQuery</code> (read screen size/orientation), <code>LayoutBuilder</code> (react to a parent's available constraints, not just the whole screen), and flexible layout widgets (<code>Expanded</code>, <code>Flexible</code>, <code>FittedBox</code>) instead of fixed pixel sizes.</p>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">responsive.dart</span></div>
+    <pre><span class="c-comment">// ── LayoutBuilder — react to AVAILABLE space, not screen size ──</span>
+<span class="c-type">LayoutBuilder</span>(
+  builder: (context, constraints) {
+    <span class="c-keyword">if</span> (constraints.maxWidth &gt; <span class="c-num">600</span>) {
+      <span class="c-keyword">return</span> <span class="c-type">_WideLayout</span>();
+    }
+    <span class="c-keyword">return</span> <span class="c-type">_NarrowLayout</span>();
+  },
+);
+
+<span class="c-comment">// ── MediaQuery — full screen metrics ────</span>
+<span class="c-keyword">final</span> <span class="c-var">size</span> = <span class="c-type">MediaQuery</span>.<span class="c-fn">of</span>(context).<span class="c-var">size</span>;
+<span class="c-keyword">final</span> <span class="c-var">isTablet</span> = <span class="c-var">size</span>.<span class="c-var">width</span> &gt; <span class="c-num">600</span>;
+
+<span class="c-comment">// ── Flexible sizing instead of fixed px ──</span>
+<span class="c-type">Row</span>(children: [
+  <span class="c-type">Expanded</span>(flex: <span class="c-num">2</span>, child: <span class="c-type">Sidebar</span>()),
+  <span class="c-type">Expanded</span>(flex: <span class="c-num">5</span>, child: <span class="c-type">Content</span>()),
+]);</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: What's the difference between MediaQuery.size and LayoutBuilder's constraints?</div>
+    <div class="iq-a"><code>MediaQuery.of(context).size</code> reflects the entire device screen, regardless of where in the widget tree you are. <code>LayoutBuilder</code> gives the actual constraints passed down by its immediate parent — crucial when a widget is nested inside something like a side panel or a grid cell, where the available space is much smaller than the full screen.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 25 ======================== -->
+<section class="section" id="s25">
+  <div class="section-header">
+    <div class="section-icon si-amber">🚀</div>
+    <div><div class="section-num">25 / 30</div><div class="section-title">Performance Optimization</div></div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>The most common performance wins in Flutter come from reducing unnecessary rebuilds and repaints: using <code>const</code> constructors, <code>ListView.builder</code> for long lists (lazy-builds only visible items instead of all at once), <code>RepaintBoundary</code> to isolate expensive paints, and avoiding heavy work inside <code>build()</code>. Flutter DevTools' "repaint rainbow" and timeline view are the standard tools to diagnose jank.</p>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">performance.dart</span></div>
+    <pre><span class="c-comment">// ── BAD: builds ALL 10,000 items upfront ──</span>
+<span class="c-type">ListView</span>(children: <span class="c-var">items</span>.<span class="c-fn">map</span>((<span class="c-var">i</span>) => <span class="c-type">ItemTile</span>(item: <span class="c-var">i</span>)).<span class="c-fn">toList</span>());
+
+<span class="c-comment">// ── GOOD: lazily builds only visible items ──</span>
+<span class="c-type">ListView</span>.<span class="c-fn">builder</span>(
+  itemCount: <span class="c-var">items</span>.<span class="c-var">length</span>,
+  itemBuilder: (context, index) => <span class="c-type">ItemTile</span>(item: <span class="c-var">items</span>[index]),
+);
+
+<span class="c-comment">// ── RepaintBoundary — isolate expensive paint ──</span>
+<span class="c-type">RepaintBoundary</span>(
+  child: <span class="c-type">CustomPaint</span>(painter: <span class="c-type">ExpensiveChartPainter</span>()),
+);
+
+<span class="c-comment">// ── const everywhere possible ────────────</span>
+<span class="c-keyword">const</span> <span class="c-type">SizedBox</span>(height: <span class="c-num">16</span>);   <span class="c-comment">// no rebuild needed, ever</span></pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: How would you debug a janky scrolling list?</div>
+    <div class="iq-a">First switch to <code>ListView.builder</code> if not already used. Then open Flutter DevTools' Performance tab to look for frames exceeding 16ms (the 60fps budget), enable the "repaint rainbow" to spot widgets repainting unnecessarily, and wrap expensive custom paints in <code>RepaintBoundary</code> so they don't get redrawn just because a sibling widget changed.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 26 ======================== -->
+<section class="section" id="s26">
+  <div class="section-header">
+    <div class="section-icon si-pink">🎬</div>
+    <div><div class="section-num">26 / 30</div><div class="section-title">Animations</div></div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Flutter has two animation styles. <strong>Implicit</strong> animations (<code>AnimatedContainer</code>, <code>AnimatedOpacity</code>) automatically tween between old and new property values whenever they change — minimal code, limited control. <strong>Explicit</strong> animations use an <code>AnimationController</code> + <code>Tween</code> for full control over duration, curve, and playback (forward, reverse, repeat). <code>Hero</code> widgets animate a shared element between two pages during navigation.</p>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">animations.dart</span></div>
+    <pre><span class="c-comment">// ── IMPLICIT — simplest, auto-tweens ────</span>
+<span class="c-type">AnimatedContainer</span>(
+  duration: <span class="c-type">Duration</span>(milliseconds: <span class="c-num">300</span>),
+  width: <span class="c-var">_expanded</span> ? <span class="c-num">200</span> : <span class="c-num">100</span>,
+  color: <span class="c-var">_expanded</span> ? <span class="c-type">Colors</span>.<span class="c-var">blue</span> : <span class="c-type">Colors</span>.<span class="c-var">grey</span>,
+);
+
+<span class="c-comment">// ── EXPLICIT — full control ─────────────</span>
+<span class="c-keyword">class</span> <span class="c-type">_PulseState</span> <span class="c-keyword">extends</span> <span class="c-type">State</span>&lt;<span class="c-type">Pulse</span>&gt; <span class="c-keyword">with</span> <span class="c-type">SingleTickerProviderStateMixin</span> {
+  <span class="c-keyword">late</span> <span class="c-keyword">final</span> <span class="c-var">_controller</span> = <span class="c-type">AnimationController</span>(
+    vsync: <span class="c-keyword">this</span>, duration: <span class="c-type">Duration</span>(seconds: <span class="c-num">1</span>),
+  )..<span class="c-fn">repeat</span>(reverse: <span class="c-keyword">true</span>);
+  <span class="c-keyword">late</span> <span class="c-keyword">final</span> <span class="c-var">_scale</span> = <span class="c-type">Tween</span>(begin: <span class="c-num">1.0</span>, end: <span class="c-num">1.2</span>).<span class="c-fn">animate</span>(<span class="c-var">_controller</span>);
+
+  <span class="c-accent">@override</span>
+  <span class="c-keyword">void</span> <span class="c-fn">dispose</span>() { <span class="c-var">_controller</span>.<span class="c-fn">dispose</span>(); <span class="c-keyword">super</span>.<span class="c-fn">dispose</span>(); }
+
+  <span class="c-accent">@override</span>
+  <span class="c-type">Widget</span> <span class="c-fn">build</span>(<span class="c-type">BuildContext</span> <span class="c-var">context</span>) =&gt;
+      <span class="c-type">ScaleTransition</span>(scale: <span class="c-var">_scale</span>, child: <span class="c-type">Icon</span>(<span class="c-type">Icons</span>.<span class="c-var">favorite</span>));
+}
+
+<span class="c-comment">// ── HERO — shared element transition ────</span>
+<span class="c-type">Hero</span>(tag: <span class="c-string">'product-image'</span>, child: <span class="c-type">Image</span>.<span class="c-fn">network</span>(<span class="c-var">url</span>));</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: Why must you dispose an AnimationController?</div>
+    <div class="iq-a">An <code>AnimationController</code> holds a <code>Ticker</code> that registers itself with the engine to receive a callback on every frame. If you don't dispose it when the widget is removed, that ticker keeps firing against a dead widget, leaking memory and potentially throwing "a ticker was disposed twice" or "Ticker was used after... was disposed" errors.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 27 ======================== -->
+<section class="section" id="s27">
+  <div class="section-header">
+    <div class="section-icon si-blue">🎨</div>
+    <div><div class="section-num">27 / 30</div><div class="section-title">Custom Painter</div></div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p><code>CustomPainter</code> gives direct access to a <code>Canvas</code> for drawing arbitrary shapes, paths, and effects that built-in widgets can't express — charts, signature pads, custom progress indicators. The <code>shouldRepaint</code> method controls whether the canvas is redrawn on rebuild, which is critical for performance since painting can be expensive.</p>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">custom_painter.dart</span></div>
+    <pre><span class="c-keyword">class</span> <span class="c-type">CirclePainter</span> <span class="c-keyword">extends</span> <span class="c-type">CustomPainter</span> {
+  <span class="c-keyword">final</span> <span class="c-type">double</span> <span class="c-var">progress</span>;
+  <span class="c-type">CirclePainter</span>(<span class="c-keyword">this</span>.<span class="c-var">progress</span>);
+
+  <span class="c-accent">@override</span>
+  <span class="c-keyword">void</span> <span class="c-fn">paint</span>(<span class="c-type">Canvas</span> <span class="c-var">canvas</span>, <span class="c-type">Size</span> <span class="c-var">size</span>) {
+    <span class="c-keyword">final</span> <span class="c-var">paint</span> = <span class="c-type">Paint</span>()
+      ..<span class="c-var">color</span> = <span class="c-type">Colors</span>.<span class="c-var">blue</span>
+      ..<span class="c-var">strokeWidth</span> = <span class="c-num">8</span>
+      ..<span class="c-var">style</span> = <span class="c-type">PaintingStyle</span>.<span class="c-var">stroke</span>;
+
+    <span class="c-keyword">final</span> <span class="c-var">center</span> = <span class="c-type">Offset</span>(<span class="c-var">size</span>.<span class="c-var">width</span> / <span class="c-num">2</span>, <span class="c-var">size</span>.<span class="c-var">height</span> / <span class="c-num">2</span>);
+    <span class="c-var">canvas</span>.<span class="c-fn">drawArc</span>(
+      <span class="c-type">Rect</span>.<span class="c-fn">fromCircle</span>(center: <span class="c-var">center</span>, radius: <span class="c-num">50</span>),
+      -<span class="c-num">1.57</span>, <span class="c-num">6.28</span> * <span class="c-var">progress</span>, <span class="c-keyword">false</span>, <span class="c-var">paint</span>,
+    );
+  }
+
+  <span class="c-accent">@override</span>
+  <span class="c-type">bool</span> <span class="c-fn">shouldRepaint</span>(<span class="c-type">CirclePainter</span> <span class="c-var">old</span>) => <span class="c-var">old</span>.<span class="c-var">progress</span> != <span class="c-var">progress</span>;
+}
+
+<span class="c-comment">// usage</span>
+<span class="c-type">CustomPaint</span>(size: <span class="c-type">Size</span>(<span class="c-num">120</span>, <span class="c-num">120</span>), painter: <span class="c-type">CirclePainter</span>(<span class="c-num">0.7</span>));</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: Why does shouldRepaint matter for performance?</div>
+    <div class="iq-a">Returning <code>true</code> unconditionally forces a full repaint on every frame even when nothing visually changed — wasteful for static or rarely-changing custom paints. Comparing the relevant fields between old and new painter instances lets Flutter skip expensive canvas redraws when the actual visual output wouldn't change.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 28 ======================== -->
+<section class="section" id="s28">
+  <div class="section-header">
+    <div class="section-icon si-green">🏗️</div>
+    <div><div class="section-num">28 / 30</div><div class="section-title">Clean Architecture</div></div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Clean Architecture organizes code into concentric layers with a strict dependency rule: <strong>inner layers never depend on outer layers</strong>. The <strong>Domain</strong> layer (entities, use cases, repository interfaces) is pure Dart with zero Flutter or package imports. The <strong>Data</strong> layer implements those repository interfaces using real APIs/databases. The <strong>Presentation</strong> layer (widgets, state management) depends on Domain, never directly on Data — keeping business logic testable and swappable.</p>
+  </div>
+
+  <div class="diagram">
+    <svg viewBox="0 0 820 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:14px;background:#141626;border:1px solid rgba(120,130,255,0.15);">
+      <text x="20" y="24" font-family="Space Mono,monospace" font-size="11" fill="#546e7a">CLEAN ARCHITECTURE — DEPENDENCY RULE</text>
+      <circle cx="410" cy="130" r="90" fill="rgba(124,109,250,0.06)" stroke="rgba(124,109,250,0.4)" stroke-width="1.5"/>
+      <text x="370" y="135" font-family="Space Mono,monospace" font-size="12" fill="#a99cfc" font-weight="700">Domain</text>
+      <text x="350" y="152" font-family="Sora,sans-serif" font-size="10" fill="#8892b0">entities · use cases</text>
+      <circle cx="410" cy="130" r="160" fill="none" stroke="rgba(56,217,169,0.35)" stroke-width="1.5"/>
+      <text x="250" y="20" font-family="Space Mono,monospace" font-size="11" fill="#6ef0d4" font-weight="700">Data</text>
+      <text x="250" y="36" font-family="Sora,sans-serif" font-size="10" fill="#8892b0">API · local DB · repo impls</text>
+      <circle cx="410" cy="130" r="160" fill="none" stroke="rgba(247,169,75,0.0)" stroke-width="0"/>
+      <text x="560" y="220" font-family="Space Mono,monospace" font-size="11" fill="#fcc377" font-weight="700">Presentation</text>
+      <text x="560" y="205" font-family="Sora,sans-serif" font-size="10" fill="#8892b0">widgets · Bloc/Riverpod</text>
+      <text x="55" y="200" font-family="Space Mono,monospace" font-size="9" fill="#546e7a">Dependencies point INWARD only →</text>
+    </svg>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">clean_architecture.dart</span></div>
+    <pre><span class="c-comment">// ── DOMAIN LAYER — pure Dart, no Flutter import ──</span>
+<span class="c-keyword">abstract class</span> <span class="c-type">UserRepository</span> {
+  <span class="c-type">Future</span>&lt;<span class="c-type">User</span>&gt; <span class="c-fn">getUser</span>(<span class="c-type">int</span> <span class="c-var">id</span>);    <span class="c-comment">// interface only</span>
+}
+
+<span class="c-keyword">class</span> <span class="c-type">GetUserUseCase</span> {
+  <span class="c-keyword">final</span> <span class="c-type">UserRepository</span> <span class="c-var">repository</span>;
+  <span class="c-type">GetUserUseCase</span>(<span class="c-keyword">this</span>.<span class="c-var">repository</span>);
+  <span class="c-type">Future</span>&lt;<span class="c-type">User</span>&gt; <span class="c-fn">call</span>(<span class="c-type">int</span> <span class="c-var">id</span>) => <span class="c-var">repository</span>.<span class="c-fn">getUser</span>(<span class="c-var">id</span>);
+}
+
+<span class="c-comment">// ── DATA LAYER — implements the interface ──────</span>
+<span class="c-keyword">class</span> <span class="c-type">UserRepositoryImpl</span> <span class="c-keyword">implements</span> <span class="c-type">UserRepository</span> {
+  <span class="c-keyword">final</span> <span class="c-type">Dio</span> <span class="c-var">dio</span>;
+  <span class="c-type">UserRepositoryImpl</span>(<span class="c-keyword">this</span>.<span class="c-var">dio</span>);
+
+  <span class="c-accent">@override</span>
+  <span class="c-type">Future</span>&lt;<span class="c-type">User</span>&gt; <span class="c-fn">getUser</span>(<span class="c-type">int</span> <span class="c-var">id</span>) <span class="c-keyword">async</span> {
+    <span class="c-keyword">final</span> <span class="c-var">res</span> = <span class="c-keyword">await</span> <span class="c-var">dio</span>.<span class="c-fn">get</span>(<span class="c-string">'/users/</span><span class="c-var">$id</span><span class="c-string">'</span>);
+    <span class="c-keyword">return</span> <span class="c-type">User</span>.<span class="c-fn">fromJson</span>(<span class="c-var">res</span>.<span class="c-var">data</span>);
+  }
+}
+
+<span class="c-comment">// ── PRESENTATION — depends on Domain, never Data ──</span>
+<span class="c-keyword">final</span> <span class="c-var">useCase</span> = <span class="c-type">GetUserUseCase</span>(<span class="c-type">UserRepositoryImpl</span>(<span class="c-var">dio</span>)); <span class="c-comment">// injected at the edge</span></pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: How would you unit test the GetUserUseCase without hitting a real API?</div>
+    <div class="iq-a">Because <code>UserRepository</code> is an abstract interface, you create a fake/mock implementation (e.g. with <code>mocktail</code>) that returns a hardcoded <code>User</code> instead of calling Dio. The use case never knows the difference — that's exactly the point of depending on abstractions rather than concrete implementations.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 29 ======================== -->
+<section class="section" id="s29">
+  <div class="section-header">
+    <div class="section-icon si-red">🧪</div>
+    <div><div class="section-num">29 / 30</div><div class="section-title">Testing</div></div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Flutter testing has three levels. <strong>Unit tests</strong> verify a single function/class in isolation (fast, no Flutter engine needed). <strong>Widget tests</strong> pump a widget into a simulated environment and verify rendering/interaction without a real device. <strong>Integration tests</strong> run on a real device/emulator, testing full user flows end-to-end. Mocking (e.g. with <code>mocktail</code>) isolates the unit under test from real network/database calls.</p>
+  </div>
+
+  <table>
+    <tr><th>Type</th><th>Speed</th><th>Scope</th><th>Tooling</th></tr>
+    <tr><td>Unit</td><td>Fastest</td><td>Single function/class</td><td>test package</td></tr>
+    <tr><td>Widget</td><td>Fast</td><td>One widget/screen</td><td>flutter_test</td></tr>
+    <tr><td>Integration</td><td>Slow</td><td>Full app flow, real device</td><td>integration_test</td></tr>
+  </table>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">testing.dart</span></div>
+    <pre><span class="c-comment">// ── UNIT TEST ───────────────────────────</span>
+<span class="c-fn">test</span>(<span class="c-string">'GetUserUseCase returns user from repository'</span>, () <span class="c-keyword">async</span> {
+  <span class="c-keyword">final</span> <span class="c-var">mockRepo</span> = <span class="c-type">MockUserRepository</span>();
+  <span class="c-fn">when</span>(() => <span class="c-var">mockRepo</span>.<span class="c-fn">getUser</span>(<span class="c-num">1</span>)).<span class="c-fn">thenAnswer</span>((_) <span class="c-keyword">async</span> => <span class="c-type">User</span>(id: <span class="c-num">1</span>, name: <span class="c-string">'Shatrudhan'</span>));
+
+  <span class="c-keyword">final</span> <span class="c-var">useCase</span> = <span class="c-type">GetUserUseCase</span>(<span class="c-var">mockRepo</span>);
+  <span class="c-keyword">final</span> <span class="c-var">user</span> = <span class="c-keyword">await</span> <span class="c-var">useCase</span>(<span class="c-num">1</span>);
+
+  <span class="c-fn">expect</span>(<span class="c-var">user</span>.<span class="c-var">name</span>, <span class="c-string">'Shatrudhan'</span>);
+});
+
+<span class="c-comment">// ── WIDGET TEST ─────────────────────────</span>
+<span class="c-fn">testWidgets</span>(<span class="c-string">'Counter increments on tap'</span>, (<span class="c-type">WidgetTester</span> <span class="c-var">tester</span>) <span class="c-keyword">async</span> {
+  <span class="c-keyword">await</span> <span class="c-var">tester</span>.<span class="c-fn">pumpWidget</span>(<span class="c-type">MaterialApp</span>(home: <span class="c-type">CounterWidget</span>()));
+  <span class="c-fn">expect</span>(<span class="c-fn">find</span>.<span class="c-fn">text</span>(<span class="c-string">'Count: 0'</span>), <span class="c-fn">findsOneWidget</span>());
+
+  <span class="c-keyword">await</span> <span class="c-var">tester</span>.<span class="c-fn">tap</span>(<span class="c-fn">find</span>.<span class="c-fn">text</span>(<span class="c-string">'+'</span>));
+  <span class="c-keyword">await</span> <span class="c-var">tester</span>.<span class="c-fn">pump</span>();        <span class="c-comment">// rebuild after the tap</span>
+  <span class="c-fn">expect</span>(<span class="c-fn">find</span>.<span class="c-fn">text</span>(<span class="c-string">'Count: 1'</span>), <span class="c-fn">findsOneWidget</span>());
+});</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: What's the difference between tester.pump() and tester.pumpAndSettle()?</div>
+    <div class="iq-a"><code>pump()</code> triggers exactly one frame rebuild — useful right after an action like a tap when you know one rebuild is enough. <code>pumpAndSettle()</code> repeatedly pumps frames until there are no more scheduled frames (e.g. waiting out an animation) — necessary when the UI change involves a transition or async delay, but it can time out if something keeps scheduling frames indefinitely.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 30 ======================== -->
+<section class="section" id="s30">
+  <div class="section-header">
+    <div class="section-icon si-purple">🎯</div>
+    <div><div class="section-num">30 / 30</div><div class="section-title">Advanced Interview Questions — Rapid Fire</div></div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>A compiled set of advanced/scenario-based Flutter questions commonly asked in senior or "machine coding" rounds — useful for a final review pass.</p>
+  </div>
+
+  <div class="rapid-grid">
+    <div class="interview-q">
+      <div class="iq-q">Q: How would you reduce app startup time?</div>
+      <div class="iq-a">Defer heavy initialization (analytics SDKs, non-critical Firebase modules) until after the first frame using <code>WidgetsBinding.instance.addPostFrameCallback</code>, lazy-load feature modules, minimize work in <code>main()</code> before <code>runApp()</code>, and use deferred imports for rarely-used large packages.</div>
+    </div>
+    <div class="interview-q">
+      <div class="iq-q">Q: Explain the difference between hot reload and hot restart.</div>
+      <div class="iq-a">Hot reload injects updated code into the running Dart VM and re-runs <code>build()</code>, preserving app state (e.g. current screen, form input) — fast but doesn't pick up changes to <code>main()</code>, global variables, or native code. Hot restart fully restarts the Dart VM and app from scratch, losing state but applying all changes including initialization logic.</div>
+    </div>
+    <div class="interview-q">
+      <div class="iq-q">Q: How do InheritedWidget and Provider relate?</div>
+      <div class="iq-a">Provider is built directly on top of <code>InheritedWidget</code> — it's a more ergonomic API around the same underlying mechanism that lets descendant widgets efficiently look up data from an ancestor without explicit prop drilling, and rebuild only when that specific data changes.</div>
+    </div>
+    <div class="interview-q">
+      <div class="iq-q">Q: What is tree shaking icons / fonts and why does it matter?</div>
+      <div class="iq-a">Flutter can tree-shake unused icons out of icon font packages (like <code>MaterialIcons</code>) at build time if it can statically determine which icons are referenced, significantly reducing release app size — this is why dynamically-constructed icon codepoints (e.g. from a remote config) can break shaking and bloat the binary.</div>
+    </div>
+    <div class="interview-q">
+      <div class="iq-q">Q: How would you architect offline-first behavior in a Flutter app?</div>
+      <div class="iq-a">Treat the local database (Hive/Sqflite) as the single source of truth that the UI always reads from. Sync with the remote API in the background — queue writes locally when offline and replay them on reconnect (often using a "pending sync" flag per record), and use a connectivity listener to trigger sync attempts.</div>
+    </div>
+    <div class="interview-q">
+      <div class="iq-q">Q: What's the purpose of the const constructor optimization in large widget trees?</div>
+      <div class="iq-a">A const widget subtree is built exactly once at compile time. When an ancestor rebuilds, Flutter recognizes the const child as identical (same instance) and skips rebuilding/diffing it entirely — for deeply nested static UI (icons, padding, dividers), this avoids a meaningful amount of redundant work on every frame.</div>
+    </div>
+  </div>
+
+  <table>
+    <tr><th>Area</th><th>Key Question</th></tr>
+    <tr><td>Architecture</td><td>How do the Widget, Element, and RenderObject trees interact?</td></tr>
+    <tr><td>State Management</td><td>Provider vs Riverpod vs Bloc — when to pick which?</td></tr>
+    <tr><td>Performance</td><td>How do you diagnose and fix jank in a list?</td></tr>
+    <tr><td>Architecture Patterns</td><td>How does Clean Architecture keep business logic testable?</td></tr>
+    <tr><td>Async</td><td>Future vs Stream vs Isolate — when does each apply?</td></tr>
+  </table>
+</section>
+
+</div>
+
+<footer>
+  <p>FLUTTER INTERVIEW HANDBOOK — PART 2 (Ch 16–30) — Prepared for Shatrudhan Kumar Sharma</p>
+  <p style="margin-top:6px;color:#546e7a;">Flutter Mobile Developer · Trinetra Services</p>
+</footer>
+
+</body>
+</html>
