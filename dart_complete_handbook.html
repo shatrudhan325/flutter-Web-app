@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dart Complete Handbook – Shatrudhan</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141626;
+    --surface2: #1a1e33;
+    --border: rgba(120,130,255,0.15);
+    --accent: #7c6dfa;
+    --accent2: #38d9a9;
+    --accent3: #f7a94b;
+    --accent4: #f06595;
+    --text: #e8eaf6;
+    --muted: #8892b0;
+    --code-bg: #0a0c18;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  /* HEADER */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #151030 50%, #0d1a1f 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 40px 50px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 800px 400px at 70% 50%, rgba(124,109,250,0.08), transparent),
+                radial-gradient(ellipse 600px 300px at 20% 80%, rgba(56,217,169,0.06), transparent);
+  }
+  .hero-inner { max-width: 900px; margin: 0 auto; position: relative; }
+  .dart-logo {
+    width: 52px; height: 52px; margin-bottom: 20px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 700; color: #fff;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p { color: var(--muted); font-size: 15px; max-width: 560px; }
+  .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+  .badge {
+    font-size: 11px; font-family: 'Space Mono', monospace;
+    padding: 4px 12px; border-radius: 99px; font-weight: 700; letter-spacing: 0.5px;
+    border: 1px solid;
+  }
+  .badge-purple { border-color: rgba(124,109,250,0.5); color: #a99cfc; background: rgba(124,109,250,0.1); }
+  .badge-teal   { border-color: rgba(56,217,169,0.5);  color: #6ef0d4; background: rgba(56,217,169,0.08); }
+  .badge-amber  { border-color: rgba(247,169,75,0.5);  color: #fcc377; background: rgba(247,169,75,0.08); }
+
+  /* NAV */
+  .toc {
+    position: sticky; top: 0; z-index: 99;
+    background: rgba(13,15,26,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    overflow-x: auto;
+  }
+  .toc-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 0; }
+  .toc a {
+    text-decoration: none; font-size: 12px; font-family: 'Space Mono', monospace;
+    color: var(--muted); padding: 14px 14px; display: block;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap; transition: all 0.2s;
+  }
+  .toc a:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* LAYOUT */
+  .main { max-width: 900px; margin: 0 auto; padding: 48px 40px; }
+
+  /* SECTION */
+  .section { margin-bottom: 72px; }
+  .section-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 28px; padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .si-purple { background: rgba(124,109,250,0.15); }
+  .si-teal   { background: rgba(56,217,169,0.12); }
+  .si-amber  { background: rgba(247,169,75,0.12); }
+  .si-pink   { background: rgba(240,101,149,0.12); }
+  .si-blue   { background: rgba(96,165,250,0.12); }
+  .si-green  { background: rgba(74,222,128,0.12); }
+  .si-red    { background: rgba(248,113,113,0.12); }
+
+  .section-title { font-size: 22px; font-weight: 600; }
+  .section-num {
+    font-family: 'Space Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: 1px;
+  }
+
+  /* THEORY BOX */
+  .theory {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .theory-title {
+    font-size: 13px; font-weight: 600;
+    color: var(--accent2); letter-spacing: 0.5px;
+    text-transform: uppercase; margin-bottom: 10px;
+  }
+  .theory p { color: #c5cae9; font-size: 14px; line-height: 1.8; }
+
+  /* CONCEPT GRID */
+  .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0; }
+  .concept-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .concept-card .keyword {
+    font-family: 'Space Mono', monospace; font-size: 14px;
+    font-weight: 700; margin-bottom: 6px;
+  }
+  .concept-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .kw-purple { color: #a99cfc; }
+  .kw-teal   { color: #6ef0d4; }
+  .kw-amber  { color: #fcc377; }
+  .kw-pink   { color: #f9a8d4; }
+  .kw-blue   { color: #93c5fd; }
+  .kw-green  { color: #86efac; }
+  .kw-red    { color: #fca5a5; }
+
+  /* CODE */
+  .code-wrap { margin: 16px 0; }
+  .code-label {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+    padding: 8px 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .code-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .cd-red { background: #f87171; }
+  .cd-yellow { background: #fbbf24; }
+  .cd-green { background: #4ade80; }
+  .code-filename { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); margin-left: 4px; }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 0 0 10px 10px;
+    padding: 20px 22px;
+    overflow-x: auto;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    line-height: 1.85;
+  }
+  .c-keyword  { color: #c792ea; }
+  .c-type     { color: #82aaff; }
+  .c-string   { color: #c3e88d; }
+  .c-comment  { color: #546e7a; font-style: italic; }
+  .c-num      { color: #f78c6c; }
+  .c-fn       { color: #82aaff; }
+  .c-var      { color: #eeffff; }
+  .c-accent   { color: #ffcb6b; }
+
+  /* VISUAL DIAGRAM */
+  .diagram { margin: 20px 0; }
+
+  /* INTERVIEW CALLOUT */
+  .interview-q {
+    background: rgba(124,109,250,0.07);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    margin: 14px 0;
+  }
+  .interview-q .iq-label {
+    font-size: 10px; font-family: 'Space Mono', monospace;
+    color: var(--accent); letter-spacing: 1px; font-weight: 700;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .interview-q .iq-q { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .interview-q .iq-a { font-size: 13px; color: #b0bec5; line-height: 1.7; }
+
+  .tip {
+    background: rgba(56,217,169,0.06);
+    border: 1px solid rgba(56,217,169,0.25);
+    border-radius: 10px; padding: 14px 18px; margin: 14px 0;
+    font-size: 13px; color: #9eecd8;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .tip-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+
+  /* COMPARISON TABLE */
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  th {
+    background: var(--surface2); padding: 12px 16px;
+    text-align: left; font-weight: 600;
+    border-bottom: 1px solid var(--border);
+    font-family: 'Space Mono', monospace; font-size: 12px;
+    color: var(--accent);
+  }
+  td { padding: 11px 16px; border-bottom: 1px solid var(--border); color: #c5cae9; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* FLOW DIAGRAM */
+  .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+  .flow-node {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 16px;
+    font-family: 'Space Mono', monospace; font-size: 12px;
+    color: var(--text);
+  }
+  .flow-arrow { color: var(--muted); font-size: 18px; }
+  .fn-purple { border-color: rgba(124,109,250,0.4); color: #a99cfc; }
+  .fn-teal   { border-color: rgba(56,217,169,0.4);  color: #6ef0d4; }
+  .fn-amber  { border-color: rgba(247,169,75,0.4);  color: #fcc377; }
+  .fn-pink   { border-color: rgba(240,101,149,0.4); color: #f9a8d4; }
+
+  /* NULL SAFETY VISUAL */
+  .ns-visual {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0;
+  }
+  .ns-box {
+    border-radius: 12px; padding: 18px 20px;
+    border: 1px solid;
+  }
+  .ns-box-good { background: rgba(56,217,169,0.05); border-color: rgba(56,217,169,0.3); }
+  .ns-box-bad  { background: rgba(248,113,113,0.05); border-color: rgba(248,113,113,0.3); }
+  .ns-box-title { font-size: 12px; font-family: 'Space Mono', monospace; font-weight: 700; margin-bottom: 8px; }
+  .ns-good { color: #6ef0d4; }
+  .ns-bad  { color: #fca5a5; }
+
+  /* RAPID-FIRE Q&A */
+  .rapid-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 16px 0; }
+
+  /* FOOTER */
+  footer {
+    text-align: center; padding: 40px;
+    border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 12px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 40px 20px; }
+    .main { padding: 32px 20px; }
+    .toc { padding: 0 20px; }
+    .ns-visual { grid-template-columns: 1fr; }
+    .concept-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <a href="/flutter_notes.html" style="display:inline-block;margin-bottom:18px;font-family:'Space Mono',monospace;font-size:12px;color:#a99cfc;text-decoration:none;">&larr; Back to Flutter &amp; Dart Notes</a>
+    <div class="dart-logo">D</div>
+    <h1>Dart <span>Complete</span><br>Interview Handbook</h1>
+    <p>All 20 core Dart topics with theory, diagrams, real code and interview Q&A — built for Flutter developers preparing for technical rounds.</p>
+    <div class="badge-row">
+      <span class="badge badge-purple">20 Chapters</span>
+      <span class="badge badge-teal">Dart 3 / Null Safety</span>
+      <span class="badge badge-amber">Interview Ready</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-inner">
+    <a href="#s1">01 Variables</a>
+    <a href="#s2">02 Data Types</a>
+    <a href="#s3">03 Null Safety</a>
+    <a href="#s4">04 Functions</a>
+    <a href="#s5">05 Collections</a>
+    <a href="#s6">06 OOP</a>
+    <a href="#s7">07 Generics</a>
+    <a href="#s8">08 Extensions</a>
+    <a href="#s9">09 Mixins</a>
+    <a href="#s10">10 Async</a>
+    <a href="#s11">11 Streams</a>
+    <a href="#s12">12 Isolates</a>
+    <a href="#s13">13 Errors</a>
+    <a href="#s14">14 Enums</a>
+    <a href="#s15">15 Records</a>
+    <a href="#s16">16 Patterns</a>
+    <a href="#s17">17 Factory</a>
+    <a href="#s18">18 Memory</a>
+    <a href="#s19">19 Functional</a>
+    <a href="#s20">20 Interview Qs</a>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ======================== SECTION 1 ======================== -->
+<section class="section" id="s1">
+  <div class="section-header">
+    <div class="section-icon si-purple">🔤</div>
+    <div>
+      <div class="section-num">01 / 20</div>
+      <div class="section-title">Variables</div>
+    </div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Dart gives you four ways to declare a variable: <code>var</code> (type inferred, reassignable), <code>final</code> (set once at runtime), <code>const</code> (compile-time constant, deeply immutable), and <code>late</code> (non-nullable but initialized after declaration). Choosing the right one signals intent and helps the compiler catch bugs early.</p>
+  </div>
+
+  <div class="diagram">
+    <svg viewBox="0 0 820 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:14px;background:#141626;border:1px solid rgba(120,130,255,0.15);">
+      <text x="20" y="28" font-family="Space Mono,monospace" font-size="11" fill="#546e7a">VAR vs FINAL vs CONST vs LATE</text>
+      <rect x="20" y="50" width="200" height="110" rx="10" fill="rgba(124,109,250,0.08)" stroke="rgba(124,109,250,0.35)" stroke-width="1"/>
+      <text x="40" y="80" font-family="Space Mono,monospace" font-size="15" fill="#a99cfc" font-weight="700">var</text>
+      <text x="40" y="100" font-family="Sora,sans-serif" font-size="12" fill="#8892b0">Type inferred once</text>
+      <text x="40" y="118" font-family="Sora,sans-serif" font-size="12" fill="#8892b0">Reassignable</text>
+      <text x="40" y="148" font-family="Space Mono,monospace" font-size="11" fill="#a99cfc">var x = 5; x = 10; ✓</text>
+      <rect x="240" y="50" width="200" height="110" rx="10" fill="rgba(56,217,169,0.08)" stroke="rgba(56,217,169,0.35)" stroke-width="1"/>
+      <text x="260" y="80" font-family="Space Mono,monospace" font-size="15" fill="#6ef0d4" font-weight="700">final</text>
+      <text x="260" y="100" font-family="Sora,sans-serif" font-size="12" fill="#8892b0">Set once at runtime</text>
+      <text x="260" y="118" font-family="Sora,sans-serif" font-size="12" fill="#8892b0">Can use functions</text>
+      <text x="260" y="148" font-family="Space Mono,monospace" font-size="11" fill="#6ef0d4">final n = getUser();</text>
+      <rect x="460" y="50" width="200" height="110" rx="10" fill="rgba(247,169,75,0.08)" stroke="rgba(247,169,75,0.35)" stroke-width="1"/>
+      <text x="480" y="80" font-family="Space Mono,monospace" font-size="15" fill="#fcc377" font-weight="700">const</text>
+      <text x="480" y="100" font-family="Sora,sans-serif" font-size="12" fill="#8892b0">Compile-time only</text>
+      <text x="480" y="118" font-family="Sora,sans-serif" font-size="12" fill="#8892b0">Shared in memory</text>
+      <text x="480" y="148" font-family="Space Mono,monospace" font-size="11" fill="#fcc377">const pi = 3.14; ✓</text>
+      <rect x="680" y="50" width="120" height="110" rx="10" fill="rgba(240,101,149,0.08)" stroke="rgba(240,101,149,0.35)" stroke-width="1"/>
+      <text x="700" y="80" font-family="Space Mono,monospace" font-size="15" fill="#f9a8d4" font-weight="700">late</text>
+      <text x="700" y="100" font-family="Sora,sans-serif" font-size="12" fill="#8892b0">Lazy init</text>
+      <text x="700" y="118" font-family="Sora,sans-serif" font-size="12" fill="#8892b0">Init later</text>
+    </svg>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">variables.dart</span></div>
+    <pre><span class="c-keyword">void</span> <span class="c-fn">main</span>() {
+  <span class="c-comment">// var — inferred type, reassignable</span>
+  <span class="c-keyword">var</span> <span class="c-var">name</span> = <span class="c-string">'Shatrudhan'</span>;
+  <span class="c-var">name</span> = <span class="c-string">'Kumar'</span>;           <span class="c-comment">// ✓ OK</span>
+
+  <span class="c-comment">// final — set once, runtime value allowed</span>
+  <span class="c-keyword">final</span> <span class="c-var">age</span> = <span class="c-num">23</span>;
+  <span class="c-comment">// age = 24;             // ✗ Error: can't assign to final</span>
+
+  <span class="c-comment">// const — compile-time, deeply immutable</span>
+  <span class="c-keyword">const</span> <span class="c-var">pi</span> = <span class="c-num">3.14159</span>;
+
+  <span class="c-comment">// late — non-nullable but assigned later</span>
+  <span class="c-keyword">late</span> <span class="c-type">String</span> <span class="c-var">token</span>;
+  <span class="c-var">token</span> = <span class="c-fn">fetchToken</span>();  <span class="c-comment">// assigned before use ✓</span>
+}</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: Can you use a function call to assign a const variable?</div>
+    <div class="iq-a">No. <code>const</code> must be a compile-time constant. Use <code>final</code> if the value comes from a function or is computed at runtime.</div>
+  </div>
+
+  <table>
+    <tr><th>Keyword</th><th>Mutable?</th><th>When assigned</th><th>Use case</th></tr>
+    <tr><td><code style="color:#a99cfc;">var</code></td><td>✅ Yes</td><td>At declaration</td><td>Local variables</td></tr>
+    <tr><td><code style="color:#6ef0d4;">final</code></td><td>❌ No</td><td>Runtime</td><td>Config, tokens</td></tr>
+    <tr><td><code style="color:#fcc377;">const</code></td><td>❌ No</td><td>Compile time</td><td>Constants, colors</td></tr>
+    <tr><td><code style="color:#f9a8d4;">late</code></td><td>Once</td><td>Lazily</td><td>Dependency injection</td></tr>
+  </table>
+</section>
+
+<!-- ======================== SECTION 2 ======================== -->
+<section class="section" id="s2">
+  <div class="section-header">
+    <div class="section-icon si-teal">🧮</div>
+    <div>
+      <div class="section-num">02 / 20</div>
+      <div class="section-title">Data Types</div>
+    </div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Everything in Dart is an object — even numbers and functions. Built-in types include <code>num</code> (parent of <code>int</code> and <code>double</code>), <code>String</code>, <code>bool</code>, and the collection types <code>List</code>, <code>Set</code>, <code>Map</code>. Dart is statically typed but supports type inference via <code>var</code>.</p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="concept-card"><div class="keyword kw-purple">int</div><p>Whole numbers, 64-bit on native platforms.</p></div>
+    <div class="concept-card"><div class="keyword kw-teal">double</div><p>64-bit floating-point numbers.</p></div>
+    <div class="concept-card"><div class="keyword kw-amber">num</div><p>Parent type of int & double — useful for generic math.</p></div>
+    <div class="concept-card"><div class="keyword kw-pink">String</div><p>UTF-16 sequence, immutable, supports interpolation.</p></div>
+    <div class="concept-card"><div class="keyword kw-blue">bool</div><p>Strictly true/false — no truthy/falsy values like JS.</p></div>
+    <div class="concept-card"><div class="keyword kw-green">dynamic</div><p>Bypasses static type checking — use sparingly.</p></div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">data_types.dart</span></div>
+    <pre><span class="c-keyword">void</span> <span class="c-fn">main</span>() {
+  <span class="c-type">int</span> <span class="c-var">age</span> = <span class="c-num">23</span>;
+  <span class="c-type">double</span> <span class="c-var">price</span> = <span class="c-num">499.99</span>;
+  <span class="c-type">num</span> <span class="c-var">anyNumber</span> = <span class="c-var">age</span>;        <span class="c-comment">// num accepts int or double</span>
+  <span class="c-type">bool</span> <span class="c-var">isActive</span> = <span class="c-keyword">true</span>;
+
+  <span class="c-comment">// ── STRING INTERPOLATION ─────────────</span>
+  <span class="c-type">String</span> <span class="c-var">name</span> = <span class="c-string">'Shatrudhan'</span>;
+  <span class="c-fn">print</span>(<span class="c-string">'Hi </span><span class="c-var">$name</span><span class="c-string">, age: </span><span class="c-var">${age + 1}</span><span class="c-string">'</span>);
+
+  <span class="c-comment">// ── TYPE CONVERSION ──────────────────</span>
+  <span class="c-type">String</span> <span class="c-var">ageStr</span> = <span class="c-var">age</span>.<span class="c-fn">toString</span>();
+  <span class="c-type">int</span> <span class="c-var">parsed</span> = <span class="c-type">int</span>.<span class="c-fn">parse</span>(<span class="c-string">'42'</span>);
+  <span class="c-type">double</span> <span class="c-var">d</span> = <span class="c-type">double</span>.<span class="c-fn">parse</span>(<span class="c-string">'3.14'</span>);
+  <span class="c-type">int</span>? <span class="c-var">safe</span> = <span class="c-type">int</span>.<span class="c-fn">tryParse</span>(<span class="c-string">'abc'</span>); <span class="c-comment">// null, no crash</span>
+
+  <span class="c-comment">// ── STRING METHODS ───────────────────</span>
+  <span class="c-fn">print</span>(<span class="c-string">'  hi  '</span>.<span class="c-fn">trim</span>());          <span class="c-comment">// 'hi'</span>
+  <span class="c-fn">print</span>(<span class="c-string">'hi,bye'</span>.<span class="c-fn">split</span>(<span class="c-string">','</span>));    <span class="c-comment">// [hi, bye]</span>
+  <span class="c-fn">print</span>(<span class="c-string">'hi'</span>.<span class="c-fn">toUpperCase</span>());    <span class="c-comment">// HI</span>
+}</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: Why prefer int.tryParse over int.parse?</div>
+    <div class="iq-a"><code>int.parse</code> throws a <code>FormatException</code> on invalid input, crashing the app if unhandled. <code>int.tryParse</code> returns <code>null</code> instead, which is safer for user input like form fields.</div>
+  </div>
+
+  <table>
+    <tr><th>Type</th><th>Example</th><th>Nullable form</th></tr>
+    <tr><td>int</td><td>42</td><td>int?</td></tr>
+    <tr><td>double</td><td>3.14</td><td>double?</td></tr>
+    <tr><td>String</td><td>'hello'</td><td>String?</td></tr>
+    <tr><td>bool</td><td>true / false</td><td>bool?</td></tr>
+  </table>
+</section>
+
+<!-- ======================== SECTION 3 ======================== -->
+<section class="section" id="s3">
+  <div class="section-header">
+    <div class="section-icon si-amber">🛡️</div>
+    <div>
+      <div class="section-num">03 / 20</div>
+      <div class="section-title">Null Safety</div>
+    </div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Dart's <strong>sound null safety</strong> means the compiler guarantees non-nullable variables never contain null — caught at compile time, not runtime. Nullable types are explicitly marked with <code style="color:#6ef0d4;">?</code>, making nullability visible and intentional.</p>
+  </div>
+
+  <div class="ns-visual">
+    <div class="ns-box ns-box-good">
+      <div class="ns-box-title ns-good">✓ Non-Nullable (Default)</div>
+      <pre style="border:none;padding:0;background:transparent;font-size:12px;line-height:1.8;"><span class="c-type">String</span> <span class="c-var">name</span> = <span class="c-string">'Alice'</span>;
+<span class="c-comment">// name can NEVER be null</span></pre>
+    </div>
+    <div class="ns-box ns-box-bad">
+      <div class="ns-box-title ns-bad">? Nullable (Explicit)</div>
+      <pre style="border:none;padding:0;background:transparent;font-size:12px;line-height:1.8;"><span class="c-type">String</span>? <span class="c-var">name</span>;
+<span class="c-comment">// must handle null case</span></pre>
+    </div>
+  </div>
+
+  <div class="diagram">
+    <svg viewBox="0 0 820 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:14px;background:#141626;border:1px solid rgba(120,130,255,0.15);">
+      <text x="20" y="28" font-family="Space Mono,monospace" font-size="11" fill="#546e7a">NULL-AWARE OPERATORS</text>
+      <rect x="20" y="45" width="180" height="140" rx="10" fill="rgba(56,217,169,0.07)" stroke="rgba(56,217,169,0.3)" stroke-width="1"/>
+      <text x="40" y="75" font-family="Space Mono,monospace" font-size="20" fill="#6ef0d4" font-weight="700">??</text>
+      <text x="40" y="95" font-family="Sora,sans-serif" font-size="13" fill="#8892b0">If-null operator</text>
+      <text x="40" y="113" font-family="Sora,sans-serif" font-size="12" fill="#c5cae9">Returns right side</text>
+      <text x="40" y="172" font-family="Space Mono,monospace" font-size="11" fill="#6ef0d4">x ?? 'default'</text>
+      <rect x="220" y="45" width="180" height="140" rx="10" fill="rgba(124,109,250,0.07)" stroke="rgba(124,109,250,0.3)" stroke-width="1"/>
+      <text x="240" y="75" font-family="Space Mono,monospace" font-size="20" fill="#a99cfc" font-weight="700">??=</text>
+      <text x="240" y="95" font-family="Sora,sans-serif" font-size="13" fill="#8892b0">Null-assign</text>
+      <text x="240" y="113" font-family="Sora,sans-serif" font-size="12" fill="#c5cae9">Assigns if null</text>
+      <text x="240" y="172" font-family="Space Mono,monospace" font-size="11" fill="#a99cfc">x ??= 'hello'</text>
+      <rect x="420" y="45" width="180" height="140" rx="10" fill="rgba(247,169,75,0.07)" stroke="rgba(247,169,75,0.3)" stroke-width="1"/>
+      <text x="440" y="75" font-family="Space Mono,monospace" font-size="20" fill="#fcc377" font-weight="700">?.</text>
+      <text x="440" y="95" font-family="Sora,sans-serif" font-size="13" fill="#8892b0">Conditional access</text>
+      <text x="440" y="113" font-family="Sora,sans-serif" font-size="12" fill="#c5cae9">Call only if not null</text>
+      <text x="440" y="172" font-family="Space Mono,monospace" font-size="11" fill="#fcc377">user?.getName()</text>
+      <rect x="620" y="45" width="180" height="140" rx="10" fill="rgba(248,113,113,0.07)" stroke="rgba(248,113,113,0.3)" stroke-width="1"/>
+      <text x="640" y="75" font-family="Space Mono,monospace" font-size="20" fill="#fca5a5" font-weight="700">!</text>
+      <text x="640" y="95" font-family="Sora,sans-serif" font-size="13" fill="#8892b0">Null assertion</text>
+      <text x="640" y="113" font-family="Sora,sans-serif" font-size="12" fill="#fca5a5">Dangerous — throws</text>
+      <text x="640" y="172" font-family="Space Mono,monospace" font-size="11" fill="#fca5a5">user!.getName()</text>
+    </svg>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">null_safety.dart</span></div>
+    <pre><span class="c-keyword">void</span> <span class="c-fn">main</span>() {
+  <span class="c-type">String</span>? <span class="c-var">name</span>;
+  <span class="c-fn">print</span>(<span class="c-var">name</span> ?? <span class="c-string">'Guest'</span>);         <span class="c-comment">// Guest</span>
+  <span class="c-var">name</span> ??= <span class="c-string">'Default'</span>;
+  <span class="c-fn">print</span>(<span class="c-var">name</span>?.<span class="c-var">length</span>);          <span class="c-comment">// safe access</span>
+
+  <span class="c-type">User</span>? <span class="c-var">user</span> = <span class="c-fn">getUser</span>();
+  <span class="c-keyword">if</span> (<span class="c-var">user</span> != <span class="c-keyword">null</span>) {
+    <span class="c-fn">print</span>(<span class="c-var">user</span>.<span class="c-var">name</span>);          <span class="c-comment">// smart-promoted, no ! needed</span>
+  }
+}</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: When is it safe to use the ! null assertion operator?</div>
+    <div class="iq-a">Only when you're certain the value is non-null at that point — e.g., right after a null check, or with late-initialized fields you control. Overusing <code>!</code> defeats the purpose of null safety and reintroduces runtime crashes.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 4 ======================== -->
+<section class="section" id="s4">
+  <div class="section-header">
+    <div class="section-icon si-pink">⚙️</div>
+    <div>
+      <div class="section-num">04 / 20</div>
+      <div class="section-title">Functions</div>
+    </div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Functions in Dart are <strong>first-class objects</strong> — they can be assigned to variables, passed as arguments, and returned from other functions. Dart supports positional, named, and optional parameters, arrow syntax for one-liners, and closures that capture variables from their surrounding scope.</p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="concept-card"><div class="keyword kw-purple">Positional</div><p><code>fn(String a, int b)</code> — order matters.</p></div>
+    <div class="concept-card"><div class="keyword kw-teal">Optional Positional</div><p><code>fn(String a, [int? b])</code> — wrapped in <code>[]</code>.</p></div>
+    <div class="concept-card"><div class="keyword kw-amber">Named</div><p><code>fn({required String a, int b = 0})</code> — wrapped in <code>{}</code>.</p></div>
+    <div class="concept-card"><div class="keyword kw-pink">Closure</div><p>A function that captures variables from its enclosing scope.</p></div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">functions.dart</span></div>
+    <pre><span class="c-comment">// ── NAMED & OPTIONAL PARAMS ───────────</span>
+<span class="c-type">String</span> <span class="c-fn">greet</span>({<span class="c-keyword">required</span> <span class="c-type">String</span> <span class="c-var">name</span>, <span class="c-type">String</span> <span class="c-var">greeting</span> = <span class="c-string">'Hello'</span>}) {
+  <span class="c-keyword">return</span> <span class="c-string">'</span><span class="c-var">$greeting</span><span class="c-string">, </span><span class="c-var">$name</span><span class="c-string">!'</span>;
+}
+<span class="c-fn">print</span>(<span class="c-fn">greet</span>(name: <span class="c-string">'Shatrudhan'</span>));        <span class="c-comment">// Hello, Shatrudhan!</span>
+
+<span class="c-comment">// ── OPTIONAL POSITIONAL ───────────────</span>
+<span class="c-type">int</span> <span class="c-fn">add</span>(<span class="c-type">int</span> <span class="c-var">a</span>, [<span class="c-type">int</span> <span class="c-var">b</span> = <span class="c-num">0</span>]) => <span class="c-var">a</span> + <span class="c-var">b</span>;
+
+<span class="c-comment">// ── ARROW FUNCTION ────────────────────</span>
+<span class="c-type">int</span> <span class="c-fn">square</span>(<span class="c-type">int</span> <span class="c-var">n</span>) => <span class="c-var">n</span> * <span class="c-var">n</span>;
+
+<span class="c-comment">// ── CLOSURE — captures surrounding scope ──</span>
+<span class="c-type">Function</span> <span class="c-fn">counter</span>() {
+  <span class="c-type">int</span> <span class="c-var">count</span> = <span class="c-num">0</span>;
+  <span class="c-keyword">return</span> () {
+    <span class="c-var">count</span>++;
+    <span class="c-keyword">return</span> <span class="c-var">count</span>;
+  };
+}
+<span class="c-keyword">void</span> <span class="c-fn">main</span>() {
+  <span class="c-keyword">final</span> <span class="c-var">increment</span> = <span class="c-fn">counter</span>();
+  <span class="c-fn">print</span>(<span class="c-var">increment</span>());   <span class="c-comment">// 1</span>
+  <span class="c-fn">print</span>(<span class="c-var">increment</span>());   <span class="c-comment">// 2 — count persists across calls</span>
+
+  <span class="c-comment">// function passed as a parameter (higher-order)</span>
+  [<span class="c-num">1</span>,<span class="c-num">2</span>,<span class="c-num">3</span>].<span class="c-fn">forEach</span>((<span class="c-var">n</span>) => <span class="c-fn">print</span>(<span class="c-fn">square</span>(<span class="c-var">n</span>)));
+}</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: What's the difference between optional positional [ ] and named { } parameters?</div>
+    <div class="iq-a">Optional positional params are passed by position and wrapped in <code>[]</code> — order matters, no labels at the call site. Named params are wrapped in <code>{}</code>, passed by name in any order, and are self-documenting — generally preferred for readability when a function has 3+ parameters.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 5 ======================== -->
+<section class="section" id="s5">
+  <div class="section-header">
+    <div class="section-icon si-blue">📚</div>
+    <div>
+      <div class="section-num">05 / 20</div>
+      <div class="section-title">Collections</div>
+    </div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Dart has three built-in collection types: <code>List</code> (ordered, indexed), <code>Set</code> (unique elements), and <code>Map</code> (key-value pairs). All support generics for type safety. Dart also has collection literals with control flow — <code>if</code>, <code>for</code>, and spread (<code>...</code>) inside collections.</p>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">collections.dart</span></div>
+    <pre><span class="c-comment">// ── LIST ─────────────────────────────</span>
+<span class="c-type">List</span>&lt;<span class="c-type">String</span>&gt; <span class="c-var">fruits</span> = [<span class="c-string">'apple'</span>, <span class="c-string">'mango'</span>, <span class="c-string">'banana'</span>];
+<span class="c-var">fruits</span>.<span class="c-fn">add</span>(<span class="c-string">'grapes'</span>);
+<span class="c-fn">print</span>(<span class="c-var">fruits</span>[<span class="c-num">0</span>]);
+
+<span class="c-comment">// ── SET ──────────────────────────────</span>
+<span class="c-type">Set</span>&lt;<span class="c-type">int</span>&gt; <span class="c-var">ids</span> = {<span class="c-num">1</span>, <span class="c-num">2</span>, <span class="c-num">3</span>, <span class="c-num">2</span>};
+<span class="c-fn">print</span>(<span class="c-var">ids</span>);  <span class="c-comment">// {1, 2, 3} — duplicates removed</span>
+
+<span class="c-comment">// ── MAP ──────────────────────────────</span>
+<span class="c-type">Map</span>&lt;<span class="c-type">String</span>, <span class="c-type">int</span>&gt; <span class="c-var">scores</span> = {<span class="c-string">'Alice'</span>: <span class="c-num">95</span>, <span class="c-string">'Bob'</span>: <span class="c-num">80</span>};
+<span class="c-var">scores</span>[<span class="c-string">'Charlie'</span>] = <span class="c-num">90</span>;
+
+<span class="c-comment">// ── SPREAD & COLLECTION CONTROL ──────</span>
+<span class="c-keyword">final</span> <span class="c-var">extra</span> = [<span class="c-num">4</span>, <span class="c-num">5</span>];
+<span class="c-keyword">final</span> <span class="c-var">all</span>   = [<span class="c-num">1</span>, <span class="c-num">2</span>, <span class="c-num">3</span>, ...<span class="c-var">extra</span>];
+<span class="c-keyword">bool</span> <span class="c-var">isAdmin</span> = <span class="c-keyword">true</span>;
+<span class="c-keyword">final</span> <span class="c-var">menu</span>  = [
+  <span class="c-string">'Home'</span>,
+  <span class="c-keyword">if</span> (<span class="c-var">isAdmin</span>) <span class="c-string">'Admin Panel'</span>,
+  <span class="c-keyword">for</span> (<span class="c-keyword">var</span> <span class="c-var">i</span> <span class="c-keyword">in</span> [<span class="c-num">1</span>,<span class="c-num">2</span>]) <span class="c-string">'Item </span><span class="c-var">$i</span><span class="c-string">'</span>,
+];</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: When would you use Set over List?</div>
+    <div class="iq-a">Use <code>Set</code> when you need unique elements and don't care about order — lookup is O(1) vs O(n) in List. Use <code>List</code> when order matters or duplicates are allowed.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 6 ======================== -->
+<section class="section" id="s6">
+  <div class="section-header">
+    <div class="section-icon si-green">🏛️</div>
+    <div>
+      <div class="section-num">06 / 20</div>
+      <div class="section-title">OOP</div>
+    </div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Dart is fully object-oriented — everything is an object. It supports all four OOP pillars: <strong>Encapsulation</strong> (<code>_</code> prefix for private), <strong>Inheritance</strong> (<code>extends</code>), <strong>Polymorphism</strong> (<code>@override</code>), and <strong>Abstraction</strong> (<code>abstract</code>). Dart has no <code>interface</code> keyword — every class implicitly defines an interface that can be implemented with <code>implements</code>.</p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="concept-card"><div class="keyword kw-purple">Encapsulation</div><p>Hide state with <code>_</code> prefix. Expose via getters/setters.</p></div>
+    <div class="concept-card"><div class="keyword kw-teal">Inheritance</div><p><code>extends</code> for is-a relationships. Single inheritance only.</p></div>
+    <div class="concept-card"><div class="keyword kw-amber">Polymorphism</div><p>Override with <code>@override</code> — same method, different behavior.</p></div>
+    <div class="concept-card"><div class="keyword kw-pink">Abstraction</div><p><code>abstract class</code> defines a contract, can't be instantiated.</p></div>
+    <div class="concept-card"><div class="keyword kw-blue">implements</div><p>Enforce a contract as an interface — must implement ALL members.</p></div>
+    <div class="concept-card"><div class="keyword kw-green">factory</div><p>Constructor returning a subtype/cached instance. See Ch.17.</p></div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">oop.dart</span></div>
+    <pre><span class="c-keyword">abstract class</span> <span class="c-type">Animal</span> {
+  <span class="c-keyword">void</span> <span class="c-fn">makeSound</span>();
+  <span class="c-keyword">void</span> <span class="c-fn">breathe</span>() => <span class="c-fn">print</span>(<span class="c-string">'Breathing'</span>);
+}
+
+<span class="c-keyword">class</span> <span class="c-type">Dog</span> <span class="c-keyword">extends</span> <span class="c-type">Animal</span> {
+  <span class="c-keyword">final</span> <span class="c-type">String</span> <span class="c-var">name</span>;
+  <span class="c-type">Dog</span>(<span class="c-keyword">this</span>.<span class="c-var">name</span>);
+
+  <span class="c-accent">@override</span>
+  <span class="c-keyword">void</span> <span class="c-fn">makeSound</span>() => <span class="c-fn">print</span>(<span class="c-string">'</span><span class="c-var">$name</span><span class="c-string"> says Woof!'</span>);
+}
+
+<span class="c-keyword">class</span> <span class="c-type">User</span> {
+  <span class="c-keyword">final</span> <span class="c-type">String</span> <span class="c-var">name</span>;
+  <span class="c-type">User</span>(<span class="c-keyword">this</span>.<span class="c-var">name</span>);
+  <span class="c-type">User</span>.<span class="c-fn">guest</span>() : <span class="c-var">name</span> = <span class="c-string">'Guest'</span>;     <span class="c-comment">// named constructor</span>
+}</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: Why does Dart not have a separate "interface" keyword?</div>
+    <div class="iq-a">Every Dart class implicitly defines an interface consisting of its instance members. Any class can <code>implements</code> another class to satisfy that interface, without needing a dedicated <code>interface</code> keyword like Java.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 7 ======================== -->
+<section class="section" id="s7">
+  <div class="section-header">
+    <div class="section-icon si-red">🧬</div>
+    <div>
+      <div class="section-num">07 / 20</div>
+      <div class="section-title">Generics</div>
+    </div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Generics let you write reusable, type-safe code without duplicating logic per type. Instead of using <code>dynamic</code> (which loses compile-time checks), a generic type parameter like <code>&lt;T&gt;</code> lets the compiler enforce consistency while keeping the implementation generic.</p>
+  </div>
+
+  <div class="diagram">
+    <svg viewBox="0 0 820 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:14px;background:#141626;border:1px solid rgba(120,130,255,0.15);">
+      <text x="20" y="28" font-family="Space Mono,monospace" font-size="11" fill="#546e7a">GENERIC TYPE SUBSTITUTION</text>
+      <rect x="40" y="50" width="200" height="90" rx="10" fill="rgba(124,109,250,0.08)" stroke="rgba(124,109,250,0.35)" stroke-width="1.5"/>
+      <text x="60" y="80" font-family="Space Mono,monospace" font-size="14" fill="#a99cfc" font-weight="700">Box&lt;T&gt;</text>
+      <text x="60" y="100" font-family="Sora,sans-serif" font-size="12" fill="#8892b0">T value;</text>
+      <text x="60" y="118" font-family="Sora,sans-serif" font-size="12" fill="#8892b0">generic container</text>
+      <line x1="240" y1="95" x2="330" y2="60" stroke="rgba(56,217,169,0.5)" stroke-width="1.5"/>
+      <line x1="240" y1="95" x2="330" y2="95" stroke="rgba(247,169,75,0.5)" stroke-width="1.5"/>
+      <line x1="240" y1="95" x2="330" y2="130" stroke="rgba(240,101,149,0.5)" stroke-width="1.5"/>
+      <rect x="330" y="40" width="180" height="40" rx="8" fill="rgba(56,217,169,0.08)" stroke="rgba(56,217,169,0.35)" stroke-width="1"/>
+      <text x="350" y="65" font-family="Space Mono,monospace" font-size="13" fill="#6ef0d4">Box&lt;int&gt;</text>
+      <rect x="330" y="78" width="180" height="40" rx="8" fill="rgba(247,169,75,0.08)" stroke="rgba(247,169,75,0.35)" stroke-width="1"/>
+      <text x="350" y="103" font-family="Space Mono,monospace" font-size="13" fill="#fcc377">Box&lt;String&gt;</text>
+      <rect x="330" y="116" width="180" height="40" rx="8" fill="rgba(240,101,149,0.08)" stroke="rgba(240,101,149,0.35)" stroke-width="1"/>
+      <text x="350" y="141" font-family="Space Mono,monospace" font-size="13" fill="#f9a8d4">Box&lt;User&gt;</text>
+    </svg>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">generics.dart</span></div>
+    <pre><span class="c-comment">// ── GENERIC CLASS ─────────────────────</span>
+<span class="c-keyword">class</span> <span class="c-type">Box</span>&lt;<span class="c-type">T</span>&gt; {
+  <span class="c-keyword">final</span> <span class="c-type">T</span> <span class="c-var">value</span>;
+  <span class="c-type">Box</span>(<span class="c-keyword">this</span>.<span class="c-var">value</span>);
+}
+<span class="c-keyword">final</span> <span class="c-var">intBox</span> = <span class="c-type">Box</span>&lt;<span class="c-type">int</span>&gt;(<span class="c-num">42</span>);
+<span class="c-keyword">final</span> <span class="c-var">userBox</span> = <span class="c-type">Box</span>&lt;<span class="c-type">User</span>&gt;(<span class="c-type">User</span>(<span class="c-string">'Shatrudhan'</span>));
+
+<span class="c-comment">// ── GENERIC METHOD ────────────────────</span>
+<span class="c-type">T</span> <span class="c-fn">first</span>&lt;<span class="c-type">T</span>&gt;(<span class="c-type">List</span>&lt;<span class="c-type">T</span>&gt; <span class="c-var">items</span>) => <span class="c-var">items</span>[<span class="c-num">0</span>];
+
+<span class="c-comment">// ── BOUNDED GENERIC ───────────────────</span>
+<span class="c-type">T</span> <span class="c-fn">largest</span>&lt;<span class="c-type">T</span> <span class="c-keyword">extends</span> <span class="c-type">num</span>&gt;(<span class="c-type">T</span> <span class="c-var">a</span>, <span class="c-type">T</span> <span class="c-var">b</span>) => <span class="c-var">a</span> &gt; <span class="c-var">b</span> ? <span class="c-var">a</span> : <span class="c-var">b</span>;
+<span class="c-fn">print</span>(<span class="c-fn">largest</span>(<span class="c-num">3</span>, <span class="c-num">7</span>));      <span class="c-comment">// works only with num subtypes</span></pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: Why use generics instead of dynamic?</div>
+    <div class="iq-a"><code>dynamic</code> disables compile-time type checking entirely — bugs surface only at runtime. Generics keep the implementation reusable across types while preserving full compile-time safety and IDE autocomplete.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 8 ======================== -->
+<section class="section" id="s8">
+  <div class="section-header">
+    <div class="section-icon si-purple">🔌</div>
+    <div>
+      <div class="section-num">08 / 20</div>
+      <div class="section-title">Extensions</div>
+    </div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Extensions let you add new methods, getters, and setters to <strong>existing types</strong> — even SDK types like <code>String</code> or <code>int</code> — without modifying their source code or wrapping them in a subclass. They're resolved statically, so they don't add runtime overhead.</p>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">extensions.dart</span></div>
+    <pre><span class="c-keyword">extension</span> <span class="c-type">StringUtils</span> <span class="c-keyword">on</span> <span class="c-type">String</span> {
+  <span class="c-type">bool</span> <span class="c-keyword">get</span> <span class="c-var">isValidEmail</span> => <span class="c-fn">contains</span>(<span class="c-string">'@'</span>) && <span class="c-fn">contains</span>(<span class="c-string">'.'</span>);
+
+  <span class="c-type">String</span> <span class="c-keyword">get</span> <span class="c-var">capitalize</span> =>
+      <span class="c-fn">isEmpty</span> ? <span class="c-keyword">this</span> : <span class="c-keyword">this</span>[<span class="c-num">0</span>].<span class="c-fn">toUpperCase</span>() + <span class="c-fn">substring</span>(<span class="c-num">1</span>);
+}
+
+<span class="c-keyword">extension</span> <span class="c-type">IntUtils</span> <span class="c-keyword">on</span> <span class="c-type">int</span> {
+  <span class="c-type">bool</span> <span class="c-keyword">get</span> <span class="c-var">isEven</span> => <span class="c-keyword">this</span> % <span class="c-num">2</span> == <span class="c-num">0</span>;
+  <span class="c-type">Duration</span> <span class="c-keyword">get</span> <span class="c-var">seconds</span> => <span class="c-type">Duration</span>(seconds: <span class="c-keyword">this</span>);
+}
+
+<span class="c-comment">// Usage — feels like built-in methods!</span>
+<span class="c-fn">print</span>(<span class="c-string">'hello'</span>.<span class="c-var">capitalize</span>);               <span class="c-comment">// Hello</span>
+<span class="c-fn">print</span>(<span class="c-string">'dev@mail.com'</span>.<span class="c-var">isValidEmail</span>);      <span class="c-comment">// true</span>
+<span class="c-keyword">await</span> <span class="c-type">Future</span>.<span class="c-fn">delayed</span>(<span class="c-num">2</span>.<span class="c-var">seconds</span>);         <span class="c-comment">// wait 2 seconds</span></pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: Do extensions let you override existing methods on a type?</div>
+    <div class="iq-a">No. If a member name in your extension collides with a member already on the class, the class's own member wins. Extensions only add new members — they cannot override existing behavior, which prevents conflicts across libraries.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 9 ======================== -->
+<section class="section" id="s9">
+  <div class="section-header">
+    <div class="section-icon si-teal">🧩</div>
+    <div>
+      <div class="section-num">09 / 20</div>
+      <div class="section-title">Mixins</div>
+    </div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Mixins solve the "diamond problem" of multiple inheritance by reusing code across multiple class hierarchies without actual inheritance. A mixin defines capabilities "mixed in" to any class using <code>with</code>. Mixins can't be instantiated and (by default) can't have their own constructors.</p>
+  </div>
+
+  <div class="diagram">
+    <svg viewBox="0 0 820 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:14px;background:#141626;border:1px solid rgba(120,130,255,0.15);">
+      <text x="20" y="28" font-family="Space Mono,monospace" font-size="11" fill="#546e7a">MIXIN COMPOSITION vs INHERITANCE</text>
+      <rect x="20" y="50" width="150" height="55" rx="8" fill="rgba(56,217,169,0.1)" stroke="rgba(56,217,169,0.35)" stroke-width="1" stroke-dasharray="5,3"/>
+      <text x="40" y="73" font-family="Space Mono,monospace" font-size="12" fill="#6ef0d4" font-weight="700">CanFly</text>
+      <text x="40" y="91" font-family="Sora,sans-serif" font-size="12" fill="#8892b0">fly() behavior</text>
+      <rect x="20" y="125" width="150" height="55" rx="8" fill="rgba(247,169,75,0.08)" stroke="rgba(247,169,75,0.35)" stroke-width="1" stroke-dasharray="5,3"/>
+      <text x="40" y="148" font-family="Space Mono,monospace" font-size="12" fill="#fcc377" font-weight="700">CanSwim</text>
+      <text x="40" y="166" font-family="Sora,sans-serif" font-size="12" fill="#8892b0">swim() behavior</text>
+      <rect x="330" y="85" width="180" height="75" rx="10" fill="rgba(124,109,250,0.1)" stroke="rgba(124,109,250,0.35)" stroke-width="1.5"/>
+      <text x="350" y="112" font-family="Space Mono,monospace" font-size="14" fill="#a99cfc" font-weight="700">Duck</text>
+      <text x="350" y="130" font-family="Sora,sans-serif" font-size="12" fill="#8892b0">extends Animal</text>
+      <text x="350" y="148" font-family="Space Mono,monospace" font-size="11" fill="#a99cfc">with CanFly, CanSwim</text>
+      <rect x="570" y="85" width="150" height="55" rx="8" fill="rgba(240,101,149,0.07)" stroke="rgba(240,101,149,0.3)" stroke-width="1"/>
+      <text x="590" y="110" font-family="Space Mono,monospace" font-size="12" fill="#f9a8d4" font-weight="700">Animal</text>
+      <text x="590" y="128" font-family="Sora,sans-serif" font-size="12" fill="#8892b0">breathe()</text>
+      <line x1="175" y1="77" x2="328" y2="115" stroke="rgba(56,217,169,0.5)" stroke-width="1.5"/>
+      <line x1="175" y1="152" x2="328" y2="140" stroke="rgba(247,169,75,0.5)" stroke-width="1.5"/>
+      <line x1="512" y1="122" x2="568" y2="112" stroke="rgba(240,101,149,0.5)" stroke-width="1.5"/>
+    </svg>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">mixins.dart</span></div>
+    <pre><span class="c-keyword">mixin</span> <span class="c-type">CanFly</span> {
+  <span class="c-keyword">void</span> <span class="c-fn">fly</span>() => <span class="c-fn">print</span>(<span class="c-string">'Flying!'</span>);
+}
+<span class="c-keyword">mixin</span> <span class="c-type">CanSwim</span> {
+  <span class="c-keyword">void</span> <span class="c-fn">swim</span>() => <span class="c-fn">print</span>(<span class="c-string">'Swimming!'</span>);
+}
+<span class="c-keyword">class</span> <span class="c-type">Animal</span> {
+  <span class="c-keyword">void</span> <span class="c-fn">breathe</span>() => <span class="c-fn">print</span>(<span class="c-string">'Breathing'</span>);
+}
+
+<span class="c-comment">// Duck can fly AND swim — no multiple inheritance needed</span>
+<span class="c-keyword">class</span> <span class="c-type">Duck</span> <span class="c-keyword">extends</span> <span class="c-type">Animal</span> <span class="c-keyword">with</span> <span class="c-type">CanFly</span>, <span class="c-type">CanSwim</span> {}
+
+<span class="c-keyword">void</span> <span class="c-fn">main</span>() {
+  <span class="c-keyword">final</span> <span class="c-var">duck</span> = <span class="c-type">Duck</span>();
+  <span class="c-var">duck</span>.<span class="c-fn">fly</span>(); <span class="c-var">duck</span>.<span class="c-fn">swim</span>(); <span class="c-var">duck</span>.<span class="c-fn">breathe</span>();
+}</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: What is the difference between a mixin and an abstract class?</div>
+    <div class="iq-a">An <strong>abstract class</strong> defines a contract for "is-a" relationships and can only be single-extended. A <strong>mixin</strong> provides reusable "has-ability" behavior that can be plugged into any class — you can apply multiple mixins to the same class.</div>
+  </div>
+
+  <table>
+    <tr><th>Feature</th><th>Mixin</th><th>Abstract Class</th><th>Extension</th></tr>
+    <tr><td>Purpose</td><td>Share behavior</td><td>Define contract</td><td>Add to existing type</td></tr>
+    <tr><td>Keyword</td><td><code>mixin</code> + <code>with</code></td><td><code>abstract class</code></td><td><code>extension on</code></td></tr>
+    <tr><td>Multiple use?</td><td>✅ Yes</td><td>❌ Single extend</td><td>✅ Yes</td></tr>
+  </table>
+</section>
+
+<!-- ======================== SECTION 10 ======================== -->
+<section class="section" id="s10">
+  <div class="section-header">
+    <div class="section-icon si-amber">⏱️</div>
+    <div>
+      <div class="section-num">10 / 20</div>
+      <div class="section-title">Async Programming</div>
+    </div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Dart is single-threaded but handles concurrency via an <strong>event loop</strong>. A <code>Future</code> represents a value (or error) available at some point in the future. <code>async</code>/<code>await</code> let you write asynchronous code that reads like synchronous code, while <code>try/catch/finally</code> handles errors.</p>
+  </div>
+
+  <div class="flow">
+    <div class="flow-node fn-purple">Call async fn</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node fn-teal">Future&lt;T&gt; returned</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node fn-amber">Event loop continues</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node fn-pink">await resolves value</div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">async.dart</span></div>
+    <pre><span class="c-type">Future</span>&lt;<span class="c-type">String</span>&gt; <span class="c-fn">fetchUser</span>() <span class="c-keyword">async</span> {
+  <span class="c-keyword">await</span> <span class="c-type">Future</span>.<span class="c-fn">delayed</span>(<span class="c-type">Duration</span>(seconds: <span class="c-num">2</span>));
+  <span class="c-keyword">return</span> <span class="c-string">'Shatrudhan'</span>;
+}
+
+<span class="c-keyword">void</span> <span class="c-fn">loadData</span>() <span class="c-keyword">async</span> {
+  <span class="c-keyword">try</span> {
+    <span class="c-keyword">final</span> <span class="c-var">user</span> = <span class="c-keyword">await</span> <span class="c-fn">fetchUser</span>();
+    <span class="c-fn">print</span>(<span class="c-string">'Hello </span><span class="c-var">$user</span><span class="c-string">'</span>);
+  } <span class="c-keyword">catch</span> (<span class="c-var">e</span>) {
+    <span class="c-fn">print</span>(<span class="c-string">'Error: </span><span class="c-var">$e</span><span class="c-string">'</span>);
+  } <span class="c-keyword">finally</span> {
+    <span class="c-fn">print</span>(<span class="c-string">'Done'</span>);  <span class="c-comment">// always runs</span>
+  }
+}
+
+<span class="c-comment">// Run multiple futures in parallel</span>
+<span class="c-keyword">final</span> <span class="c-var">results</span> = <span class="c-keyword">await</span> <span class="c-type">Future</span>.<span class="c-fn">wait</span>([<span class="c-fn">fetchUser</span>(), <span class="c-fn">fetchUser</span>()]);</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: Does await block the main thread while waiting?</div>
+    <div class="iq-a">No. <code>await</code> suspends the current async function and yields control back to the event loop, which keeps processing other events (UI rebuilds, gestures). It does not block the isolate's single thread.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 11 ======================== -->
+<section class="section" id="s11">
+  <div class="section-header">
+    <div class="section-icon si-green">🌊</div>
+    <div>
+      <div class="section-num">11 / 20</div>
+      <div class="section-title">Streams</div>
+    </div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>A <code>Stream</code> is a sequence of asynchronous events, unlike <code>Future</code> which resolves once. Streams come in two flavors: <strong>single-subscription</strong> (one listener, used for discrete sequences like file reads) and <strong>broadcast</strong> (multiple listeners, used for ongoing events like UI state or sensor data).</p>
+  </div>
+
+  <div class="diagram">
+    <svg viewBox="0 0 820 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:14px;background:#141626;border:1px solid rgba(120,130,255,0.15);">
+      <text x="20" y="28" font-family="Space Mono,monospace" font-size="11" fill="#546e7a">STREAM DATA FLOW</text>
+      <rect x="20" y="55" width="140" height="60" rx="8" fill="rgba(124,109,250,0.08)" stroke="rgba(124,109,250,0.35)" stroke-width="1"/>
+      <text x="35" y="90" font-family="Space Mono,monospace" font-size="13" fill="#a99cfc">Source</text>
+      <line x1="160" y1="85" x2="220" y2="85" stroke="#546e7a" stroke-width="1.5"/>
+      <circle cx="200" cy="85" r="4" fill="#6ef0d4"/>
+      <circle cx="240" cy="85" r="4" fill="#6ef0d4"/>
+      <circle cx="280" cy="85" r="4" fill="#6ef0d4"/>
+      <rect x="320" y="55" width="160" height="60" rx="8" fill="rgba(56,217,169,0.08)" stroke="rgba(56,217,169,0.35)" stroke-width="1"/>
+      <text x="335" y="80" font-family="Space Mono,monospace" font-size="12" fill="#6ef0d4">StreamController</text>
+      <text x="335" y="98" font-family="Sora,sans-serif" font-size="11" fill="#8892b0">.sink.add(event)</text>
+      <line x1="480" y1="85" x2="560" y2="55" stroke="rgba(247,169,75,0.5)" stroke-width="1.5"/>
+      <line x1="480" y1="85" x2="560" y2="115" stroke="rgba(240,101,149,0.5)" stroke-width="1.5"/>
+      <rect x="560" y="35" width="160" height="40" rx="8" fill="rgba(247,169,75,0.08)" stroke="rgba(247,169,75,0.35)" stroke-width="1"/>
+      <text x="575" y="60" font-family="Space Mono,monospace" font-size="11" fill="#fcc377">listener 1</text>
+      <rect x="560" y="95" width="160" height="40" rx="8" fill="rgba(240,101,149,0.08)" stroke="rgba(240,101,149,0.35)" stroke-width="1"/>
+      <text x="575" y="120" font-family="Space Mono,monospace" font-size="11" fill="#f9a8d4">listener 2</text>
+    </svg>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">streams.dart</span></div>
+    <pre><span class="c-comment">// ── GENERATOR FUNCTION (async*) ───────</span>
+<span class="c-type">Stream</span>&lt;<span class="c-type">int</span>&gt; <span class="c-fn">countDown</span>() <span class="c-keyword">async</span>* {
+  <span class="c-keyword">for</span> (<span class="c-type">int</span> <span class="c-var">i</span> = <span class="c-num">5</span>; <span class="c-var">i</span> &gt;= <span class="c-num">0</span>; <span class="c-var">i</span>--) {
+    <span class="c-keyword">await</span> <span class="c-type">Future</span>.<span class="c-fn">delayed</span>(<span class="c-type">Duration</span>(seconds: <span class="c-num">1</span>));
+    <span class="c-keyword">yield</span> <span class="c-var">i</span>;
+  }
+}
+
+<span class="c-keyword">void</span> <span class="c-fn">main</span>() <span class="c-keyword">async</span> {
+  <span class="c-keyword">await for</span> (<span class="c-keyword">final</span> <span class="c-var">val</span> <span class="c-keyword">in</span> <span class="c-fn">countDown</span>()) {
+    <span class="c-fn">print</span>(<span class="c-var">val</span>);
+  }
+
+  <span class="c-comment">// .listen() with all callbacks</span>
+  <span class="c-fn">countDown</span>().<span class="c-fn">listen</span>(
+    (<span class="c-var">val</span>) => <span class="c-fn">print</span>(<span class="c-var">val</span>),
+    onError: (<span class="c-var">e</span>) => <span class="c-fn">print</span>(<span class="c-string">'Error: </span><span class="c-var">$e</span><span class="c-string">'</span>),
+    onDone: () => <span class="c-fn">print</span>(<span class="c-string">'Complete!'</span>),
+  );
+
+  <span class="c-comment">// StreamController for manual control</span>
+  <span class="c-keyword">final</span> <span class="c-var">controller</span> = <span class="c-type">StreamController</span>&lt;<span class="c-type">int</span>&gt;.<span class="c-fn">broadcast</span>();
+  <span class="c-var">controller</span>.<span class="c-var">sink</span>.<span class="c-fn">add</span>(<span class="c-num">1</span>);
+  <span class="c-var">controller</span>.<span class="c-fn">close</span>();  <span class="c-comment">// always close to avoid leaks</span>
+}</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: What happens if you try to listen twice to a single-subscription stream?</div>
+    <div class="iq-a">It throws a <code>StateError</code> — single-subscription streams allow exactly one listener. Use <code>.asBroadcastStream()</code> or a <code>StreamController.broadcast()</code> if multiple listeners are needed.</div>
+  </div>
+
+  <table>
+    <tr><th>Feature</th><th>Future</th><th>Stream</th></tr>
+    <tr><td>Values</td><td>One value (or error)</td><td>Zero or more values</td></tr>
+    <tr><td>Keyword</td><td><code>async</code>/<code>await</code></td><td><code>async*</code>/<code>yield</code></td></tr>
+    <tr><td>Consume</td><td><code>await</code></td><td><code>await for</code> or <code>.listen()</code></td></tr>
+  </table>
+</section>
+
+<!-- ======================== SECTION 12 ======================== -->
+<section class="section" id="s12">
+  <div class="section-header">
+    <div class="section-icon si-red">🧵</div>
+    <div>
+      <div class="section-num">12 / 20</div>
+      <div class="section-title">Isolates</div>
+    </div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Dart code runs in a single-threaded <strong>isolate</strong> with its own memory — that's why a heavy synchronous computation freezes the UI even though Dart is "async." Isolates give true parallelism: each isolate has its own memory heap and communicates with others only via message passing (no shared state, no locks).</p>
+  </div>
+
+  <div class="diagram">
+    <svg viewBox="0 0 820 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:14px;background:#141626;border:1px solid rgba(120,130,255,0.15);">
+      <text x="20" y="28" font-family="Space Mono,monospace" font-size="11" fill="#546e7a">ISOLATE MESSAGE PASSING (NO SHARED MEMORY)</text>
+      <rect x="60" y="55" width="220" height="90" rx="10" fill="rgba(124,109,250,0.08)" stroke="rgba(124,109,250,0.35)" stroke-width="1.5"/>
+      <text x="80" y="85" font-family="Space Mono,monospace" font-size="13" fill="#a99cfc" font-weight="700">Main Isolate</text>
+      <text x="80" y="105" font-family="Sora,sans-serif" font-size="12" fill="#8892b0">UI / event loop</text>
+      <text x="80" y="123" font-family="Sora,sans-serif" font-size="12" fill="#8892b0">own memory heap</text>
+      <line x1="280" y1="80" x2="520" y2="80" stroke="rgba(56,217,169,0.5)" stroke-width="1.5" marker-end="url(#a1)"/>
+      <text x="320" y="72" font-family="Space Mono,monospace" font-size="10" fill="#6ef0d4">SendPort message</text>
+      <line x1="520" y1="115" x2="280" y2="115" stroke="rgba(247,169,75,0.5)" stroke-width="1.5" marker-end="url(#a2)"/>
+      <text x="330" y="135" font-family="Space Mono,monospace" font-size="10" fill="#fcc377">result returned</text>
+      <rect x="520" y="55" width="220" height="90" rx="10" fill="rgba(56,217,169,0.08)" stroke="rgba(56,217,169,0.35)" stroke-width="1.5"/>
+      <text x="540" y="85" font-family="Space Mono,monospace" font-size="13" fill="#6ef0d4" font-weight="700">Worker Isolate</text>
+      <text x="540" y="105" font-family="Sora,sans-serif" font-size="12" fill="#8892b0">heavy computation</text>
+      <text x="540" y="123" font-family="Sora,sans-serif" font-size="12" fill="#8892b0">separate memory heap</text>
+      <defs>
+        <marker id="a1" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#6ef0d4"/></marker>
+        <marker id="a2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#fcc377"/></marker>
+      </defs>
+    </svg>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">isolates.dart</span></div>
+    <pre><span class="c-comment">// ── FLUTTER'S compute() — simplest way to use an isolate ──</span>
+<span class="c-type">int</span> <span class="c-fn">heavySum</span>(<span class="c-type">int</span> <span class="c-var">n</span>) {
+  <span class="c-type">int</span> <span class="c-var">total</span> = <span class="c-num">0</span>;
+  <span class="c-keyword">for</span> (<span class="c-type">int</span> <span class="c-var">i</span> = <span class="c-num">0</span>; <span class="c-var">i</span> &lt; <span class="c-var">n</span>; <span class="c-var">i</span>++) <span class="c-var">total</span> += <span class="c-var">i</span>;
+  <span class="c-keyword">return</span> <span class="c-var">total</span>;
+}
+
+<span class="c-keyword">void</span> <span class="c-fn">runHeavyTask</span>() <span class="c-keyword">async</span> {
+  <span class="c-keyword">final</span> <span class="c-var">result</span> = <span class="c-keyword">await</span> <span class="c-fn">compute</span>(<span class="c-fn">heavySum</span>, <span class="c-num">100000000</span>);
+  <span class="c-fn">print</span>(<span class="c-var">result</span>);  <span class="c-comment">// runs off the UI thread, no jank</span>
+}
+
+<span class="c-comment">// ── RAW Isolate.spawn ──────────────────</span>
+<span class="c-keyword">void</span> <span class="c-fn">worker</span>(<span class="c-type">SendPort</span> <span class="c-var">sendPort</span>) {
+  <span class="c-var">sendPort</span>.<span class="c-fn">send</span>(<span class="c-string">'Done from isolate'</span>);
+}
+<span class="c-keyword">void</span> <span class="c-fn">main</span>() <span class="c-keyword">async</span> {
+  <span class="c-keyword">final</span> <span class="c-var">receivePort</span> = <span class="c-type">ReceivePort</span>();
+  <span class="c-keyword">await</span> <span class="c-type">Isolate</span>.<span class="c-fn">spawn</span>(<span class="c-fn">worker</span>, <span class="c-var">receivePort</span>.<span class="c-var">sendPort</span>);
+  <span class="c-var">receivePort</span>.<span class="c-fn">listen</span>((<span class="c-var">msg</span>) => <span class="c-fn">print</span>(<span class="c-var">msg</span>));
+}</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: When would you reach for an isolate instead of just using async/await?</div>
+    <div class="iq-a"><code>async</code>/<code>await</code> handles I/O-bound waiting (network, disk) without blocking — it doesn't run code in parallel. Use an <strong>isolate</strong> (via <code>compute()</code>) for CPU-bound work — JSON parsing of huge payloads, image processing, encryption — where the computation itself would otherwise freeze the UI.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 13 ======================== -->
+<section class="section" id="s13">
+  <div class="section-header">
+    <div class="section-icon si-purple">🚨</div>
+    <div>
+      <div class="section-num">13 / 20</div>
+      <div class="section-title">Error Handling</div>
+    </div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Dart distinguishes between <code>Exception</code> (expected, recoverable problems — bad input, failed network call) and <code>Error</code> (programming bugs — null assertion failures, out-of-range index). Use <code>try/on/catch/finally</code> to handle exceptions, and create custom exception classes for domain-specific errors.</p>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">error_handling.dart</span></div>
+    <pre><span class="c-comment">// ── CUSTOM EXCEPTION ───────────────────</span>
+<span class="c-keyword">class</span> <span class="c-type">ApiException</span> <span class="c-keyword">implements</span> <span class="c-type">Exception</span> {
+  <span class="c-keyword">final</span> <span class="c-type">String</span> <span class="c-var">message</span>;
+  <span class="c-keyword">final</span> <span class="c-type">int</span> <span class="c-var">statusCode</span>;
+  <span class="c-type">ApiException</span>(<span class="c-keyword">this</span>.<span class="c-var">message</span>, <span class="c-keyword">this</span>.<span class="c-var">statusCode</span>);
+
+  <span class="c-accent">@override</span>
+  <span class="c-type">String</span> <span class="c-fn">toString</span>() => <span class="c-string">'ApiException(</span><span class="c-var">$statusCode</span><span class="c-string">): </span><span class="c-var">$message</span><span class="c-string">'</span>;
+}
+
+<span class="c-keyword">void</span> <span class="c-fn">fetchData</span>() {
+  <span class="c-keyword">try</span> {
+    <span class="c-keyword">throw</span> <span class="c-type">ApiException</span>(<span class="c-string">'Not found'</span>, <span class="c-num">404</span>);
+  } <span class="c-keyword">on</span> <span class="c-type">ApiException</span> <span class="c-keyword">catch</span> (<span class="c-var">e</span>) {
+    <span class="c-fn">print</span>(<span class="c-string">'API failed: </span><span class="c-var">$e</span><span class="c-string">'</span>);     <span class="c-comment">// specific catch</span>
+  } <span class="c-keyword">catch</span> (<span class="c-var">e</span>, <span class="c-var">stackTrace</span>) {
+    <span class="c-fn">print</span>(<span class="c-string">'Unknown error: </span><span class="c-var">$e</span><span class="c-string">'</span>);    <span class="c-comment">// generic fallback</span>
+  } <span class="c-keyword">finally</span> {
+    <span class="c-fn">print</span>(<span class="c-string">'Cleanup complete'</span>);
+  }
+}</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: What's the difference between Exception and Error in Dart?</div>
+    <div class="iq-a"><code>Exception</code> represents expected failure conditions you should catch and handle gracefully — like a failed API call. <code>Error</code> represents programming mistakes (e.g., <code>RangeError</code>, <code>TypeError</code>) that generally shouldn't be caught — they indicate a bug that needs fixing, not a recoverable runtime condition.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 14 ======================== -->
+<section class="section" id="s14">
+  <div class="section-header">
+    <div class="section-icon si-teal">🏷️</div>
+    <div>
+      <div class="section-num">14 / 20</div>
+      <div class="section-title">Enums</div>
+    </div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Enums represent a fixed set of constant values. Since Dart 2.17, <strong>enhanced enums</strong> can have fields, constructors, methods, and even implement interfaces — turning what used to be a plain label into a small, type-safe data class.</p>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">enums.dart</span></div>
+    <pre><span class="c-comment">// ── BASIC ENUM ─────────────────────────</span>
+<span class="c-keyword">enum</span> <span class="c-type">Status</span> { pending, approved, rejected }
+
+<span class="c-keyword">void</span> <span class="c-fn">printStatus</span>(<span class="c-type">Status</span> <span class="c-var">s</span>) {
+  <span class="c-fn">print</span>(<span class="c-var">s</span>.<span class="c-var">name</span>);    <span class="c-comment">// 'pending'</span>
+  <span class="c-fn">print</span>(<span class="c-var">s</span>.<span class="c-var">index</span>);   <span class="c-comment">// 0</span>
+}
+
+<span class="c-comment">// ── ENHANCED ENUM (Dart 2.17+) ─────────</span>
+<span class="c-keyword">enum</span> <span class="c-type">Plan</span> {
+  free(<span class="c-num">0</span>, <span class="c-string">'Free Tier'</span>),
+  pro(<span class="c-num">499</span>, <span class="c-string">'Pro Tier'</span>),
+  enterprise(<span class="c-num">4999</span>, <span class="c-string">'Enterprise'</span>);
+
+  <span class="c-keyword">final</span> <span class="c-type">int</span> <span class="c-var">priceInRupees</span>;
+  <span class="c-keyword">final</span> <span class="c-type">String</span> <span class="c-var">label</span>;
+  <span class="c-keyword">const</span> <span class="c-type">Plan</span>(<span class="c-keyword">this</span>.<span class="c-var">priceInRupees</span>, <span class="c-keyword">this</span>.<span class="c-var">label</span>);
+
+  <span class="c-type">bool</span> <span class="c-keyword">get</span> <span class="c-var">isPaid</span> => <span class="c-var">priceInRupees</span> &gt; <span class="c-num">0</span>;
+}
+
+<span class="c-fn">print</span>(<span class="c-type">Plan</span>.<span class="c-var">pro</span>.<span class="c-var">label</span>);       <span class="c-comment">// Pro Tier</span>
+<span class="c-fn">print</span>(<span class="c-type">Plan</span>.<span class="c-var">pro</span>.<span class="c-var">isPaid</span>);     <span class="c-comment">// true</span>
+<span class="c-keyword">for</span> (<span class="c-keyword">final</span> <span class="c-var">p</span> <span class="c-keyword">in</span> <span class="c-type">Plan</span>.<span class="c-var">values</span>) <span class="c-fn">print</span>(<span class="c-var">p</span>.<span class="c-var">label</span>);</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: When would you reach for an enhanced enum over a plain class?</div>
+    <div class="iq-a">When you have a small, fixed, known-at-compile-time set of values that each carry constant data — like subscription tiers, HTTP method types, or app environments. Enums guarantee exhaustiveness in switch statements, which plain classes can't.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 15 ======================== -->
+<section class="section" id="s15">
+  <div class="section-header">
+    <div class="section-icon si-amber">📦</div>
+    <div>
+      <div class="section-num">15 / 20</div>
+      <div class="section-title">Records</div>
+    </div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Records (Dart 3+) are lightweight, anonymous, immutable aggregate types that group multiple values without needing to define a class. They're perfect for returning multiple values from a function and can be positional, named, or both.</p>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">records.dart</span></div>
+    <pre><span class="c-comment">// ── POSITIONAL RECORD ──────────────────</span>
+(<span class="c-type">int</span>, <span class="c-type">String</span>) <span class="c-fn">getUser</span>() {
+  <span class="c-keyword">return</span> (<span class="c-num">1</span>, <span class="c-string">'Shatrudhan'</span>);
+}
+<span class="c-keyword">final</span> (<span class="c-var">id</span>, <span class="c-var">name</span>) = <span class="c-fn">getUser</span>();   <span class="c-comment">// destructuring</span>
+<span class="c-fn">print</span>(<span class="c-string">'</span><span class="c-var">$id</span><span class="c-string"> - </span><span class="c-var">$name</span><span class="c-string">'</span>);
+
+<span class="c-comment">// ── NAMED RECORD ───────────────────────</span>
+({<span class="c-type">int</span> age, <span class="c-type">String</span> city}) <span class="c-fn">getProfile</span>() {
+  <span class="c-keyword">return</span> (age: <span class="c-num">23</span>, city: <span class="c-string">'Ranchi'</span>);
+}
+<span class="c-keyword">final</span> <span class="c-var">profile</span> = <span class="c-fn">getProfile</span>();
+<span class="c-fn">print</span>(<span class="c-var">profile</span>.<span class="c-var">city</span>);     <span class="c-comment">// Ranchi — field access</span>
+
+<span class="c-comment">// ── EQUALITY ────────────────────────────</span>
+<span class="c-fn">print</span>((<span class="c-num">1</span>, <span class="c-num">2</span>) == (<span class="c-num">1</span>, <span class="c-num">2</span>));   <span class="c-comment">// true — value-based equality</span></pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: When should you use a Record instead of a class?</div>
+    <div class="iq-a">Use a record for short-lived, structural groupings — like returning two or three values from a function — where you don't need named identity, methods, or inheritance. Use a class when the type needs behavior, validation, or represents a meaningful domain entity.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 16 ======================== -->
+<section class="section" id="s16">
+  <div class="section-header">
+    <div class="section-icon si-pink">🔍</div>
+    <div>
+      <div class="section-num">16 / 20</div>
+      <div class="section-title">Pattern Matching</div>
+    </div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Dart 3 introduced patterns: a way to match and destructure data in <code>switch</code> statements/expressions, <code>if-case</code>, and variable declarations. Combined with <code>sealed</code> classes, the compiler can enforce <strong>exhaustiveness</strong> — every possible case must be handled.</p>
+  </div>
+
+  <div class="diagram">
+    <svg viewBox="0 0 820 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:14px;background:#141626;border:1px solid rgba(120,130,255,0.15);">
+      <text x="20" y="28" font-family="Space Mono,monospace" font-size="11" fill="#546e7a">SEALED CLASS EXHAUSTIVENESS</text>
+      <rect x="320" y="40" width="180" height="45" rx="8" fill="rgba(124,109,250,0.1)" stroke="rgba(124,109,250,0.4)" stroke-width="1.5" stroke-dasharray="6,3"/>
+      <text x="340" y="68" font-family="Space Mono,monospace" font-size="13" fill="#a99cfc" font-weight="700">sealed Shape</text>
+      <rect x="60" y="120" width="160" height="40" rx="8" fill="rgba(56,217,169,0.08)" stroke="rgba(56,217,169,0.35)" stroke-width="1"/>
+      <text x="80" y="144" font-family="Space Mono,monospace" font-size="12" fill="#6ef0d4">Circle</text>
+      <rect x="330" y="120" width="160" height="40" rx="8" fill="rgba(247,169,75,0.08)" stroke="rgba(247,169,75,0.35)" stroke-width="1"/>
+      <text x="350" y="144" font-family="Space Mono,monospace" font-size="12" fill="#fcc377">Square</text>
+      <rect x="600" y="120" width="160" height="40" rx="8" fill="rgba(240,101,149,0.08)" stroke="rgba(240,101,149,0.35)" stroke-width="1"/>
+      <text x="620" y="144" font-family="Space Mono,monospace" font-size="12" fill="#f9a8d4">Triangle</text>
+      <line x1="350" y1="85" x2="140" y2="120" stroke="rgba(56,217,169,0.4)" stroke-width="1.5"/>
+      <line x1="410" y1="85" x2="410" y2="120" stroke="rgba(247,169,75,0.4)" stroke-width="1.5"/>
+      <line x1="470" y1="85" x2="680" y2="120" stroke="rgba(240,101,149,0.4)" stroke-width="1.5"/>
+    </svg>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">patterns.dart</span></div>
+    <pre><span class="c-keyword">sealed class</span> <span class="c-type">Shape</span> {}
+<span class="c-keyword">class</span> <span class="c-type">Circle</span> <span class="c-keyword">extends</span> <span class="c-type">Shape</span> { <span class="c-keyword">final</span> <span class="c-type">double</span> <span class="c-var">radius</span>; <span class="c-type">Circle</span>(<span class="c-keyword">this</span>.<span class="c-var">radius</span>); }
+<span class="c-keyword">class</span> <span class="c-type">Square</span> <span class="c-keyword">extends</span> <span class="c-type">Shape</span> { <span class="c-keyword">final</span> <span class="c-type">double</span> <span class="c-var">side</span>; <span class="c-type">Square</span>(<span class="c-keyword">this</span>.<span class="c-var">side</span>); }
+
+<span class="c-type">double</span> <span class="c-fn">area</span>(<span class="c-type">Shape</span> <span class="c-var">shape</span>) => <span class="c-keyword">switch</span> (<span class="c-var">shape</span>) {
+  <span class="c-type">Circle</span>(<span class="c-var">radius</span>: <span class="c-keyword">var</span> <span class="c-var">r</span>) =&gt; <span class="c-num">3.14</span> * <span class="c-var">r</span> * <span class="c-var">r</span>,
+  <span class="c-type">Square</span>(<span class="c-var">side</span>: <span class="c-keyword">var</span> <span class="c-var">s</span>)   =&gt; <span class="c-var">s</span> * <span class="c-var">s</span>,
+  <span class="c-comment">// no default needed — compiler knows these are ALL the subtypes</span>
+};
+
+<span class="c-comment">// ── if-case ──────────────────────────────</span>
+<span class="c-keyword">final</span> <span class="c-var">point</span> = (<span class="c-num">3</span>, <span class="c-num">4</span>);
+<span class="c-keyword">if</span> (<span class="c-var">point</span> <span class="c-keyword">case</span> (<span class="c-keyword">var</span> <span class="c-var">x</span>, <span class="c-keyword">var</span> <span class="c-var">y</span>) <span class="c-keyword">when</span> <span class="c-var">x</span> == <span class="c-var">y</span>) {
+  <span class="c-fn">print</span>(<span class="c-string">'Equal coordinates'</span>);
+}</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: What does sealed buy you that abstract doesn't?</div>
+    <div class="iq-a">A <code>sealed</code> class restricts all direct subtypes to the same library. This lets the compiler verify <strong>exhaustiveness</strong> in a switch — if you add a new subtype later and forget to handle it in a switch, you get a compile-time error instead of a silent runtime bug.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 17 ======================== -->
+<section class="section" id="s17">
+  <div class="section-header">
+    <div class="section-icon si-blue">🏭</div>
+    <div>
+      <div class="section-num">17 / 20</div>
+      <div class="section-title">Factory Constructors</div>
+    </div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>A <code>factory</code> constructor doesn't always create a new instance — it can return a cached/existing instance (singleton pattern) or a different subtype based on input. This is impossible with a regular generative constructor, which always creates a brand-new instance of exactly its own class.</p>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">factory.dart</span></div>
+    <pre><span class="c-comment">// ── SINGLETON via factory ───────────────</span>
+<span class="c-keyword">class</span> <span class="c-type">ApiClient</span> {
+  <span class="c-keyword">static final</span> <span class="c-type">ApiClient</span> <span class="c-var">_instance</span> = <span class="c-type">ApiClient</span>.<span class="c-fn">_internal</span>();
+  <span class="c-type">ApiClient</span>.<span class="c-fn">_internal</span>();           <span class="c-comment">// private named constructor</span>
+
+  <span class="c-keyword">factory</span> <span class="c-type">ApiClient</span>() {
+    <span class="c-keyword">return</span> <span class="c-var">_instance</span>;             <span class="c-comment">// always returns the same instance</span>
+  }
+}
+<span class="c-fn">print</span>(<span class="c-fn">identical</span>(<span class="c-type">ApiClient</span>(), <span class="c-type">ApiClient</span>())); <span class="c-comment">// true</span>
+
+<span class="c-comment">// ── fromJson — common in API integration ──</span>
+<span class="c-keyword">class</span> <span class="c-type">User</span> {
+  <span class="c-keyword">final</span> <span class="c-type">String</span> <span class="c-var">name</span>;
+  <span class="c-type">User</span>(<span class="c-keyword">this</span>.<span class="c-var">name</span>);
+
+  <span class="c-keyword">factory</span> <span class="c-type">User</span>.<span class="c-fn">fromJson</span>(<span class="c-type">Map</span>&lt;<span class="c-type">String</span>, <span class="c-keyword">dynamic</span>&gt; <span class="c-var">json</span>) {
+    <span class="c-keyword">return</span> <span class="c-type">User</span>(<span class="c-var">json</span>[<span class="c-string">'name'</span>] <span class="c-keyword">as</span> <span class="c-type">String</span>);
+  }
+}</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: Why can't a factory constructor access "this"?</div>
+    <div class="iq-a">A factory constructor doesn't necessarily create a new instance — it may return a cached object or a different subtype — so there's no guaranteed "current instance" to refer to. It behaves like a static method that happens to be called with constructor syntax.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 18 ======================== -->
+<section class="section" id="s18">
+  <div class="section-header">
+    <div class="section-icon si-green">🧠</div>
+    <div>
+      <div class="section-num">18 / 20</div>
+      <div class="section-title">Memory Management</div>
+    </div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Dart uses a <strong>generational garbage collector</strong>: most objects are short-lived and collected quickly from a "young generation" using a fast scavenger; objects that survive get promoted to an "old generation," collected less often with a mark-sweep algorithm. In Flutter, the most common memory leaks come from forgetting to dispose controllers, subscriptions, and listeners.</p>
+  </div>
+
+  <div class="flow">
+    <div class="flow-node fn-purple">Allocate (young gen)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node fn-teal">Survives GC?</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node fn-amber">Promoted (old gen)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node fn-pink">Mark & sweep collected</div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">memory.dart</span></div>
+    <pre><span class="c-comment">// ── COMMON FLUTTER LEAK SOURCES ───────</span>
+<span class="c-keyword">class</span> <span class="c-type">_MyPageState</span> <span class="c-keyword">extends</span> <span class="c-type">State</span>&lt;<span class="c-type">MyPage</span>&gt; {
+  <span class="c-keyword">late</span> <span class="c-keyword">final</span> <span class="c-type">AnimationController</span> <span class="c-var">controller</span>;
+  <span class="c-type">StreamSubscription</span>? <span class="c-var">subscription</span>;
+
+  <span class="c-accent">@override</span>
+  <span class="c-keyword">void</span> <span class="c-fn">initState</span>() {
+    <span class="c-keyword">super</span>.<span class="c-fn">initState</span>();
+    <span class="c-var">controller</span> = <span class="c-type">AnimationController</span>(vsync: <span class="c-keyword">this</span>, duration: <span class="c-type">Duration</span>(seconds: <span class="c-num">1</span>));
+    <span class="c-var">subscription</span> = <span class="c-var">someStream</span>.<span class="c-fn">listen</span>((_) {});
+  }
+
+  <span class="c-accent">@override</span>
+  <span class="c-keyword">void</span> <span class="c-fn">dispose</span>() {
+    <span class="c-var">controller</span>.<span class="c-fn">dispose</span>();        <span class="c-comment">// ✓ release animation resources</span>
+    <span class="c-var">subscription</span>?.<span class="c-fn">cancel</span>();    <span class="c-comment">// ✓ stop listening, avoid leak</span>
+    <span class="c-keyword">super</span>.<span class="c-fn">dispose</span>();
+  }
+}</pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: What are the most common causes of memory leaks in a Flutter app?</div>
+    <div class="iq-a">Forgetting to call <code>dispose()</code> on <code>AnimationController</code>/<code>TextEditingController</code>, not cancelling <code>StreamSubscription</code>s, holding a <code>BuildContext</code> reference after a widget is unmounted, and registering listeners (e.g. on a singleton) without removing them when the widget is destroyed.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 19 ======================== -->
+<section class="section" id="s19">
+  <div class="section-header">
+    <div class="section-icon si-red">🔁</div>
+    <div>
+      <div class="section-num">19 / 20</div>
+      <div class="section-title">Functional Programming</div>
+    </div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>Dart supports functional-style programming via first-class functions and a rich set of higher-order methods on collections — <code>map</code>, <code>where</code>, <code>reduce</code>, <code>fold</code>. Chaining these creates concise, declarative data pipelines instead of manual loops.</p>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-label"><div class="code-dot cd-red"></div><div class="code-dot cd-yellow"></div><div class="code-dot cd-green"></div><span class="code-filename">functional.dart</span></div>
+    <pre><span class="c-comment">// ── MAP / WHERE / REDUCE / FOLD ───────</span>
+<span class="c-keyword">final</span> <span class="c-var">nums</span> = [<span class="c-num">1</span>,<span class="c-num">2</span>,<span class="c-num">3</span>,<span class="c-num">4</span>,<span class="c-num">5</span>];
+
+<span class="c-keyword">final</span> <span class="c-var">doubled</span> = <span class="c-var">nums</span>.<span class="c-fn">map</span>((<span class="c-var">n</span>) => <span class="c-var">n</span> * <span class="c-num">2</span>).<span class="c-fn">toList</span>();
+<span class="c-keyword">final</span> <span class="c-var">evens</span>   = <span class="c-var">nums</span>.<span class="c-fn">where</span>((<span class="c-var">n</span>) => <span class="c-var">n</span> % <span class="c-num">2</span> == <span class="c-num">0</span>).<span class="c-fn">toList</span>();
+<span class="c-keyword">final</span> <span class="c-var">sum</span>     = <span class="c-var">nums</span>.<span class="c-fn">reduce</span>((<span class="c-var">a</span>, <span class="c-var">b</span>) => <span class="c-var">a</span> + <span class="c-var">b</span>);          <span class="c-comment">// fails on empty list</span>
+<span class="c-keyword">final</span> <span class="c-var">total</span>   = <span class="c-var">nums</span>.<span class="c-fn">fold</span>(<span class="c-num">100</span>, (<span class="c-var">acc</span>, <span class="c-var">n</span>) => <span class="c-var">acc</span> + <span class="c-var">n</span>);  <span class="c-comment">// safe on empty list</span>
+
+<span class="c-comment">// ── CHAINING ─────────────────────────</span>
+<span class="c-keyword">final</span> <span class="c-var">result</span> = [<span class="c-num">1</span>,<span class="c-num">2</span>,<span class="c-num">3</span>,<span class="c-num">4</span>,<span class="c-num">5</span>,<span class="c-num">6</span>]
+  .<span class="c-fn">where</span>((<span class="c-var">n</span>) => <span class="c-var">n</span> % <span class="c-num">2</span> == <span class="c-num">0</span>)
+  .<span class="c-fn">map</span>((<span class="c-var">n</span>) => <span class="c-var">n</span> * <span class="c-var">n</span>)
+  .<span class="c-fn">toList</span>();
+<span class="c-fn">print</span>(<span class="c-var">result</span>);  <span class="c-comment">// [4, 16, 36]</span></pre>
+  </div>
+
+  <div class="interview-q">
+    <div class="iq-label">🎯 Interview Question</div>
+    <div class="iq-q">Q: What is the difference between reduce and fold?</div>
+    <div class="iq-a"><code>reduce</code> combines elements starting from the first — it throws on an empty list. <code>fold</code> takes an explicit initial value, so it works on empty lists and can change the result's type entirely.</div>
+  </div>
+</section>
+
+<!-- ======================== SECTION 20 ======================== -->
+<section class="section" id="s20">
+  <div class="section-header">
+    <div class="section-icon si-purple">🎯</div>
+    <div>
+      <div class="section-num">20 / 20</div>
+      <div class="section-title">Interview Questions — Rapid Fire</div>
+    </div>
+  </div>
+
+  <div class="theory">
+    <div class="theory-title">Theory</div>
+    <p>A compiled set of the most commonly asked Dart questions across all chapters above — useful for a final review pass right before an interview.</p>
+  </div>
+
+  <div class="rapid-grid">
+    <div class="interview-q">
+      <div class="iq-q">Q: What makes Dart good for both client (Flutter) and server-side use?</div>
+      <div class="iq-a">It compiles to native ARM/x64 (AOT) for fast startup and performance, and to JIT for fast hot-reload during development — plus it compiles to JavaScript for web. A single language across mobile, web, desktop, and server.</div>
+    </div>
+    <div class="interview-q">
+      <div class="iq-q">Q: What is tree shaking and why does it matter for Dart/Flutter apps?</div>
+      <div class="iq-a">Tree shaking removes unused code at compile time, keeping release app size small — especially important since Flutter ships its own rendering engine.</div>
+    </div>
+    <div class="interview-q">
+      <div class="iq-q">Q: Difference between == and identical()?</div>
+      <div class="iq-a"><code>==</code> checks logical/value equality (can be overridden). <code>identical()</code> checks if two references point to the exact same object in memory.</div>
+    </div>
+    <div class="interview-q">
+      <div class="iq-q">Q: What's the difference between a top-level function and a static method?</div>
+      <div class="iq-a">A top-level function lives outside any class, directly in a library. A static method belongs to a class's namespace but doesn't need an instance to be called — useful for grouping related utilities.</div>
+    </div>
+    <div class="interview-q">
+      <div class="iq-q">Q: What is the cascade operator (..) used for?</div>
+      <div class="iq-a">It lets you call multiple methods/set multiple properties on the same object without repeating the variable name — e.g. <code>Paint()..color = Colors.red..strokeWidth = 2</code>.</div>
+    </div>
+    <div class="interview-q">
+      <div class="iq-q">Q: What does covariant mean in Dart?</div>
+      <div class="iq-a">It relaxes a type check when overriding a method, allowing a subclass to accept a more specific parameter type than the parent's signature declares — used when you're confident of the actual runtime type.</div>
+    </div>
+  </div>
+
+  <table>
+    <tr><th>Topic</th><th>Most-asked question</th></tr>
+    <tr><td>Null Safety</td><td>Difference between ?? and ??=?</td></tr>
+    <tr><td>Async</td><td>Future vs Stream — when to use which?</td></tr>
+    <tr><td>OOP</td><td>extends vs implements vs with?</td></tr>
+    <tr><td>Generics</td><td>Why generics over dynamic?</td></tr>
+    <tr><td>Memory</td><td>How do you avoid memory leaks in StatefulWidgets?</td></tr>
+  </table>
+</section>
+
+</div>
+
+<footer>
+  <p>DART COMPLETE INTERVIEW HANDBOOK — Prepared for Shatrudhan Kumar Sharma</p>
+  <p style="margin-top:6px;color:#546e7a;">Flutter Mobile Developer · Trinetra Services</p>
+</footer>
+
+</body>
+</html>
